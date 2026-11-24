@@ -167,7 +167,6 @@ function detail(view) {
       ${item.aliases.length ? `<button class="source" data-action="aliases" aria-expanded="${state.aliasesOpen}">相关编号 <span>${item.aliases.length} 项 ${state.aliasesOpen ? '⌃' : '⌄'}</span></button>${state.aliasesOpen ? `<div class="alias-grid">${item.aliases.map(id => `<button class="chip" data-action="copy" data-value="${esc(id)}" aria-label="复制 ${esc(id)}">${esc(id)}</button>`).join('')}</div>` : ''}` : ''}
       <p class="panel-text">${esc(item.summary)}</p>
     </section>
-    <section class="panel"><h2 class="panel-title">官方来源</h2>${item.sources.map(source => `<a class="source" href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.name)} ${icon('arrow','tiny-arrow')}</a>`).join('')}</section>
     <div class="actions">${item.products.map(product => `<button class="cta light" data-action="follow" data-value="${esc(product)}">${state.following.includes(product) ? '已关注 ' : '关注 '}${esc(product)}</button>`).join('')}
       <button class="cta light" data-action="topics" aria-expanded="${state.topicsOpen}">关注与提醒</button>
     </div>

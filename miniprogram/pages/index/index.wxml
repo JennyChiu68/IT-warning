@@ -49,10 +49,6 @@
         </view>
         <view class="panel-text">{{detail.summary}}</view>
       </view>
-      <view class="panel">
-        <view class="panel-title">官方来源</view>
-        <button class="source" wx:for="{{detail.sources}}" wx:key="url" data-value="{{item.url}}" bindtap="copy"><text>{{item.name}}</text><text>复制链接 ›</text></button>
-      </view>
       <view class="actions">
         <button class="cta light" wx:for="{{detail.products}}" wx:key="*this" wx:for-item="product" data-value="{{product}}" bindtap="follow">{{detail.followingMap[product] ? '已关注' : '关注'}} {{product}}</button>
         <button class="cta light" open-type="share">分享</button>
