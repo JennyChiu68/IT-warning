@@ -86,7 +86,7 @@ function rows(items, empty) {
   return `<div class="stack">${items.map(item => `<button class="row" data-action="detail" data-value="${esc(item.matchedId || item.id)}">
     <span class="product-symbol">${icon(item.productIcon,'product-icon')}</span>
     <span class="row-main"><span class="row-label">${esc(item.title)}</span>
-      <span class="meta">${tags(item)} <span class="row-date">${esc(item.dateLabel)}</span>${item.matchedId ? `<span class="matched-id">${esc(item.matchedId)}</span>` : ''}</span>
+      <span class="meta">${tags(item)} <time class="row-date" datetime="${esc(AlertCatalog.day(item))}" title="${esc(item.dateTitle)}">${esc(item.dateLabel)}</time>${item.matchedId ? `<span class="matched-id">${esc(item.matchedId)}</span>` : ''}</span>
     </span>${icon('arrow','row-arrow')}
   </button>`).join('')}</div>`;
 }
@@ -108,7 +108,13 @@ function alertsSection(view) {
   return `<section class="browse" id="list-start" tabindex="-1" aria-label="预警列表">
     <div class="section-head">
       <div class="heading-group"><h2 class="heading">预警列表</h2><span class="list-count">${view.count} 条</span></div>
-      ${view.severityName ? `<button class="severity-filter" data-action="clear-severity" aria-label="清除严重程度筛选">${view.severityName} <b aria-hidden="true">×</b></button>` : ''}
+      <div class="list-controls">
+        ${view.severityName ? `<button class="severity-filter" data-action="clear-severity" aria-label="清除严重程度筛选">${view.severityName} <b aria-hidden="true">×</b></button>` : ''}
+        <div class="list-sort">
+          <select id="alert-sort" class="list-sort-control" aria-label="预警排序">${AlertCatalog.sortOptions.map((option, index) => `<option value="${option.id}" ${index === view.sortIndex ? 'selected' : ''}>${option.name}</option>`).join('')}</select>
+          <span class="list-sort-arrow" aria-hidden="true"></span>
+        </div>
+      </div>
     </div>
     ${overview(view)}
     <div class="category-list" aria-label="按类别筛选">${AlertCatalog.categories.map(category => `<button class="chip ${state.category === category.id ? 'selected' : ''}" aria-pressed="${state.category === category.id}" data-action="category" data-value="${category.id}">${category.name}</button>`).join('')}</div>
@@ -246,6 +252,13 @@ app.addEventListener('input', event => {
   document.getElementById('list-start').innerHTML = results(AlertCatalog.display(feed,state));
 });
 
+app.addEventListener('change', event => {
+  if (event.target.id !== 'alert-sort') return;
+  Object.assign(state, { sort: event.target.value, page: 1 });
+  render();
+  document.getElementById('alert-sort').focus({ preventScroll: true });
+});
+
 window.addEventListener('popstate', () => {
   state.id = new URLSearchParams(location.search).get('id') || '';
   state.aliasesOpen = false;
@@ -266,7 +279,7 @@ async function refresh() {
       try { feed = await (await fetch('/shared/snapshot.json')).json(); } catch {}
     }
   }
-  if (document.activeElement?.id !== 'query') render();
+  if (!['query', 'alert-sort'].includes(document.activeElement?.id)) render();
 }
 
 render();

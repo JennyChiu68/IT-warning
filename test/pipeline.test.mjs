@@ -47,17 +47,23 @@ test('severity distribution and pagination use the same grades and keep every al
   const alertCatalog = sandbox.module.exports;
   const initial = alertCatalog.display(snapshot, { tab: 'home' });
   const displayedIds = new Set();
-  const shownGrades = [];
+  const shownDates = [];
+  const shownRiskGrades = [];
   for (let page = 1; page <= initial.pageCount; page++) {
     const view = alertCatalog.display(snapshot, { tab: 'home', page });
+    const risk = alertCatalog.display(snapshot, { tab: 'home', page, sort: 'risk' });
     assert.ok(view.pageItems.length <= 5);
     for (const item of view.pageItems) {
       displayedIds.add(item.id);
-      shownGrades.push(initial.severityCounts.findIndex(level => level.id === item.severity));
+      const date = alertCatalog.day(item);
+      assert.equal(item.dateLabel, date.slice(5).replace('-', '/'));
+      shownDates.push(date);
     }
+    for (const item of risk.pageItems) shownRiskGrades.push(initial.severityCounts.findIndex(level => level.id === item.severity));
   }
   assert.equal(displayedIds.size, snapshot.items.length);
-  assert.deepEqual(shownGrades, [...shownGrades].sort((a, b) => a - b));
+  assert.deepEqual(shownDates, [...shownDates].sort().reverse());
+  assert.deepEqual(shownRiskGrades, [...shownRiskGrades].sort((a, b) => a - b));
   assert.equal(initial.severityCounts.reduce((sum, level) => sum + level.count, 0), initial.count);
   for (const level of initial.severityCounts) {
     const view = alertCatalog.display(snapshot, { tab: 'home', severity: level.id });

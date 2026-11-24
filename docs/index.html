@@ -9,10 +9,10 @@
   <style>* { box-sizing:border-box; }
 html, body { margin:0; min-height:100%; background:#f4f5f9; color:#171d32; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif; -webkit-font-smoothing:antialiased; }
 h1, h2, p { margin:0; }
-button, input { font:inherit; }
+button, input, select { font:inherit; }
 button { border:0; background:none; color:inherit; padding:0; text-align:left; cursor:pointer; }
 button:disabled { cursor:default; }
-button:focus-visible, a:focus-visible, input:focus-visible { outline:2px solid #5966e7; outline-offset:2px; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline:2px solid #5966e7; outline-offset:2px; }
 a { color:inherit; text-decoration:none; }
 [hidden] { display:none !important; }
 .app { width:100%; max-width:428px; margin-inline:auto; }
@@ -22,6 +22,7 @@ a { color:inherit; text-decoration:none; }
 .search-input:focus-visible { outline:none; }
 .searchbar:focus-within { border-color:#7984e2; box-shadow:0 0 0 2px #e7eaff; }
 .search-input::-webkit-search-cancel-button { display:none; }
+.list-sort select { appearance:none; cursor:pointer; }
 #list-start { scroll-margin-top:12px; outline:none; }
 .lead-title { text-wrap:balance; }
 @media (max-width:340px) { .home-section .lead-title { font-size:19px; } }
@@ -82,6 +83,10 @@ a { color:inherit; text-decoration:none; }
 .list-count { color:#575f79; font-size:11px; font-variant-numeric:tabular-nums; }
 .severity-filter { flex:none; color:#414ebd; background:#ededff; padding:5px 7px; border-radius:7px; font-size:10px; font-weight:650; white-space:nowrap; }
 .severity-filter b, .severity-filter text { margin-left:2px; font-size:13px; font-weight:600; }
+.list-controls { display:flex; align-items:center; gap:6px; flex:none; }
+.list-sort { display:block; position:relative; }
+.list-sort-control { display:flex; align-items:center; min-height:36px; padding:0 25px 0 9px; border:1px solid #e1e5f0; border-radius:9px; background:#fff; color:#465375; font-size:11px; font-weight:650; white-space:nowrap; }
+.list-sort-arrow { position:absolute; top:50%; right:10px; width:6px; height:6px; border-right:1.5px solid #687698; border-bottom:1.5px solid #687698; transform:translateY(-70%) rotate(45deg); pointer-events:none; }
 .category-list, .chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
 .chip { display:inline-flex; align-items:center; min-width:0; gap:5px; min-height:34px; padding:5px 9px; color:#505a77; background:#fff; border:1px solid #e2e6f2; border-radius:9px; font-size:11px; line-height:1.2; overflow-wrap:anywhere; }
 .chip.selected { color:#3444bd; background:#f0f1ff; border-color:#bcc3fb; font-weight:690; }
@@ -1352,6 +1357,7 @@ const IT_WARNING_ICONS={"arrow-white":"data:image/png;base64,iVBORw0KGgoAAAANSUh
     { id: 'mobile', name: '移动端' }, { id: 'incident', name: '安全事件' }
   ];
   const tabs = [{ id: 'home', name: '首页', icon: 'pulse' }, { id: 'search', name: '搜索', icon: 'search' }];
+  const sortOptions = [{ id: 'latest', name: '最新优先' }, { id: 'risk', name: '风险优先' }];
   const levels = [
     { id: 'critical', name: '严重', range: '9.0–10.0' }, { id: 'high', name: '高危', range: '7.0–8.9' },
     { id: 'medium', name: '中危', range: '4.0–6.9' }, { id: 'low', name: '低危', range: '0.1–3.9' },
@@ -1414,7 +1420,8 @@ const IT_WARNING_ICONS={"arrow-white":"data:image/png;base64,iVBORw0KGgoAAAANSUh
         dateTitle: item.kev ? 'KEV 收录于 ' + item.kev : '发布于 ' + item.date
       };
     }).sort((a, b) => day(b).localeCompare(day(a)) ||
-      Number(priority(b)) - Number(priority(a)) || (b.score ?? 0) - (a.score ?? 0) || a.title.localeCompare(b.title));
+      Number(priority(b)) - Number(priority(a)) || (b.score ?? 0) - (a.score ?? 0) ||
+      a.title.localeCompare(b.title) || a.id.localeCompare(b.id));
   }
 
   function chinaTime(value) {
@@ -1458,14 +1465,17 @@ const IT_WARNING_ICONS={"arrow-white":"data:image/png;base64,iVBORw0KGgoAAAANSUh
     const scope = all.filter(item => category === 'all' || item.category === category ||
       (category === 'system' && item.products.includes('macOS')));
     const selectedLevel = levels[severityRanks[state.severity]];
+    const sortIndex = Math.max(0, sortOptions.findIndex(option => option.id === state.sort));
     const items = searching
       ? all.filter(item => {
         const searchable = normalize([item.id, ...(item.aliases || []), ...item.products, item.title, item.summary, item.fix].join(' '));
         return words.length && words.every(word => searchable.includes(word));
       })
-      : scope.filter(item => !selectedLevel || item.severity === selectedLevel.id)
-        .sort((a, b) => severityRanks[a.severity] - severityRanks[b.severity] ||
-          Number(Boolean(b.kev)) - Number(Boolean(a.kev)));
+      : scope.filter(item => !selectedLevel || item.severity === selectedLevel.id);
+    if (!searching && sortOptions[sortIndex].id === 'risk') {
+      items.sort((a, b) => severityRanks[a.severity] - severityRanks[b.severity] ||
+        Number(Boolean(b.kev)) - Number(Boolean(a.kev)));
+    }
     const pageCount = searching ? 1 : Math.max(1, Math.ceil(items.length / pageSize));
     const page = Math.min(pageCount, Math.max(1, Math.trunc(Number(state.page)) || 1));
     const start = (page - 1) * pageSize;
@@ -1480,7 +1490,7 @@ const IT_WARNING_ICONS={"arrow-white":"data:image/png;base64,iVBORw0KGgoAAAANSUh
     const pageStart = Math.max(1, Math.min(page - 2, pageCount - 4));
     const pageLinks = Array.from({ length: Math.min(5, pageCount) }, (_, index) => pageStart + index);
     return {
-      pageItems, page, pageCount, pageLinks, count: items.length, queryActive: Boolean(query),
+      pageItems, page, pageCount, pageLinks, sortIndex, count: items.length, queryActive: Boolean(query),
       updateLabel: updateTime ? updateTime.slice(5, 10).replace('-', '/') + ' ' + updateTime.slice(11, 16) : '',
       nextSearchLimit: searching && searchLimit < items.length ? Math.min(searchLimit + searchBatchSize, items.length) : 0,
       severityCounts: all.length ? severityOverview(scope) : [], severityName: selectedLevel?.name || '',
@@ -1499,7 +1509,7 @@ const IT_WARNING_ICONS={"arrow-white":"data:image/png;base64,iVBORw0KGgoAAAANSUh
     return list.includes(value) ? list.filter(item => item !== value) : list.concat(value);
   }
 
-  return { categories, tabs, severityGuide, display, priority, toggle, day };
+  return { categories, tabs, sortOptions, severityGuide, display, priority, toggle, day };
 });
 
 /* global AlertCatalog, IT_WARNING_SNAPSHOT, IT_WARNING_ICONS */
@@ -1590,7 +1600,7 @@ function rows(items, empty) {
   return `<div class="stack">${items.map(item => `<button class="row" data-action="detail" data-value="${esc(item.matchedId || item.id)}">
     <span class="product-symbol">${icon(item.productIcon,'product-icon')}</span>
     <span class="row-main"><span class="row-label">${esc(item.title)}</span>
-      <span class="meta">${tags(item)} <span class="row-date">${esc(item.dateLabel)}</span>${item.matchedId ? `<span class="matched-id">${esc(item.matchedId)}</span>` : ''}</span>
+      <span class="meta">${tags(item)} <time class="row-date" datetime="${esc(AlertCatalog.day(item))}" title="${esc(item.dateTitle)}">${esc(item.dateLabel)}</time>${item.matchedId ? `<span class="matched-id">${esc(item.matchedId)}</span>` : ''}</span>
     </span>${icon('arrow','row-arrow')}
   </button>`).join('')}</div>`;
 }
@@ -1612,7 +1622,13 @@ function alertsSection(view) {
   return `<section class="browse" id="list-start" tabindex="-1" aria-label="预警列表">
     <div class="section-head">
       <div class="heading-group"><h2 class="heading">预警列表</h2><span class="list-count">${view.count} 条</span></div>
-      ${view.severityName ? `<button class="severity-filter" data-action="clear-severity" aria-label="清除严重程度筛选">${view.severityName} <b aria-hidden="true">×</b></button>` : ''}
+      <div class="list-controls">
+        ${view.severityName ? `<button class="severity-filter" data-action="clear-severity" aria-label="清除严重程度筛选">${view.severityName} <b aria-hidden="true">×</b></button>` : ''}
+        <div class="list-sort">
+          <select id="alert-sort" class="list-sort-control" aria-label="预警排序">${AlertCatalog.sortOptions.map((option, index) => `<option value="${option.id}" ${index === view.sortIndex ? 'selected' : ''}>${option.name}</option>`).join('')}</select>
+          <span class="list-sort-arrow" aria-hidden="true"></span>
+        </div>
+      </div>
     </div>
     ${overview(view)}
     <div class="category-list" aria-label="按类别筛选">${AlertCatalog.categories.map(category => `<button class="chip ${state.category === category.id ? 'selected' : ''}" aria-pressed="${state.category === category.id}" data-action="category" data-value="${category.id}">${category.name}</button>`).join('')}</div>
@@ -1750,6 +1766,13 @@ app.addEventListener('input', event => {
   document.getElementById('list-start').innerHTML = results(AlertCatalog.display(feed,state));
 });
 
+app.addEventListener('change', event => {
+  if (event.target.id !== 'alert-sort') return;
+  Object.assign(state, { sort: event.target.value, page: 1 });
+  render();
+  document.getElementById('alert-sort').focus({ preventScroll: true });
+});
+
 window.addEventListener('popstate', () => {
   state.id = new URLSearchParams(location.search).get('id') || '';
   state.aliasesOpen = false;
@@ -1770,7 +1793,7 @@ async function refresh() {
       try { feed = await (await fetch('/shared/snapshot.json')).json(); } catch {}
     }
   }
-  if (document.activeElement?.id !== 'query') render();
+  if (!['query', 'alert-sort'].includes(document.activeElement?.id)) render();
 }
 
 render();

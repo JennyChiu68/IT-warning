@@ -94,7 +94,13 @@
       <view class="browse" id="list-start">
         <view class="section-head">
           <view class="heading-group"><text class="heading">预警列表</text><text class="list-count">{{count}} 条</text></view>
-          <button class="severity-filter" wx:if="{{severityName}}" bindtap="clearSeverity" aria-label="清除严重程度筛选">{{severityName}} <text>×</text></button>
+          <view class="list-controls">
+            <button class="severity-filter" wx:if="{{severityName}}" bindtap="clearSeverity" aria-label="清除严重程度筛选">{{severityName}} <text>×</text></button>
+            <picker class="list-sort" range="{{sortOptions}}" range-key="name" value="{{sortIndex}}" bindchange="selectSort">
+              <view class="list-sort-control">{{sortOptions[sortIndex].name}}</view>
+              <view class="list-sort-arrow"/>
+            </picker>
+          </view>
         </view>
         <view class="overview" wx:if="{{severityCounts.length}}">
           <view class="overview-header">

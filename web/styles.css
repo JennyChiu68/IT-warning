@@ -1,10 +1,10 @@
 * { box-sizing:border-box; }
 html, body { margin:0; min-height:100%; background:#f4f5f9; color:#171d32; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif; -webkit-font-smoothing:antialiased; }
 h1, h2, p { margin:0; }
-button, input { font:inherit; }
+button, input, select { font:inherit; }
 button { border:0; background:none; color:inherit; padding:0; text-align:left; cursor:pointer; }
 button:disabled { cursor:default; }
-button:focus-visible, a:focus-visible, input:focus-visible { outline:2px solid #5966e7; outline-offset:2px; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline:2px solid #5966e7; outline-offset:2px; }
 a { color:inherit; text-decoration:none; }
 [hidden] { display:none !important; }
 .app { width:100%; max-width:428px; margin-inline:auto; }
@@ -14,6 +14,7 @@ a { color:inherit; text-decoration:none; }
 .search-input:focus-visible { outline:none; }
 .searchbar:focus-within { border-color:#7984e2; box-shadow:0 0 0 2px #e7eaff; }
 .search-input::-webkit-search-cancel-button { display:none; }
+.list-sort select { appearance:none; cursor:pointer; }
 #list-start { scroll-margin-top:12px; outline:none; }
 .lead-title { text-wrap:balance; }
 @media (max-width:340px) { .home-section .lead-title { font-size:19px; } }
@@ -74,6 +75,10 @@ a { color:inherit; text-decoration:none; }
 .list-count { color:#575f79; font-size:11px; font-variant-numeric:tabular-nums; }
 .severity-filter { flex:none; color:#414ebd; background:#ededff; padding:5px 7px; border-radius:7px; font-size:10px; font-weight:650; white-space:nowrap; }
 .severity-filter b, .severity-filter text { margin-left:2px; font-size:13px; font-weight:600; }
+.list-controls { display:flex; align-items:center; gap:6px; flex:none; }
+.list-sort { display:block; position:relative; }
+.list-sort-control { display:flex; align-items:center; min-height:36px; padding:0 25px 0 9px; border:1px solid #e1e5f0; border-radius:9px; background:#fff; color:#465375; font-size:11px; font-weight:650; white-space:nowrap; }
+.list-sort-arrow { position:absolute; top:50%; right:10px; width:6px; height:6px; border-right:1.5px solid #687698; border-bottom:1.5px solid #687698; transform:translateY(-70%) rotate(45deg); pointer-events:none; }
 .category-list, .chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
 .chip { display:inline-flex; align-items:center; min-width:0; gap:5px; min-height:34px; padding:5px 9px; color:#505a77; background:#fff; border:1px solid #e2e6f2; border-radius:9px; font-size:11px; line-height:1.2; overflow-wrap:anywhere; }
 .chip.selected { color:#3444bd; background:#f0f1ff; border-color:#bcc3fb; font-weight:690; }

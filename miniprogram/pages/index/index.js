@@ -21,7 +21,7 @@ Page({
     tab: 'home', category: 'all', page: 1, severity: '', severityHelp: false,
     query: '', searchLimit: 0, following: [], id: '', topicsOpen: false, aliasesOpen: false,
     searchFocus: false,
-    categories: catalog.categories, tabs: catalog.tabs, severityGuide: catalog.severityGuide, live: false, canSubscribe: false,
+    categories: catalog.categories, tabs: catalog.tabs, sortOptions: catalog.sortOptions, severityGuide: catalog.severityGuide, live: false, canSubscribe: false,
     grants: 0, busy: false, message: ''
   },
 
@@ -110,6 +110,10 @@ Page({
 
   selectCategory(event) {
     this.render({ category: event.currentTarget.dataset.value, page: 1 });
+  },
+  selectSort(event) {
+    const option = this.data.sortOptions[event.detail.value];
+    if (option) this.render({ sort: option.id, page: 1 });
   },
   selectSeverity(event) {
     const value = event.currentTarget.dataset.value;

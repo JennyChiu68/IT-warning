@@ -11,6 +11,7 @@
     { id: 'mobile', name: '移动端' }, { id: 'incident', name: '安全事件' }
   ];
   const tabs = [{ id: 'home', name: '首页', icon: 'pulse' }, { id: 'search', name: '搜索', icon: 'search' }];
+  const sortOptions = [{ id: 'latest', name: '最新优先' }, { id: 'risk', name: '风险优先' }];
   const levels = [
     { id: 'critical', name: '严重', range: '9.0–10.0' }, { id: 'high', name: '高危', range: '7.0–8.9' },
     { id: 'medium', name: '中危', range: '4.0–6.9' }, { id: 'low', name: '低危', range: '0.1–3.9' },
@@ -73,7 +74,8 @@
         dateTitle: item.kev ? 'KEV 收录于 ' + item.kev : '发布于 ' + item.date
       };
     }).sort((a, b) => day(b).localeCompare(day(a)) ||
-      Number(priority(b)) - Number(priority(a)) || (b.score ?? 0) - (a.score ?? 0) || a.title.localeCompare(b.title));
+      Number(priority(b)) - Number(priority(a)) || (b.score ?? 0) - (a.score ?? 0) ||
+      a.title.localeCompare(b.title) || a.id.localeCompare(b.id));
   }
 
   function chinaTime(value) {
@@ -117,14 +119,17 @@
     const scope = all.filter(item => category === 'all' || item.category === category ||
       (category === 'system' && item.products.includes('macOS')));
     const selectedLevel = levels[severityRanks[state.severity]];
+    const sortIndex = Math.max(0, sortOptions.findIndex(option => option.id === state.sort));
     const items = searching
       ? all.filter(item => {
         const searchable = normalize([item.id, ...(item.aliases || []), ...item.products, item.title, item.summary, item.fix].join(' '));
         return words.length && words.every(word => searchable.includes(word));
       })
-      : scope.filter(item => !selectedLevel || item.severity === selectedLevel.id)
-        .sort((a, b) => severityRanks[a.severity] - severityRanks[b.severity] ||
-          Number(Boolean(b.kev)) - Number(Boolean(a.kev)));
+      : scope.filter(item => !selectedLevel || item.severity === selectedLevel.id);
+    if (!searching && sortOptions[sortIndex].id === 'risk') {
+      items.sort((a, b) => severityRanks[a.severity] - severityRanks[b.severity] ||
+        Number(Boolean(b.kev)) - Number(Boolean(a.kev)));
+    }
     const pageCount = searching ? 1 : Math.max(1, Math.ceil(items.length / pageSize));
     const page = Math.min(pageCount, Math.max(1, Math.trunc(Number(state.page)) || 1));
     const start = (page - 1) * pageSize;
@@ -139,7 +144,7 @@
     const pageStart = Math.max(1, Math.min(page - 2, pageCount - 4));
     const pageLinks = Array.from({ length: Math.min(5, pageCount) }, (_, index) => pageStart + index);
     return {
-      pageItems, page, pageCount, pageLinks, count: items.length, queryActive: Boolean(query),
+      pageItems, page, pageCount, pageLinks, sortIndex, count: items.length, queryActive: Boolean(query),
       updateLabel: updateTime ? updateTime.slice(5, 10).replace('-', '/') + ' ' + updateTime.slice(11, 16) : '',
       nextSearchLimit: searching && searchLimit < items.length ? Math.min(searchLimit + searchBatchSize, items.length) : 0,
       severityCounts: all.length ? severityOverview(scope) : [], severityName: selectedLevel?.name || '',
@@ -158,5 +163,5 @@
     return list.includes(value) ? list.filter(item => item !== value) : list.concat(value);
   }
 
-  return { categories, tabs, severityGuide, display, priority, toggle, day };
+  return { categories, tabs, sortOptions, severityGuide, display, priority, toggle, day };
 });
