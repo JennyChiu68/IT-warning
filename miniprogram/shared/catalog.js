@@ -10,7 +10,10 @@
     { id: 'runtime', name: '开发栈' }, { id: 'system', name: '操作系统' },
     { id: 'mobile', name: '移动端' }, { id: 'incident', name: '安全事件' }
   ];
-  const tabs = [{ id: 'home', name: '首页', icon: 'pulse' }, { id: 'search', name: '搜索', icon: 'search' }];
+  const tabs = [
+    { id: 'home', name: '首页', icon: 'pulse' }, { id: 'search', name: '搜索', icon: 'search' },
+    { id: 'subscribe', name: '订阅', icon: 'bookmark' }, { id: 'comments', name: '评论', icon: 'comment' }
+  ];
   const sortOptions = [{ id: 'latest', name: '最新优先' }, { id: 'risk', name: '风险优先' }];
   const levels = [
     { id: 'critical', name: '严重', range: '9.0–10.0' }, { id: 'high', name: '高危', range: '7.0–8.9' },

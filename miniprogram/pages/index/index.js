@@ -22,12 +22,14 @@ Page({
     query: '', searchLimit: 0, following: [], id: '', topicsOpen: false, aliasesOpen: false,
     searchFocus: false,
     categories: catalog.categories, tabs: catalog.tabs, sortOptions: catalog.sortOptions, severityGuide: catalog.severityGuide, live: false, canSubscribe: false,
+    comments: [], unread: 0, commentsEnabled: false, commentAlertIndex: 0, commentDraft: '', commentBusy: false,
     grants: 0, busy: false, message: ''
   },
 
   onLoad(options) {
     this.feed = wx.getStorageSync('it-warning-feed') || snapshot;
     this.session = wx.getStorageSync('it-warning-session') || '';
+    this.commentsReadAt = Number(wx.getStorageSync('it-warning-comments-read')) || 0;
     const following = wx.getStorageSync('it-warning-following') || [];
     const id = typeof options.id === 'string' ? options.id : '';
     this.render({ following, id });
@@ -50,6 +52,7 @@ Page({
   render(next = {}, callback) {
     const state = { ...this.data, ...next };
     const view = catalog.display(this.feed,state);
+    view.commentAlerts = this.feed.items.map(item => ({ id:item.id, title:item.title }));
     if (view.detail) {
       view.detail.followingMap = {};
       for (const product of state.following) view.detail.followingMap[product] = true;
@@ -67,6 +70,7 @@ Page({
       wx.setStorageSync('it-warning-feed', data);
       this.render({ live: data.status === 'live', canSubscribe: Boolean(data.templateId) });
       this.templateId = data.templateId;
+      await this.refreshComments();
       const missing = this.data.id;
       if (missing && !this.data.detail && /^[A-Z\d-]{4,45}$/.test(missing)) {
         try {
@@ -96,8 +100,41 @@ Page({
   },
 
   selectTab(event) {
-    this.render({ tab: event.currentTarget.dataset.value, id: '', page: 1, topicsOpen: false, searchFocus: false },
+    const tab = event.currentTarget.dataset.value;
+    if (tab === 'comments') this.markCommentsRead(this.data.comments);
+    this.render({ tab, id: '', page: 1, topicsOpen: false, searchFocus: false },
       () => wx.pageScrollTo({ scrollTop: 0, duration: 0 }));
+  },
+
+  copyFeed() { wx.setClipboardData({ data:'https://jennychiu68.github.io/IT-warning/feed.xml' }); },
+
+  markCommentsRead(items) {
+    this.commentsReadAt = Math.max(this.commentsReadAt,...items.map(item => item.approvedAt));
+    wx.setStorageSync('it-warning-comments-read',this.commentsReadAt);
+    this.setData({ unread:0 });
+  },
+
+  async refreshComments() {
+    try {
+      const [config, listing] = await Promise.all([request('/api/channels'),request('/api/comments?after='+this.commentsReadAt)]);
+      this.setData({ commentsEnabled:config.comments, comments:listing.items, unread:listing.unread });
+      if (this.data.tab === 'comments' && !this.data.id) this.markCommentsRead(listing.items);
+    } catch {}
+  },
+
+  selectCommentAlert(event) { this.setData({ commentAlertIndex:Number(event.detail.value) }); },
+  inputComment(event) { this.setData({ commentDraft:event.detail.value }); },
+  async submitComment() {
+    if (this.data.commentBusy) return;
+    const item = this.data.commentAlerts[this.data.commentAlertIndex];
+    if (!item) return;
+    this.setData({ commentBusy:true });
+    try {
+      await request('/api/comments',{ method:'POST', data:{ id:item.id, content:this.data.commentDraft } });
+      this.setData({ commentDraft:'' });
+      wx.showToast({ title:'评论已提交审核', icon:'none' });
+    } catch { wx.showToast({ title:'请填写 2–300 字的评论', icon:'none' }); }
+    finally { this.setData({ commentBusy:false }); }
   },
 
   blurSearch() { this.setData({ searchFocus: false }); },

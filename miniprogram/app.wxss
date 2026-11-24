@@ -16,6 +16,13 @@ button.page-step[disabled]:not([type]) { background:#fff; color:#53607e; }
 .status-dot.live { background:#178f65; }
 .main { padding:0 32rpx 20rpx; }
 .home-section { margin-top:6rpx; }
+.subscription-banner { display:flex; align-items:center; width:100%; gap:18rpx; padding:16rpx 20rpx; margin:0 0 20rpx; border:1px solid #dee4f7; border-radius:24rpx; background:#eef2ff; color:#303e91; }
+.subscription-icon { display:flex; flex:none; align-items:center; justify-content:center; width:60rpx; height:60rpx; background:#fff; border-radius:18rpx; }
+.subscription-banner-title { flex:1; font-size:26rpx; line-height:1.35; font-weight:720; }
+.subscription-banner-action { display:flex; align-items:center; flex:none; gap:6rpx; font-size:22rpx; font-weight:650; }
+.subscription-panel .subscription-icon { margin-bottom:16rpx; background:#edf0ff; }
+.subscription-button { margin-top:22rpx; }
+.rss-panel { margin-top:18rpx; }
 .home-section .section-head { min-height:68rpx; }
 .relevance { color:#4e569a; font-size:20rpx; }
 .lead-alert { display:block; width:100%; margin-top:10rpx; padding:32rpx 30rpx 28rpx; border-radius:38rpx; color:#f9faff; background:radial-gradient(ellipse at 100% 0,#383f96,#202856 62%,#191f3c 100%); }
@@ -73,7 +80,12 @@ button.page-step[disabled]:not([type]) { background:#fff; color:#53607e; }
 .stack { margin-top:16rpx; background:#fff; border:1px solid #e6e8f0; border-radius:30rpx; overflow:hidden; }
 .row { display:flex; align-items:center; width:100%; min-height:126rpx; gap:18rpx; padding:16rpx 20rpx; }
 .feed-results { display:flex; flex-direction:column; }
-.feed-results .row { min-height:132rpx; padding-top:8rpx; padding-bottom:8rpx; }
+.alert-cards { display:flex; flex-direction:column; gap:16rpx; margin-top:18rpx; }
+.alert-card { display:block; width:100%; padding:22rpx 24rpx 24rpx; border:1px solid #e3e7f1; border-radius:26rpx; background:#fff; }
+.card-heading { display:flex; align-items:flex-start; gap:18rpx; }
+.card-heading .row-arrow { align-self:center; }
+.card-title { display:block; color:#202944; font-size:28rpx; line-height:1.4; font-weight:730; overflow-wrap:anywhere; }
+.card-summary { display:block; margin-top:16rpx; color:#525e79; font-size:24rpx; line-height:1.5; overflow-wrap:anywhere; }
 .row + .row { border-top:1px solid #edf0f6; }
 .product-symbol { flex:none; display:flex; align-items:center; justify-content:center; width:70rpx; height:70rpx; background:#f0f2f8; border:1px solid #e9ecf4; border-radius:20rpx; }
 .product-icon { width:52rpx; height:52rpx; object-fit:contain; }
@@ -101,9 +113,22 @@ button.page-step[disabled]:not([type]) { background:#fff; color:#53607e; }
 .bottom { position:fixed; bottom:0; z-index:6; display:flex; height:calc(126rpx + env(safe-area-inset-bottom)); padding:6rpx 30rpx env(safe-area-inset-bottom); background:#fff; border-top:1px solid #e7e9f1; }
 .nav { display:flex; flex:1; flex-direction:column; align-items:center; justify-content:center; gap:6rpx; min-width:0; color:#5c6684; font-size:20rpx; }
 .nav.active { color:#3e4cc5; font-weight:750; }
-.nav-shape { display:flex; align-items:center; justify-content:center; width:90rpx; height:54rpx; border-radius:22rpx; }
+.nav-shape { position:relative; display:flex; align-items:center; justify-content:center; width:90rpx; height:54rpx; border-radius:22rpx; }
 .nav.active .nav-shape { background:#eef0ff; }
 .nav-icon { width:38rpx; height:38rpx; display:block; flex:none; }
+.tab-symbol { position:relative; display:block; width:30rpx; height:34rpx; border:3.2rpx solid currentColor; }
+.tab-bookmark { height:32rpx; width:24rpx; border-radius:4rpx 4rpx 1px 1px; border-bottom:0; margin-top:-4rpx; }
+.tab-bookmark::after { content:''; position:absolute; bottom:-6rpx; left:3rpx; width:12rpx; height:12rpx; border-top:3rpx solid currentColor; border-left:3rpx solid currentColor; transform:rotate(45deg); }
+.tab-comment { width:34rpx; height:28rpx; border-radius:6rpx; margin-top:-4rpx; }
+.tab-comment::before { content:''; position:absolute; left:6rpx; top:6rpx; width:14rpx; height:3rpx; background:currentColor; }
+.tab-comment::after { content:''; position:absolute; bottom:-8rpx; left:1px; width:10rpx; height:10rpx; border-left:3rpx solid currentColor; transform:skewY(-35deg); }
+.nav-badge { position:absolute; top:-4rpx; left:58rpx; min-width:30rpx; padding:1px 8rpx; border:1px solid #fff; border-radius:40rpx; background:#cf3f58; color:#fff; font-size:18rpx; font-weight:730; white-space:nowrap; }
+.comment-form { display:flex; flex-direction:column; gap:18rpx; }
+.comment-form select,.comment-form textarea,.comment-input { width:100%; min-height:78rpx; padding:18rpx; border:1px solid #e0e5f0; border-radius:16rpx; background:#fff; color:#202944; font:inherit; font-size:26rpx; }
+.comment-form textarea,.comment-input { height:184rpx; max-height:320rpx; resize:vertical; }
+.comment-form .cta { align-self:flex-start; }
+.comment-target { display:flex; justify-content:space-between; gap:12rpx; width:100%; font-size:26rpx; font-weight:720; }
+.comment-item p,.comment-item .panel-text { white-space:pre-wrap; overflow-wrap:anywhere; }
 .searchbar { display:flex; align-items:center; gap:20rpx; height:94rpx; padding:0 22rpx; background:#fff; border:1px solid #e1e5f1; border-radius:24rpx; }
 .search-input { flex:1; min-width:0; height:88rpx; font-size:28rpx; color:#171d32; }
 .clear-query { flex:none; min-width:64rpx; min-height:72rpx; text-align:center; font-size:40rpx; line-height:1; color:#5b6781; border-radius:16rpx; }

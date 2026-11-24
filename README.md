@@ -7,7 +7,7 @@
 - 打开项目根目录的 `preview.html`，离线浏览 2026 年 11 月 24 日核验的快照。
 - GitHub Pages 从 `main` 分支的 `/docs` 目录发布静态预览。更新代码或已核验快照后，用 `node scripts/preview.mjs` 重新生成预览并提交。在线预览使用随包快照。
 - 在微信开发者工具中导入本项目目录即可加载随包快照。项目预设体验 AppID。预览正式 API 和微信提醒时，使用对应小程序的 AppID。
-- 使用 Node.js 22.13 或更新版本运行 `npm start`。浏览 `http://127.0.0.1:4173/` 查看实时 API 和页面。服务默认每 15 分钟同步，可用 `SYNC_MINUTES` 调整。设置 `AUTO_SYNC=0` 可固定现有数据库，运行 `npm run sync` 可手动刷新，运行 `npm run review -- status` 查看信源结果。SQLite 默认存储在 `var/alerts.sqlite`。
+- 使用 Node.js 22.13 或更新版本，运行 `npm ci` 后运行 `npm start`。浏览 `http://127.0.0.1:4173/` 查看实时 API 和页面。服务默认每 15 分钟同步，可用 `SYNC_MINUTES` 调整。设置 `AUTO_SYNC=0` 可固定现有数据库，运行 `npm run sync` 可手动刷新，运行 `npm run review -- status` 查看信源结果。SQLite 默认存储在 `var/alerts.sqlite`。
 - 微信开发者工具的模拟器会尝试读取本机 API。需要在模拟器里调试该地址时，可在工具内临时跳过本地域名校验。真机使用已登记的 HTTPS 地址。
 
 ## 信源与发布方式
@@ -52,7 +52,13 @@ npm run review -- dismiss CANDIDATE-ID
 
 待发稿件采用 `miniprogram/shared/snapshot.json` 中单条 `items` 的字段结构。`date` 填原公告公布日期。原文有明确时间时，同时填写含时区的 `publishedAt`，服务端将 `date` 换算为北京时间日期。使用 `category: "incident"` 标记安全事件。可用 `aliases` 合并同一份通告的其他 CVE，搜索和详情均可按关联编号查找。核验并更新随包快照后，运行 `node scripts/preview.mjs` 重建两个预览文件。修改共享样式后运行 `node scripts/native-styles.mjs` 更新 WXSS。
 
-## 接入正式微信提醒
+## H5 订阅和评论
+
+- 首页和底部「订阅」提供重点预警 RSS。GitHub Pages 的 `feed.xml` 随审核快照发布。运行 Node 服务时，`/feed.xml` 从当前数据库生成。用 `PUBLIC_URL` 设置预警的 HTTPS 页面地址。
+- 浏览器后台通知使用 Web Push。用 `npx web-push generate-vapid-keys` 生成密钥，按 `.env.example` 设置环境变量，在支持 Push API 的 HTTPS 浏览器中点击「启用浏览器通知」。严重漏洞、新确认已遭利用和高危安全事件自发布后进入推送队列，每 30 秒检查一次。浏览器会提示用户授权，也可在订阅页随时取消。金十 App 内的系统通知需要宿主支持及真机验证。
+- 「评论」按预警收集内容。服务端将 `COMMENTS_ENABLED` 设为 `1` 后可提交；用 `npm run review -- comments` 查看待审评论，`npm run review -- approve-comment 编号` 发布，`npm run review -- remove-comment 编号` 移除。仅审核通过且对应预警仍公开的评论会显示，角标取设备上未读的公开评论数。
+
+## 原生微信提醒（可选）
 
 1. 部署 Node 服务到主办者控制的 HTTPS 域名，配置持久化 SQLite 路径（可用 `DB_PATH`），确认部署网络能访问信源和微信接口。把 API 地址写到 `miniprogram/config.js`，在微信公众平台登记为 request 合法域名。
 2. 使用项目的正式 AppID。在微信公众平台申请所属类目可用的一次性订阅模板。复制 `.env.example` 为 `.env`，仅在服务端设置 `WECHAT_APP_ID`、`WECHAT_APP_SECRET`、`WECHAT_TEMPLATE_ID` 以及匹配模板真实字段的 `WECHAT_TEMPLATE_FIELDS`。体验版测试时使用 `WECHAT_MINIPROGRAM_STATE=trial`。

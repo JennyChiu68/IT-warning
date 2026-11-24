@@ -4,9 +4,15 @@ import { fileURLToPath } from 'node:url';
 import { openStore } from './store.mjs';
 import { syncSources } from './sources.mjs';
 import { deliver, recipient, register, remaining, validTopics, wechatConfig } from './wechat.mjs';
+import { alertsRss, publicUrl } from './rss.mjs';
+import { deliverPush, managePush, pushConfig } from './push.mjs';
+import { readComments, writeComment } from './comments.mjs';
 
 const store = openStore();
 const wechat = wechatConfig();
+const push = pushConfig();
+const comments = process.env.COMMENTS_ENABLED === '1';
+const rssUrl = publicUrl(process.env.PUBLIC_URL);
 const interval = Math.max(5,Number(process.env.SYNC_MINUTES) || 15) * 60000;
 const host = process.env.HOST || '127.0.0.1';
 const port = Number(process.env.PORT || 4173);
@@ -14,7 +20,8 @@ const mime = { html:'text/html; charset=utf-8', css:'text/css; charset=utf-8', j
 const project = new URL('../',import.meta.url);
 const staticRoutes = new Map([
   ['/','web/index.html'], ['/app.js','web/app.js'], ['/styles.css','web/styles.css'],
-  ['/shared/catalog.js','miniprogram/shared/catalog.js'], ['/shared/snapshot.json','miniprogram/shared/snapshot.json']
+  ['/shared/catalog.js','miniprogram/shared/catalog.js'], ['/shared/snapshot.json','miniprogram/shared/snapshot.json'],
+  ['/push-worker.js','web/push-worker.js']
 ]);
 const rate = new Map();
 let syncing = false;
@@ -39,7 +46,7 @@ async function body(request) {
   return parsed;
 }
 
-function allowed(ip) {
+function allowed(ip,limit=30) {
   const time = Date.now();
   if (rate.size > 1000) {
     for (const [key,item] of rate) if (item.until < time) rate.delete(key);
@@ -50,7 +57,7 @@ function allowed(ip) {
     rate.set(ip,{ until:time + 60000, count:1 });
     return true;
   }
-  return ++record.count <= 30;
+  return ++record.count <= limit;
 }
 
 function staticFile(response,path,head) {
@@ -68,9 +75,17 @@ const server = createServer(async (request,response) => {
   response.setHeader('X-Content-Type-Options','nosniff');
   response.setHeader('Referrer-Policy','no-referrer');
   response.setHeader('Content-Security-Policy',"default-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'");
-  const pathname = (request.url || '/').split('?')[0];
+  const url = URL.parse(request.url || '/','http://local');
+  if (!url) return json(response,400,{ message:'请求地址无效。' });
+  const pathname = url.pathname;
   const method = request.method;
   if (method === 'GET' || method === 'HEAD') {
+    if (pathname === '/feed.xml') {
+      response.writeHead(200,{ 'Content-Type':'application/rss+xml; charset=utf-8', 'Cache-Control':'public, max-age=60' });
+      return response.end(method === 'HEAD' ? undefined : alertsRss(store.feed(),rssUrl));
+    }
+    if (pathname === '/api/channels') return json(response,200,{ pushKey:push?.publicKey || '', comments });
+    if (pathname === '/api/comments') return json(response,200,readComments(store,url.searchParams.get('after')));
     if (pathname === '/api/feed') return json(response,200,{ ...store.feed(), templateId:wechat?.templateId || null });
     const alert = /^\/api\/alerts\/([A-Z\d-]{4,45})$/.exec(pathname);
     if (alert) {
@@ -84,6 +99,20 @@ const server = createServer(async (request,response) => {
     const assets = /^\/assets\/[a-z-]+\.png$/;
     const path = staticRoutes.get(pathname) || (assets.test(pathname) ? 'miniprogram' + pathname : '');
     if (path) return staticFile(response,path,method === 'HEAD');
+  }
+  const pushAction = /^\/api\/push\/(subscribe|status|cancel)$/.exec(pathname)?.[1];
+  if (method === 'POST' && ((comments && pathname === '/api/comments') || (push && pushAction))) {
+    try {
+      if (pathname === '/api/comments') {
+        if (!allowed('comment:'+request.socket.remoteAddress,3)) return json(response,429,{ message:'评论提交过于频繁，请稍后重试。' });
+        writeComment(store,await body(request));
+        return json(response,202,{ accepted:true });
+      }
+      if (!allowed(request.socket.remoteAddress)) return json(response,429,{ message:'请求过于频繁，请稍后重试。' });
+      return json(response,200,managePush(store,await body(request),pushAction));
+    } catch (error) {
+      return json(response,400,{ message:error.message });
+    }
   }
   if (method === 'POST' && wechat && ['/api/wechat/subscribe','/api/wechat/topics','/api/wechat/cancel'].includes(pathname)) {
     if (!allowed(request.socket.remoteAddress)) return json(response,429,{ message:'请求过于频繁' });
@@ -121,7 +150,9 @@ async function sync() {
 async function notifications() {
   if (delivering) return;
   delivering = true;
-  try { await deliver(store,wechat); }
+  try { await Promise.allSettled([wechat && deliver(store,wechat),push && deliverPush(store,push)]).then(results => {
+    for (const result of results) if (result.status === 'rejected') console.warn('通知任务失败',result.reason.message);
+  }); }
   catch (error) { console.warn('通知任务失败',error.message); }
   finally { delivering = false; }
 }
@@ -132,7 +163,7 @@ server.listen(port,host,() => {
     sync();
     setInterval(sync,interval);
   }
-  if (wechat) {
+  if (wechat || push) {
     notifications();
     setInterval(notifications,30000);
   }

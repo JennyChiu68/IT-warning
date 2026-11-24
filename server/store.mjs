@@ -67,6 +67,7 @@ export function openStore(path = process.env.DB_PATH || defaultPath) {
   db.exec(`
     PRAGMA busy_timeout=5000;
     PRAGMA journal_mode=WAL;
+    PRAGMA foreign_keys=ON;
     CREATE TABLE IF NOT EXISTS alerts (
       id TEXT PRIMARY KEY, content TEXT NOT NULL, origin TEXT NOT NULL,
       active INTEGER NOT NULL DEFAULT 1, updated TEXT NOT NULL, display_date TEXT NOT NULL
@@ -83,6 +84,18 @@ export function openStore(path = process.env.DB_PATH || defaultPath) {
       openid TEXT NOT NULL, event TEXT NOT NULL, state TEXT NOT NULL, updated TEXT NOT NULL,
       PRIMARY KEY(openid,event)
     );
+    CREATE TABLE IF NOT EXISTS comments (
+      id INTEGER PRIMARY KEY, alert TEXT NOT NULL, content TEXT NOT NULL, approved_at INTEGER
+    );
+    CREATE TABLE IF NOT EXISTS push_subscriptions (
+      endpoint TEXT PRIMARY KEY, keys TEXT NOT NULL, created TEXT NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS push_deliveries (
+      endpoint TEXT NOT NULL REFERENCES push_subscriptions(endpoint) ON DELETE CASCADE,
+      event TEXT NOT NULL, next_attempt INTEGER NOT NULL, attempts INTEGER NOT NULL DEFAULT 0,
+      done INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(endpoint,event)
+    );
+    CREATE INDEX IF NOT EXISTS push_due ON push_deliveries(done,next_attempt);
   `);
   const q = sql => db.prepare(sql);
   const time = () => new Date().toISOString();

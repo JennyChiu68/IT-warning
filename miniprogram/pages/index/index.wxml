@@ -4,7 +4,17 @@
 </template>
 
 <template name="rows">
-  <view class="stack" wx:if="{{pageItems.length}}">
+  <view class="alert-cards" wx:if="{{expanded && pageItems.length}}">
+    <button class="alert-card" wx:for="{{pageItems}}" wx:key="id" data-value="{{item.id}}" bindtap="openDetail">
+      <view class="card-heading">
+        <view class="product-symbol"><image class="product-icon" src="{{'/assets/' + item.productIcon + '.png'}}" mode="aspectFit"/></view>
+        <view class="row-main"><view class="card-title">{{item.title}}</view><view class="meta"><template is="tags" data="{{item:item}}"/><text class="row-date">{{item.dateLabel}}</text></view></view>
+        <image class="row-arrow" src="/assets/arrow.png" mode="aspectFit"/>
+      </view>
+      <view class="card-summary">{{item.summary}}</view>
+    </button>
+  </view>
+  <view class="stack" wx:elif="{{pageItems.length}}">
     <button class="row" wx:for="{{pageItems}}" wx:key="id" data-value="{{item.matchedId || item.id}}" bindtap="openDetail">
       <view class="product-symbol">
         <image class="product-icon" src="{{'/assets/' + item.productIcon + '.png'}}" mode="aspectFit"/>
@@ -73,10 +83,11 @@
   <block wx:else>
     <view class="masthead">
       <view class="title home-title" wx:if="{{tab === 'home'}}">IT漏洞预警</view>
-      <view class="title" wx:else>搜索预警</view>
+      <view class="title" wx:else>{{tab === 'search' ? '搜索预警' : tab === 'subscribe' ? '订阅' : '评论'}}</view>
       <view class="status" wx:if="{{tab === 'home' && updateLabel}}"><view class="status-dot {{live ? 'live' : ''}}"/><text>{{live ? '同步于' : '快照'}} {{updateLabel}}</text></view>
     </view>
     <view class="main" wx:if="{{tab === 'home'}}">
+      <button class="subscription-banner" data-value="subscribe" bindtap="selectTab"><view class="subscription-icon"><image class="nav-icon" src="/assets/bell-active.png" mode="aspectFit"/></view><text class="subscription-banner-title">订阅重点预警</text><text class="subscription-banner-action">查看订阅方式 ›</text></button>
       <view class="home-section">
         <view class="section-head"><text class="heading">优先处理</text><text class="relevance" wx:if="{{home.featureFollowed}}">与你关注的产品有关</text></view>
         <button class="lead-alert" wx:if="{{home.feature}}" data-value="{{home.feature.id}}" bindtap="openDetail">
@@ -122,7 +133,7 @@
         <view class="category-list" aria-label="按类别筛选">
           <button class="chip {{item.id === category ? 'selected' : ''}}" wx:for="{{categories}}" wx:key="id" data-value="{{item.id}}" bindtap="selectCategory">{{item.name}}</button>
         </view>
-        <view class="feed-results"><template is="rows" data="{{pageItems, page, pageCount, pageLinks, empty:updateLabel ? '当前条件下暂无预警' : '正在获取预警…'}}"/></view>
+        <view class="feed-results"><template is="rows" data="{{pageItems, page, pageCount, pageLinks, expanded:true, empty:updateLabel ? '当前条件下暂无预警' : '正在获取预警…'}}"/></view>
       </view>
     </view>
     <view class="main" wx:elif="{{tab === 'search'}}">
@@ -144,9 +155,29 @@
         </block>
       </view>
     </view>
+    <view class="main" wx:elif="{{tab === 'subscribe'}}">
+      <view class="panel subscription-panel">
+        <view class="subscription-icon"><image class="nav-icon" src="/assets/bell-active.png" mode="aspectFit"/></view>
+        <view class="heading">重点预警提醒</view><view class="panel-text">订阅严重漏洞、已知遭利用的漏洞和高危安全事件。</view>
+        <view class="panel-text">将链接添加到 RSS 阅读器，在预警源更新后接收提醒。</view>
+        <button class="cta subscription-button" bindtap="copyFeed">复制订阅链接</button>
+      </view>
+    </view>
+    <view class="main" wx:else>
+      <view class="panel comment-form" wx:if="{{commentsEnabled && commentAlerts.length}}">
+        <view class="panel-title">评论预警</view>
+        <picker range="{{commentAlerts}}" range-key="title" value="{{commentAlertIndex}}" bindchange="selectCommentAlert"><view class="list-sort-control">{{commentAlerts[commentAlertIndex].title}}</view></picker>
+        <textarea class="comment-input" placeholder="写下你的评论" maxlength="300" value="{{commentDraft}}" bindinput="inputComment"/>
+        <button class="cta" bindtap="submitComment" disabled="{{commentBusy}}">提交审核</button>
+      </view>
+      <view class="alert-cards" wx:if="{{comments.length}}">
+        <view class="alert-card comment-item" wx:for="{{comments}}" wx:key="id"><button class="comment-target" data-value="{{item.alert}}" bindtap="openDetail">{{item.title}}</button><view class="panel-text">{{item.content}}</view></view>
+      </view>
+      <view class="empty" wx:else>{{commentsEnabled ? '暂无公开评论' : '评论将在正式版开放'}}</view>
+    </view>
     <view class="bottom">
       <button wx:for="{{tabs}}" wx:key="id" class="nav {{tab === item.id ? 'active' : ''}}" data-value="{{item.id}}" bindtap="selectTab">
-        <view class="nav-shape"><image class="nav-icon" src="{{'/assets/' + item.icon + (tab === item.id ? '-active' : '') + '.png'}}" mode="aspectFit"/></view><text>{{item.name}}</text>
+        <view class="nav-shape"><view wx:if="{{item.id === 'subscribe' || item.id === 'comments'}}" class="tab-symbol tab-{{item.icon}}"/><image wx:else class="nav-icon" src="{{'/assets/' + item.icon + (tab === item.id ? '-active' : '') + '.png'}}" mode="aspectFit"/><text class="nav-badge" wx:if="{{item.id === 'comments' && unread}}">{{unread > 99 ? '99+' : unread}}</text></view><text>{{item.name}}</text>
       </button>
     </view>
   </block>

@@ -51,8 +51,15 @@ try {
   } else if (command === 'dismiss' && value) {
     store.q("UPDATE candidates SET state='dismissed' WHERE id=?").run(value);
     console.log('已略过 ' + value);
+  } else if (command === 'comments') {
+    console.log(JSON.stringify(store.q('SELECT id,alert,content FROM comments WHERE approved_at IS NULL ORDER BY id LIMIT 100').all(),null,2));
+  } else if (command === 'approve-comment' && /^[1-9]\d*$/.test(value || '')) {
+    const result = store.q('UPDATE comments SET approved_at=? WHERE id=? AND approved_at IS NULL').run(Date.now(),Number(value));
+    console.log(result.changes ? '已发布评论 ' + value : '没有对应的待审评论');
+  } else if (command === 'remove-comment' && /^[1-9]\d*$/.test(value || '')) {
+    console.log(store.q('DELETE FROM comments WHERE id=?').run(Number(value)).changes ? '已移除评论 ' + value : '没有该评论');
   } else {
-    throw new Error('用法 npm run review -- list [digest|coverage] | status | lead 文件 | publish 文件 | backfill 文件 | withdraw 编号 | dismiss 编号');
+    throw new Error('用法 npm run review -- list [digest|coverage] | status | lead 文件 | publish 文件 | backfill 文件 | withdraw 编号 | dismiss 编号 | comments | approve-comment 编号 | remove-comment 编号');
   }
 } catch (error) {
   console.error(error.message);

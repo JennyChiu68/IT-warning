@@ -13,6 +13,7 @@ button, input, select { font:inherit; }
 button { border:0; background:none; color:inherit; padding:0; text-align:left; cursor:pointer; }
 button:disabled { cursor:default; }
 button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline:2px solid #5966e7; outline-offset:2px; }
+.visually-hidden { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
 a { color:inherit; text-decoration:none; }
 [hidden] { display:none !important; }
 .app { width:100%; max-width:428px; margin-inline:auto; }
@@ -26,7 +27,7 @@ a { color:inherit; text-decoration:none; }
 #list-start { scroll-margin-top:12px; outline:none; }
 .lead-title { text-wrap:balance; }
 @media (max-width:340px) { .home-section .lead-title { font-size:19px; } }
-@media (hover:hover) { .row:hover,.source:hover { background:#f8f9ff; } .chip:hover,.quick-product:hover { border-color:#c0c7f5; } }
+@media (hover:hover) { .row:hover,.source:hover,.alert-card:hover { background:#f8f9ff; } .chip:hover,.quick-product:hover,.alert-card:hover { border-color:#c0c7f5; } }
 @media (hover:hover) { .severity-cell:hover:not(:disabled) { background:#f0f2fa; } }
 /* Shared layout */
 .app { min-height:100vh; background:#f4f5f9; padding-bottom:calc(76px + env(safe-area-inset-bottom)); }
@@ -39,6 +40,13 @@ a { color:inherit; text-decoration:none; }
 .status-dot.live { background:#178f65; }
 .main { padding:0 16px 10px; }
 .home-section { margin-top:3px; }
+.subscription-banner { display:flex; align-items:center; width:100%; gap:9px; padding:8px 10px; margin:0 0 10px; border:1px solid #dee4f7; border-radius:12px; background:#eef2ff; color:#303e91; }
+.subscription-icon { display:flex; flex:none; align-items:center; justify-content:center; width:30px; height:30px; background:#fff; border-radius:9px; }
+.subscription-banner-title { flex:1; font-size:13px; line-height:1.35; font-weight:720; }
+.subscription-banner-action { display:flex; align-items:center; flex:none; gap:3px; font-size:11px; font-weight:650; }
+.subscription-panel .subscription-icon { margin-bottom:8px; background:#edf0ff; }
+.subscription-button { margin-top:11px; }
+.rss-panel { margin-top:9px; }
 .home-section .section-head { min-height:34px; }
 .relevance { color:#4e569a; font-size:10px; }
 .lead-alert { display:block; width:100%; margin-top:5px; padding:16px 15px 14px; border-radius:19px; color:#f9faff; background:radial-gradient(ellipse at 100% 0,#383f96,#202856 62%,#191f3c 100%); }
@@ -96,7 +104,12 @@ a { color:inherit; text-decoration:none; }
 .stack { margin-top:8px; background:#fff; border:1px solid #e6e8f0; border-radius:15px; overflow:hidden; }
 .row { display:flex; align-items:center; width:100%; min-height:63px; gap:9px; padding:8px 10px; }
 .feed-results { display:flex; flex-direction:column; }
-.feed-results .row { min-height:66px; padding-top:4px; padding-bottom:4px; }
+.alert-cards { display:flex; flex-direction:column; gap:8px; margin-top:9px; }
+.alert-card { display:block; width:100%; padding:11px 12px 12px; border:1px solid #e3e7f1; border-radius:13px; background:#fff; }
+.card-heading { display:flex; align-items:flex-start; gap:9px; }
+.card-heading .row-arrow { align-self:center; }
+.card-title { display:block; color:#202944; font-size:14px; line-height:1.4; font-weight:730; overflow-wrap:anywhere; }
+.card-summary { display:block; margin-top:8px; color:#525e79; font-size:12px; line-height:1.5; overflow-wrap:anywhere; }
 .row + .row { border-top:1px solid #edf0f6; }
 .product-symbol { flex:none; display:flex; align-items:center; justify-content:center; width:35px; height:35px; background:#f0f2f8; border:1px solid #e9ecf4; border-radius:10px; }
 .product-icon { width:26px; height:26px; object-fit:contain; }
@@ -124,9 +137,22 @@ a { color:inherit; text-decoration:none; }
 .bottom { position:fixed; bottom:0; z-index:6; display:flex; height:calc(63px + env(safe-area-inset-bottom)); padding:3px 15px env(safe-area-inset-bottom); background:#fff; border-top:1px solid #e7e9f1; }
 .nav { display:flex; flex:1; flex-direction:column; align-items:center; justify-content:center; gap:3px; min-width:0; color:#5c6684; font-size:10px; }
 .nav.active { color:#3e4cc5; font-weight:750; }
-.nav-shape { display:flex; align-items:center; justify-content:center; width:45px; height:27px; border-radius:11px; }
+.nav-shape { position:relative; display:flex; align-items:center; justify-content:center; width:45px; height:27px; border-radius:11px; }
 .nav.active .nav-shape { background:#eef0ff; }
 .nav-icon { width:19px; height:19px; display:block; flex:none; }
+.tab-symbol { position:relative; display:block; width:15px; height:17px; border:1.6px solid currentColor; }
+.tab-bookmark { height:16px; width:12px; border-radius:2px 2px 1px 1px; border-bottom:0; margin-top:-2px; }
+.tab-bookmark::after { content:''; position:absolute; bottom:-3px; left:1.5px; width:6px; height:6px; border-top:1.5px solid currentColor; border-left:1.5px solid currentColor; transform:rotate(45deg); }
+.tab-comment { width:17px; height:14px; border-radius:3px; margin-top:-2px; }
+.tab-comment::before { content:''; position:absolute; left:3px; top:3px; width:7px; height:1.5px; background:currentColor; }
+.tab-comment::after { content:''; position:absolute; bottom:-4px; left:1px; width:5px; height:5px; border-left:1.5px solid currentColor; transform:skewY(-35deg); }
+.nav-badge { position:absolute; top:-2px; left:29px; min-width:15px; padding:1px 4px; border:1px solid #fff; border-radius:20px; background:#cf3f58; color:#fff; font-size:9px; font-weight:730; white-space:nowrap; }
+.comment-form { display:flex; flex-direction:column; gap:9px; }
+.comment-form select,.comment-form textarea,.comment-input { width:100%; min-height:39px; padding:9px; border:1px solid #e0e5f0; border-radius:8px; background:#fff; color:#202944; font:inherit; font-size:13px; }
+.comment-form textarea,.comment-input { height:92px; max-height:160px; resize:vertical; }
+.comment-form .cta { align-self:flex-start; }
+.comment-target { display:flex; justify-content:space-between; gap:6px; width:100%; font-size:13px; font-weight:720; }
+.comment-item p,.comment-item .panel-text { white-space:pre-wrap; overflow-wrap:anywhere; }
 .searchbar { display:flex; align-items:center; gap:10px; height:47px; padding:0 11px; background:#fff; border:1px solid #e1e5f1; border-radius:12px; }
 .search-input { flex:1; min-width:0; height:44px; font-size:14px; color:#171d32; }
 .clear-query { flex:none; min-width:32px; min-height:36px; text-align:center; font-size:20px; line-height:1; color:#5b6781; border-radius:8px; }
@@ -1460,7 +1486,10 @@ const IT_WARNING_ICONS={"arrow-white":"data:image/png;base64,iVBORw0KGgoAAAANSUh
     { id: 'runtime', name: '开发栈' }, { id: 'system', name: '操作系统' },
     { id: 'mobile', name: '移动端' }, { id: 'incident', name: '安全事件' }
   ];
-  const tabs = [{ id: 'home', name: '首页', icon: 'pulse' }, { id: 'search', name: '搜索', icon: 'search' }];
+  const tabs = [
+    { id: 'home', name: '首页', icon: 'pulse' }, { id: 'search', name: '搜索', icon: 'search' },
+    { id: 'subscribe', name: '订阅', icon: 'bookmark' }, { id: 'comments', name: '评论', icon: 'comment' }
+  ];
   const sortOptions = [{ id: 'latest', name: '最新优先' }, { id: 'risk', name: '风险优先' }];
   const levels = [
     { id: 'critical', name: '严重', range: '9.0–10.0' }, { id: 'high', name: '高危', range: '7.0–8.9' },
@@ -1624,16 +1653,20 @@ const app = document.getElementById('app');
 const toast = document.getElementById('toast');
 const embeddedIcons = typeof IT_WARNING_ICONS === 'undefined' ? {} : IT_WARNING_ICONS;
 const staticPreview = typeof IT_WARNING_SNAPSHOT !== 'undefined';
+const rssLink = staticPreview ? 'https://jennychiu68.github.io/IT-warning/feed.xml' : new URL('./feed.xml',location.href).href;
 const state = {
   tab: 'home', category: 'all', page: 1, severity: '', severityHelp: false,
   query: '', searchLimit: 0, following: [], topicsOpen: false, aliasesOpen: false,
+  commentAlert: '', commentDraft: '', commentBusy: false,
   id: new URLSearchParams(location.search).get('id') || ''
 };
+const channels = { pushKey:'', registration:null, push:false, pushBusy:false, comments:false, unread:0, items:[], readAt:0 };
 let feed = staticPreview ? IT_WARNING_SNAPSHOT : { items: [], checkedAt: null };
 let live = false;
 let timer;
 let detailScroll = 0;
 try { state.following = JSON.parse(localStorage.getItem('it-warning-following')) || []; } catch {}
+try { channels.readAt = Number(localStorage.getItem('it-warning-comments-read')) || 0; } catch {}
 
 function esc(value) {
   return String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[char]);
@@ -1660,7 +1693,7 @@ function header(view) {
   const home = state.tab === 'home';
   const title = home
     ? '<h1 class="title home-title">IT漏洞预警</h1>'
-    : '<h1 class="title">搜索预警</h1>';
+    : '<h1 class="title">' + (state.tab === 'search' ? '搜索预警' : AlertCatalog.tabs.find(tab => tab.id === state.tab).name) + '</h1>';
   return `<header class="masthead">${title}
     ${home && view.updateLabel ? `<span class="status"><i class="status-dot ${live ? 'live' : ''}"></i>${live ? '同步于' : '快照'} <time>${esc(view.updateLabel)}</time></span>` : ''}
   </header>`;
@@ -1668,7 +1701,11 @@ function header(view) {
 
 function homePage(view) {
   const { feature, featureFollowed } = view.home;
-  return `<section class="home-section">
+  return `<button class="subscription-banner" data-action="tab" data-value="subscribe">
+      <span class="subscription-icon">${icon('bell-active')}</span><span class="subscription-banner-title">订阅重点预警</span>
+      <span class="subscription-banner-action">${channels.push ? '管理订阅' : '查看订阅方式'} ${icon('arrow','tiny-arrow')}</span>
+    </button>
+    <section class="home-section">
       <div class="section-head"><h2 class="heading">优先处理</h2>${featureFollowed ? '<span class="relevance">与你关注的产品有关</span>' : ''}</div>
       ${feature ? `<button class="lead-alert" data-action="detail" data-value="${esc(feature.id)}">
         <span class="lead-top"><span class="lead-product"><span class="product-symbol">${icon(feature.productIcon,'product-icon')}</span><span class="lead-flag">${feature.kev ? '已知遭利用' : esc(feature.levelName)}</span></span><span class="lead-date">${esc(feature.dateLabel)} 公布</span></span>
@@ -1702,8 +1739,17 @@ function overview(view) {
   </section>`;
 }
 
-function rows(items, empty) {
+function rows(items, empty, expanded = false) {
   if (!items.length) return '<p class="empty">' + esc(empty) + '</p>';
+  if (expanded) return `<div class="alert-cards">${items.map(item => `<button class="alert-card" data-action="detail" data-value="${esc(item.id)}">
+    <span class="card-heading">
+      <span class="product-symbol">${icon(item.productIcon,'product-icon')}</span>
+      <span class="row-main"><span class="card-title">${esc(item.title)}</span>
+        <span class="meta">${tags(item)} <time class="row-date" datetime="${esc(item.publishedAt || item.date)}" title="${esc(item.dateTitle)}">${esc(item.dateLabel)}</time></span>
+      </span>${icon('arrow','row-arrow')}
+    </span>
+    <span class="card-summary">${esc(item.summary)}</span>
+  </button>`).join('')}</div>`;
   return `<div class="stack">${items.map(item => `<button class="row" data-action="detail" data-value="${esc(item.matchedId || item.id)}">
     <span class="product-symbol">${icon(item.productIcon,'product-icon')}</span>
     <span class="row-main"><span class="row-label">${esc(item.title)}</span>
@@ -1722,7 +1768,7 @@ function pager(view) {
 }
 
 function list(view, empty) {
-  return rows(view.pageItems, empty) + pager(view);
+  return rows(view.pageItems, empty, true) + pager(view);
 }
 
 function alertsSection(view) {
@@ -1749,9 +1795,37 @@ function followTopics(entries) {
 
 function reminderSettings(view) {
   return `<section class="panel settings-panel"><div class="section-head"><h2 class="panel-title">关注产品</h2><span class="list-count">${view.followed} 项</span></div>
-    ${followTopics(view.topicList)}
-    ${view.followed ? `<div class="reminder"><span>${icon('bell-active')}微信订阅提醒</span><span>在小程序内开启</span></div>` : ''}
+    ${followTopics(view.topicList)}</section>`;
+}
+
+function subscriptionPage() {
+  return `<section class="panel subscription-panel">
+    <span class="subscription-icon">${icon('bell-active')}</span><h2 class="heading">重点预警提醒</h2>
+    <p class="panel-text">订阅严重漏洞、已知遭利用的漏洞和高危安全事件。</p>
+    ${channels.registration && Notification.permission !== 'denied' ? `<button class="cta subscription-button" data-action="toggle-push" ${channels.pushBusy ? 'disabled' : ''}>${channels.push ? '取消浏览器通知' : '启用浏览器通知'}</button>` : ''}
+    ${channels.registration && Notification.permission === 'denied' ? '<p class="panel-text">浏览器通知已被关闭，可在站点设置中重新允许。</p>' : ''}
+  </section>
+  <section class="panel subscription-panel rss-panel">
+    <h2 class="panel-title">RSS 订阅</h2>
+    <p class="panel-text">将链接添加到 RSS 阅读器，在预警源更新后接收提醒。</p>
+    <button class="cta ${channels.registration ? 'light' : ''} subscription-button" data-action="copy-feed">复制订阅链接</button>
   </section>`;
+}
+
+function commentsPage() {
+  const alerts = feed.items.slice().sort((a,b) => b.date.localeCompare(a.date) || (b.publishedAt || '').localeCompare(a.publishedAt || ''));
+  const form = channels.comments && alerts.length ? `<form class="panel comment-form" id="comment-form">
+    <label class="panel-title" for="comment-alert">评论预警</label>
+    <select id="comment-alert" required><option value="">选择一条预警</option>${alerts.map(item => `<option value="${esc(item.id)}" ${state.commentAlert === item.id ? 'selected' : ''}>${esc(item.title)}</option>`).join('')}</select>
+    <label class="visually-hidden" for="comment-content">评论内容</label>
+    <textarea id="comment-content" maxlength="300" minlength="2" required placeholder="写下你的评论">${esc(state.commentDraft)}</textarea>
+    <button class="cta" type="submit" ${state.commentBusy ? 'disabled' : ''}>提交审核</button>
+  </form>` : '';
+  const list = channels.items.length ? `<div class="alert-cards">${channels.items.map(item => `<article class="alert-card comment-item">
+    <button class="comment-target" data-action="detail" data-value="${esc(item.alert)}">${esc(item.title)} ${icon('arrow','tiny-arrow')}</button>
+    <p class="panel-text">${esc(item.content)}</p></article>`).join('')}</div>`
+    : `<p class="empty">${staticPreview ? '评论将在正式版开放' : '暂无公开评论'}</p>`;
+  return form + list;
 }
 
 function searchPage(view) {
@@ -1790,6 +1864,7 @@ function detail(view) {
     </section>
     <div class="actions">${item.products.map(product => `<button class="cta light" data-action="follow" data-value="${esc(product)}">${state.following.includes(product) ? '已关注 ' : '关注 '}${esc(product)}</button>`).join('')}
       <button class="cta light" data-action="topics" aria-expanded="${state.topicsOpen}">关注与提醒</button>
+      ${channels.comments ? `<button class="cta light" data-action="discuss" data-value="${esc(item.id)}">评论这条预警</button>` : ''}
     </div>
     ${state.topicsOpen ? reminderSettings(view) : ''}
   </main>`;
@@ -1799,9 +1874,16 @@ function render() {
   const view = AlertCatalog.display(feed,state);
   state.page = view.page;
   app.classList.toggle('detail-page', Boolean(state.id));
-  app.innerHTML = state.id ? detail(view) : header(view) + '<main class="main">' +
-    (state.tab === 'search' ? searchPage(view) : homePage(view)) + '</main>' +
-    '<nav class="bottom" aria-label="主导航">' + AlertCatalog.tabs.map(tab => `<button class="nav ${state.tab === tab.id ? 'active' : ''}" ${state.tab === tab.id ? 'aria-current="page"' : ''} data-action="tab" data-value="${tab.id}"><span class="nav-shape">${icon(tab.icon + (state.tab === tab.id ? '-active' : ''))}</span>${tab.name}</button>`).join('') + '</nav>';
+  const pages = { search:searchPage, home:homePage, subscribe:subscriptionPage, comments:commentsPage };
+  app.innerHTML = state.id ? detail(view) : header(view) + '<main class="main">' + pages[state.tab](view) + '</main>' +
+    '<nav class="bottom" aria-label="主导航">' + AlertCatalog.tabs.map(tab => {
+      const selected = state.tab === tab.id;
+      const symbol = tab.id === 'subscribe' || tab.id === 'comments'
+        ? `<span class="tab-symbol tab-${tab.icon}" aria-hidden="true"></span>`
+        : icon(tab.icon + (selected ? '-active' : ''));
+      const unread = tab.id === 'comments' && channels.unread;
+      return `<button class="nav ${selected ? 'active' : ''}" ${selected ? 'aria-current="page"' : ''} data-action="tab" data-value="${tab.id}"><span class="nav-shape">${symbol}${unread ? `<span class="nav-badge" aria-label="${unread} 条未读评论">${unread > 99 ? '99+' : unread}</span>` : ''}</span>${tab.name}</button>`;
+    }).join('') + '</nav>';
 }
 
 function showList() {
@@ -1830,7 +1912,23 @@ app.addEventListener('click', async event => {
     history.back();
     return;
   }
-  if (action === 'tab') Object.assign(state,{ tab: value, page: 1, topicsOpen: false });
+  if (action === 'tab') {
+    Object.assign(state,{ tab: value, page: 1, topicsOpen: false });
+    if (value === 'comments') markCommentsRead();
+  }
+  if (action === 'copy-feed') {
+    try { await navigator.clipboard.writeText(rssLink); message('订阅链接已复制'); }
+    catch { window.prompt('复制 RSS 订阅链接',rssLink); }
+    return;
+  }
+  if (action === 'toggle-push') { await togglePush(); return; }
+  if (action === 'discuss') {
+    Object.assign(state,{ tab:'comments', id:'', commentAlert:value });
+    const url = new URL(location.href);
+    url.searchParams.delete('id');
+    history.replaceState({},'',url);
+    markCommentsRead();
+  }
   if (action === 'clear-query') Object.assign(state,{ query: '', searchLimit: 0 });
   if (action === 'more-results') state.searchLimit = Number(value);
   if (action === 'category') Object.assign(state,{ category: value, page: 1 });
@@ -1860,12 +1958,13 @@ app.addEventListener('click', async event => {
   }
   render();
   if (action === 'back') window.scrollTo(0,detailScroll);
-  if (['tab','detail','query'].includes(action)) window.scrollTo(0,0);
+  if (['tab','detail','query','discuss'].includes(action)) window.scrollTo(0,0);
   if (action === 'clear-query') document.getElementById('query').focus();
   if (action === 'page') showList();
 });
 
 app.addEventListener('input', event => {
+  if (event.target.id === 'comment-content') state.commentDraft = event.target.value;
   if (event.target.id !== 'query') return;
   Object.assign(state,{ query: event.target.value, searchLimit: 0 });
   document.getElementById('clear-query').hidden = !state.query;
@@ -1873,10 +1972,26 @@ app.addEventListener('input', event => {
 });
 
 app.addEventListener('change', event => {
+  if (event.target.id === 'comment-alert') state.commentAlert = event.target.value;
   if (event.target.id !== 'alert-sort') return;
   Object.assign(state, { sort: event.target.value, page: 1 });
   render();
   document.getElementById('alert-sort').focus({ preventScroll: true });
+});
+
+app.addEventListener('submit', async event => {
+  if (event.target.id !== 'comment-form') return;
+  event.preventDefault();
+  if (state.commentBusy) return;
+  state.commentBusy = true;
+  const submitter = event.submitter;
+  if (submitter) submitter.disabled = true;
+  try {
+    await channelApi('/api/comments',{ id:state.commentAlert, content:state.commentDraft });
+    state.commentDraft = '';
+    message('评论已提交，审核通过后公开');
+  } catch (error) { message(error.message); }
+  finally { state.commentBusy = false; render(); }
 });
 
 window.addEventListener('popstate', () => {
@@ -1899,11 +2014,72 @@ async function refresh() {
       try { feed = await (await fetch('/shared/snapshot.json')).json(); } catch {}
     }
   }
-  if (!['query', 'alert-sort'].includes(document.activeElement?.id)) render();
+  await refreshComments();
+  if (!['query', 'alert-sort','comment-alert','comment-content'].includes(document.activeElement?.id)) render();
+}
+
+async function channelApi(path, data) {
+  const response = await fetch(path, data ? { method:'POST', headers:{ 'Content-Type':'application/json' }, body:JSON.stringify(data) } : { cache:'no-store' });
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.message || '服务暂不可用，请稍后再试');
+  return result;
+}
+
+function markCommentsRead() {
+  channels.readAt = Math.max(channels.readAt,...channels.items.map(item => item.approvedAt));
+  channels.unread = 0;
+  try { localStorage.setItem('it-warning-comments-read',String(channels.readAt)); } catch {}
+}
+
+async function refreshComments() {
+  try {
+    const data = await channelApi('/api/comments?after='+channels.readAt);
+    Object.assign(channels,{ unread:data.unread, items:data.items });
+    if (state.tab === 'comments' && !state.id) markCommentsRead();
+  } catch {}
+}
+
+async function loadChannels() {
+  try {
+    const { pushKey, comments } = await channelApi('/api/channels');
+    Object.assign(channels,{ pushKey, comments });
+    if (pushKey && isSecureContext && 'PushManager' in window && 'Notification' in window && 'serviceWorker' in navigator) {
+      channels.registration = await navigator.serviceWorker.register('/push-worker.js');
+      const current = await channels.registration.pushManager.getSubscription();
+      if (current) channels.push = (await channelApi('/api/push/status',current.toJSON())).subscribed;
+    }
+  } catch {}
+  if (!['query','alert-sort','comment-alert','comment-content'].includes(document.activeElement?.id)) render();
+}
+
+async function togglePush() {
+  if (!channels.registration || channels.pushBusy) return;
+  channels.pushBusy = true;
+  try {
+    const permission = channels.push || Notification.permission === 'granted' ? Promise.resolve('granted') : Notification.requestPermission();
+    render();
+    if (await permission !== 'granted') { message('浏览器通知未授权'); return; }
+    const registration = await navigator.serviceWorker.ready;
+    let subscription = await registration.pushManager.getSubscription();
+    if (channels.push) {
+      if (subscription) {
+        await channelApi('/api/push/cancel',subscription.toJSON());
+        await subscription.unsubscribe();
+      }
+      channels.push = false;
+      message('已取消浏览器通知');
+    } else {
+      if (!subscription) subscription = await registration.pushManager.subscribe({ userVisibleOnly:true, applicationServerKey:channels.pushKey });
+      channels.push = (await channelApi('/api/push/subscribe',subscription.toJSON())).subscribed;
+      message(channels.push ? '已订阅重点预警' : '订阅暂未生效，请重试');
+    }
+  } catch { message('未能更新订阅，请稍后重试'); }
+  finally { channels.pushBusy = false; render(); }
 }
 
 render();
 if (!staticPreview && location.protocol !== 'file:') {
+  loadChannels();
   refresh();
   setInterval(refresh,60000);
 }

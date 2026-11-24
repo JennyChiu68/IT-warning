@@ -1,4 +1,5 @@
 import { copyFileSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { alertsRss, publicUrl } from '../server/rss.mjs';
 const read = path => readFileSync(new URL('../' + path, import.meta.url), 'utf8');
 const snapshot = read('miniprogram/shared/snapshot.json').replaceAll('<', '\\u003c');
 const assets = new URL('../miniprogram/assets/',import.meta.url);
@@ -16,6 +17,7 @@ writeFileSync(new URL('../miniprogram/shared/snapshot.js', import.meta.url), 'mo
 const pages = new URL('../docs/', import.meta.url);
 mkdirSync(pages, { recursive: true });
 writeFileSync(new URL('index.html', pages), html.replace('</head>', '  <link rel="license" href="./brand-icons.txt">\n</head>'));
+writeFileSync(new URL('feed.xml', pages), alertsRss(JSON.parse(snapshot),publicUrl()));
 writeFileSync(new URL('.nojekyll', pages), '');
 for (const name of ['brand-icons.txt', 'monai-label-apache-2.0.txt']) {
   copyFileSync(new URL('../miniprogram/licenses/' + name, import.meta.url), new URL(name, pages));

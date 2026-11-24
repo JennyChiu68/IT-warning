@@ -7,6 +7,8 @@ import { syncSources } from '../server/sources.mjs';
 import { deliver } from '../server/wechat.mjs';
 import { digestSignals, telegramPosts } from '../server/digest.mjs';
 import { readCoverage } from '../server/coverage.mjs';
+import { managePush, deliverPush } from '../server/push.mjs';
+import { readComments, writeComment } from '../server/comments.mjs';
 
 const testedId = 'CVE-2026-999999';
 const tryDate = '2026-11-24';
@@ -256,4 +258,40 @@ test('a single opted-in matching recipient receives the new alert only once', as
   assert.deepEqual(calls,[[testedId,'matches']]);
   assert.equal(store.q('SELECT state FROM deliveries WHERE openid=?').get('matches').state,'sent');
   assert.equal(store.q('SELECT registered FROM recipients WHERE openid=?').get('matches').registered,null);
+});
+
+test('browser notifications deliver only new alerts and deduplicate retries', async t => {
+  const store = openStore(':memory:');
+  t.after(() => store.db.close());
+  const subscription = { endpoint:'https://fcm.googleapis.com/test', keys:{ p256dh:'B'+'A'.repeat(86), auth:'A'.repeat(22) } };
+  assert.throws(() => managePush(store,{ ...subscription, endpoint:'https://example.org/internal' },'subscribe'));
+  const oldId = 'CVE-2026-999991';
+  store.transact(() => store.save({ ...patch, id:oldId }));
+  store.q('UPDATE events SET created=? WHERE id=?').run(new Date(Date.now()-60000).toISOString(),oldId);
+  assert.equal(managePush(store,subscription,'subscribe').subscribed,true);
+  assert.equal(managePush(store,subscription,'subscribe').subscribed,true);
+  store.transact(() => store.save(patch));
+  store.q('UPDATE push_subscriptions SET created=?').run(new Date(Date.now()-5000).toISOString());
+  const sent = [];
+  const send = async (sub,body) => { sent.push([sub.endpoint,JSON.parse(body).id]); };
+  await Promise.all([deliverPush(store,{},send),deliverPush(store,{},send)]);
+  assert.deepEqual(sent,[[subscription.endpoint,testedId]]);
+  assert.equal(managePush(store,subscription,'cancel').subscribed,false);
+  assert.equal(store.q('SELECT count(*) AS count FROM push_deliveries').get().count,0);
+});
+
+test('comments stay private until approved and unread is based on public comments', t => {
+  const store = openStore(':memory:');
+  t.after(() => store.db.close());
+  store.transact(() => store.save(patch));
+  assert.throws(() => writeComment(store,{ id:testedId, content:'https://example.org' }));
+  writeComment(store,{ id:testedId, content:'感谢补丁提醒' });
+  assert.deepEqual(readComments(store),{ items:[],unread:0 });
+  const now = Date.now();
+  store.q('UPDATE comments SET approved_at=?').run(now);
+  assert.equal(readComments(store).unread,1);
+  assert.equal(readComments(store,now).unread,0);
+  assert.equal(readComments(store,now).items[0].alert,testedId);
+  store.transact(() => store.withdraw(testedId));
+  assert.deepEqual(readComments(store),{ items:[],unread:0 });
 });
