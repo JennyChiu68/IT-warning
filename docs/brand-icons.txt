@@ -1,0 +1,29 @@
+Product icon notices
+
+[brand-android.png]
+Android is a trademark of Google LLC. The Android robot is reproduced or
+modified from work created and shared by Google and used according to terms
+described in the Creative Commons 3.0 Attribution License.
+Source: https://developer.android.com/distribute/marketing-tools/brand-guidelines#android-robot
+License: https://creativecommons.org/licenses/by/3.0/
+
+[brand-node.png]
+Node.js is a trademark of the OpenJS Foundation. Hex Logo from the Node.js
+branding page.
+Source: https://nodejs.org/en/about/branding/
+Trademark policy: https://trademark-policy.openjsf.org/
+
+[brand-php.png]
+PHP Logo by Colin Viebrock, CC BY-SA 4.0. Resized and centered for display.
+Source: https://www.php.net/download-logos.php
+License: https://creativecommons.org/licenses/by-sa/4.0/
+
+[brand-java.png]
+Duke, the Java mascot, from OpenJDK Project Duke. BSD license.
+Source: https://github.com/openjdk/duke/blob/master/png/Duke.Wave1.3D.png
+License information: https://dev.java/duke/
+
+[brand-monai.png]
+MONAI Label module icon from the Project MONAI Slicer plugin.
+Source: https://github.com/Project-MONAI/MONAILabel/blob/main/plugins/slicer/MONAILabel/Resources/Icons/MONAILabel.png
+License: Apache License 2.0. See monai-label-apache-2.0.txt.

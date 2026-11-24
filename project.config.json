@@ -1,0 +1,7 @@
+{
+  "appid": "touristappid",
+  "projectname": "IT漏洞预警",
+  "miniprogramRoot": "miniprogram/",
+  "compileType": "miniprogram",
+  "setting": { "es6": true, "enhance": true, "urlCheck": true }
+}

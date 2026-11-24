@@ -1,0 +1,151 @@
+<template name="tags">
+  <text class="tag tag-{{item.severity}}">{{item.levelName}}</text>
+  <text wx:if="{{item.kev}}" class="tag tag-kev">已知遭利用</text>
+</template>
+
+<template name="rows">
+  <view class="stack" wx:if="{{pageItems.length}}">
+    <button class="row" wx:for="{{pageItems}}" wx:key="id" data-value="{{item.matchedId || item.id}}" bindtap="openDetail">
+      <view class="product-symbol">
+        <image class="product-icon" src="{{'/assets/' + item.productIcon + '.png'}}" mode="aspectFit"/>
+      </view>
+      <view class="row-main">
+        <view class="row-label">{{item.title}}</view>
+        <view class="meta"><template is="tags" data="{{item:item}}"/><text class="row-date">{{item.dateLabel}}</text><text class="matched-id" wx:if="{{item.matchedId}}">{{item.matchedId}}</text></view>
+      </view>
+      <image class="row-arrow" src="/assets/arrow.png" mode="aspectFit"/>
+    </button>
+  </view>
+  <view class="empty" wx:else>{{empty}}</view>
+  <view class="pager" wx:if="{{pageCount > 1}}">
+    <button class="page-step {{page === 1 ? 'disabled' : ''}}" disabled="{{page === 1}}" data-value="{{page - 1}}" bindtap="selectPage" aria-label="上一页">‹</button>
+    <view class="page-links">
+      <button class="page-number {{item === page ? 'selected' : ''}}" wx:for="{{pageLinks}}" wx:key="*this" data-value="{{item}}" bindtap="selectPage" aria-label="{{'第 ' + item + ' 页'}}">{{item}}</button>
+    </view>
+    <button class="page-step {{page === pageCount ? 'disabled' : ''}}" disabled="{{page === pageCount}}" data-value="{{page + 1}}" bindtap="selectPage" aria-label="下一页">›</button>
+  </view>
+</template>
+
+<view class="app {{id ? 'detail-page' : ''}}">
+  <block wx:if="{{id}}">
+    <view class="detail-head">
+      <button class="back" bindtap="closeDetail"><text>‹</text> 返回</button>
+      <view class="detail-product" wx:if="{{detail}}">
+        <view class="product-symbol"><image class="product-icon" src="{{'/assets/' + detail.productIcon + '.png'}}" mode="aspectFit"/></view>
+        <text>{{detail.productsLabel}}</text>
+      </view>
+      <view class="detail-title">{{detail ? detail.title : '预警详情'}}</view>
+      <view class="detail-meta" wx:if="{{detail}}"><template is="tags" data="{{item:detail}}"/><text>{{detail.dateTitle}}</text></view>
+    </view>
+    <view class="main detail-main" wx:if="{{detail}}">
+      <view class="panel fix-panel"><view class="panel-title"><text class="check-icon">✓</text>修复建议</view><view class="panel-text">{{detail.fix}}</view></view>
+      <view class="panel"><view class="panel-title">影响范围</view><view class="panel-text">{{detail.impact}}</view></view>
+      <view class="panel">
+        <view class="section-head"><view class="panel-title">漏洞信息</view><text class="list-count" wx:if="{{detail.score != null}}">{{detail.metric || 'CVSS'}} · {{detail.score}} / 10</text></view>
+        <button class="copy-id" data-value="{{id}}" bindtap="copy"><text>{{id}}</text><text>复制编号</text></button>
+        <button wx:if="{{detail.aliases.length}}" class="source" bindtap="toggleAliases"><text>相关编号</text><text>{{detail.aliases.length}} 项 {{aliasesOpen ? '⌃' : '⌄'}}</text></button>
+        <view class="alias-grid" wx:if="{{aliasesOpen}}">
+          <button class="chip" wx:for="{{detail.aliases}}" wx:key="*this" data-value="{{item}}" bindtap="copy">{{item}}</button>
+        </view>
+        <view class="panel-text">{{detail.summary}}</view>
+      </view>
+      <view class="panel">
+        <view class="panel-title">官方来源</view>
+        <button class="source" wx:for="{{detail.sources}}" wx:key="url" data-value="{{item.url}}" bindtap="copy"><text>{{item.name}}</text><text>复制链接 ›</text></button>
+      </view>
+      <view class="actions">
+        <button class="cta light" wx:for="{{detail.products}}" wx:key="*this" wx:for-item="product" data-value="{{product}}" bindtap="follow">{{detail.followingMap[product] ? '已关注' : '关注'}} {{product}}</button>
+        <button class="cta light" open-type="share">分享</button>
+        <button class="cta light" bindtap="toggleTopics">关注与提醒</button>
+      </view>
+      <view class="panel settings-panel" wx:if="{{topicsOpen}}">
+        <view class="section-head"><text class="panel-title">关注产品</text><text class="list-count">{{followed}} 项</text></view>
+        <view class="chips">
+          <button class="chip topic-chip {{item.selected ? 'selected' : ''}}" wx:for="{{topicList}}" wx:key="name" data-value="{{item.name}}" bindtap="follow"><image class="topic-icon" src="{{'/assets/' + item.icon + '.png'}}" mode="aspectFit"/>{{item.name}}</button>
+        </view>
+        <view class="reminder" wx:if="{{followed || grants}}">
+          <view class="reminder-label"><image class="nav-icon" src="/assets/bell-active.png" mode="aspectFit"/>微信订阅提醒</view>
+          <text wx:if="{{!canSubscribe}}">暂未开通</text>
+          <button wx:elif="{{grants}}" disabled="{{busy}}" class="cta light" bindtap="cancelReminders">取消待发提醒</button>
+          <button wx:else disabled="{{busy || !followed}}" class="cta" bindtap="subscribe">订阅下一条</button>
+        </view>
+        <view class="hint notice-message" wx:if="{{message}}">{{message}}</view>
+      </view>
+    </view>
+    <view class="main" wx:else><view class="empty">这条预警暂不可查看</view></view>
+  </block>
+  <block wx:else>
+    <view class="masthead">
+      <view class="title home-title" wx:if="{{tab === 'home'}}">IT漏洞预警</view>
+      <view class="title" wx:else>搜索预警</view>
+      <view class="status" wx:if="{{tab === 'home' && updateLabel}}"><view class="status-dot {{live ? 'live' : ''}}"/><text>{{live ? '同步于' : '快照'}} {{updateLabel}}</text></view>
+    </view>
+    <view class="main" wx:if="{{tab === 'home'}}">
+      <view class="home-section">
+        <view class="section-head"><text class="heading">优先处理</text><text class="relevance" wx:if="{{home.featureFollowed}}">与你关注的产品有关</text></view>
+        <button class="lead-alert" wx:if="{{home.feature}}" data-value="{{home.feature.id}}" bindtap="openDetail">
+          <view class="lead-top"><view class="lead-product"><view class="product-symbol"><image class="product-icon" src="{{'/assets/' + home.feature.productIcon + '.png'}}" mode="aspectFit"/></view><text class="lead-flag">{{home.feature.kev ? '已知遭利用' : home.feature.levelName}}</text></view><text class="lead-date">{{home.feature.dateLabel}} {{home.feature.kev ? '收录' : '发布'}}</text></view>
+          <view class="lead-title">{{home.feature.title}}</view>
+          <view class="lead-fix">{{home.feature.fix}}</view>
+          <view class="lead-cta"><text>查看修复建议</text><image class="tiny-arrow" src="/assets/arrow-white.png" mode="aspectFit"/></view>
+        </button>
+        <view class="empty" wx:else>{{updateLabel ? '近 7 天暂无已收录的重点预警' : '正在获取预警…'}}</view>
+      </view>
+      <view class="browse" id="list-start">
+        <view class="section-head">
+          <view class="heading-group"><text class="heading">预警列表</text><text class="list-count">{{count}} 条</text></view>
+          <button class="severity-filter" wx:if="{{severityName}}" bindtap="clearSeverity" aria-label="清除严重程度筛选">{{severityName}} <text>×</text></button>
+        </view>
+        <view class="overview" wx:if="{{severityCounts.length}}">
+          <view class="overview-header">
+            <view class="overview-heading">严重程度分布</view>
+            <button class="severity-help" bindtap="toggleSeverityHelp" aria-label="严重程度分级说明"><text>?</text></button>
+          </view>
+          <view class="severity-guide" wx:if="{{severityHelp}}">
+            <view class="severity-guide-title">FIRST CVSS 分级</view>
+            <view class="severity-guide-scale">
+              <view wx:for="{{severityGuide}}" wx:key="id">{{item.name}} <text class="severity-guide-range">{{item.range}}</text></view>
+            </view>
+            <view>缺少评分且无明确级别时，标为未定级。</view>
+          </view>
+          <view class="severity-chart">
+            <button class="severity-cell {{severity === item.id ? 'selected' : ''}} {{item.count ? '' : 'disabled'}}"
+              wx:for="{{severityCounts}}" wx:key="id" disabled="{{!item.count}}" aria-label="{{item.name + ' ' + item.count + ' 条'}}" data-value="{{item.id}}" bindtap="selectSeverity">
+              <text class="severity-count">{{item.count}}</text>
+              <view class="severity-track"><view class="severity-bar severity-{{item.id}}" style="{{'height:' + item.height + '%'}}"/></view>
+              <text class="severity-label">{{item.name}}</text>
+            </button>
+          </view>
+        </view>
+        <view class="category-list" aria-label="按类别筛选">
+          <button class="chip {{item.id === category ? 'selected' : ''}}" wx:for="{{categories}}" wx:key="id" data-value="{{item.id}}" bindtap="selectCategory">{{item.name}}</button>
+        </view>
+        <view class="feed-results"><template is="rows" data="{{pageItems, page, pageCount, pageLinks, empty:updateLabel ? '当前条件下暂无预警' : '正在获取预警…'}}"/></view>
+      </view>
+    </view>
+    <view class="main" wx:elif="{{tab === 'search'}}">
+      <view class="searchbar"><image class="nav-icon" src="/assets/search.png" mode="aspectFit"/><input class="search-input" aria-label="搜索预警" placeholder="搜索产品或 CVE 编号" confirm-type="search" value="{{query}}" focus="{{searchFocus}}" bindblur="blurSearch" bindinput="queryInput"/><button class="clear-query" wx:if="{{query}}" bindtap="clearQuery" aria-label="清空搜索">×</button></view>
+      <view class="browse secondary-browse" id="list-start">
+        <block wx:if="{{queryActive}}">
+          <view class="section-head"><view class="heading-group"><text class="heading">搜索结果</text><text class="list-count">{{count}} 条</text></view></view>
+          <template is="rows" data="{{pageItems, empty:'没有搜到相关预警'}}"/>
+          <button class="more-results" wx:if="{{nextSearchLimit}}" bindtap="showMoreResults">显示更多</button>
+        </block>
+        <block wx:else>
+          <view class="section-head"><text class="heading">常用产品</text></view>
+          <view class="quick-products">
+            <button class="quick-product" wx:for="{{popularTopics}}" wx:key="name" data-value="{{item.name}}" bindtap="queryTopic">
+              <view class="product-symbol"><image class="product-icon" src="{{'/assets/' + item.icon + '.png'}}" mode="aspectFit"/></view>
+              <text class="quick-name">{{item.name}}</text><image class="tiny-arrow" src="/assets/arrow.png" mode="aspectFit"/>
+            </button>
+          </view>
+        </block>
+      </view>
+    </view>
+    <view class="bottom">
+      <button wx:for="{{tabs}}" wx:key="id" class="nav {{tab === item.id ? 'active' : ''}}" data-value="{{item.id}}" bindtap="selectTab">
+        <view class="nav-shape"><image class="nav-icon" src="{{'/assets/' + item.icon + (tab === item.id ? '-active' : '') + '.png'}}" mode="aspectFit"/></view><text>{{item.name}}</text>
+      </button>
+    </view>
+  </block>
+</view>

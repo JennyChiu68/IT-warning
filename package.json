@@ -1,0 +1,13 @@
+{
+  "name": "it-warning",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.13" },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server/index.mjs",
+    "sync": "node --env-file-if-exists=.env server/cli.mjs sync",
+    "review": "node --env-file-if-exists=.env server/cli.mjs",
+    "test": "node --test"
+  }
+}
