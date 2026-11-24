@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-24T07:12:22.346Z",
+  "checkedAt": "2026-11-24T09:19:48.315Z",
   "kevVersion": "2026.11.23",
   "items": [
     {
@@ -1018,6 +1018,149 @@
         {
           "name": "CISA KEV",
           "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        }
+      ],
+      "score": null,
+      "metric": null
+    },
+    {
+      "id": "CVE-2026-132825",
+      "date": "2026-11-20",
+      "kev": null,
+      "category": "server",
+      "kind": "vulnerability",
+      "products": [
+        "GitLab",
+        "Ruby"
+      ],
+      "level": "critical",
+      "badge": "GitLab",
+      "aliases": [],
+      "title": "自建 GitLab 发布 Ruby 安全补丁",
+      "summary": "GitLab 沿用 Ruby 项目的严重评级，CVE 记录另列 MITRE 的 CVSS 3.1 评分 7.4（高危）。",
+      "impact": "影响使用受影响 Ruby 版本的自建 GitLab CE/EE。满足漏洞触发条件时，存在远程执行代码的风险。",
+      "fix": "按所在分支升级至 GitLab 19.6.1、19.5.8、19.4.10 或更新版本。官方安装包和镜像已含修复。自行编译部署时，按实际运行的 Ruby 分支升级至 3.3.14、3.4.13 或更新补丁版本。独立使用 Ruby 4.0 的环境应升级至 4.0.10 或更高版本。",
+      "sources": [
+        {
+          "name": "GitLab 补丁公告",
+          "url": "https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-6-1-released/"
+        },
+        {
+          "name": "Ruby 项目安全公告",
+          "url": "https://github.com/ruby/ruby/security/advisories/GHSA-34m4-m9fh-gqp5"
+        },
+        {
+          "name": "Ruby 官方发布",
+          "url": "https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-132825"
+        }
+      ],
+      "score": null,
+      "metric": null
+    },
+    {
+      "id": "CVE-2026-134815",
+      "date": "2026-11-23",
+      "kev": null,
+      "category": "runtime",
+      "kind": "vulnerability",
+      "products": [
+        "simple-git",
+        "@simple-git/argv-parser"
+      ],
+      "level": "critical",
+      "badge": "simple-git",
+      "aliases": [],
+      "title": "npm 依赖 simple-git 命令注入漏洞",
+      "summary": "CVE 记录给出 CVSS 4.0 评分 9.2，维护者已发布修复。",
+      "impact": "涉及 Node.js 生态的 npm 包。simple-git 低于 4.1.0 或 @simple-git/argv-parser 低于 3.0.0 的应用应核对依赖。会将不受信任的输入传给 Git 的服务和 CI 工具应优先排查。",
+      "fix": "检查应用及 CI 工具的直接和传递依赖，更新锁文件。将 simple-git 升级至 4.1.0 或更高版本，将独立使用的 @simple-git/argv-parser 升级至 3.0.0 或更高版本，然后重建并部署。",
+      "sources": [
+        {
+          "name": "维护者发布说明",
+          "url": "https://github.com/steveukx/git-js/releases/tag/simple-git%404.1.0"
+        },
+        {
+          "name": "GitHub 安全公告",
+          "url": "https://github.com/advisories/GHSA-24pq-g7mp-w876"
+        },
+        {
+          "name": "argv-parser 维护者发布",
+          "url": "https://github.com/steveukx/git-js/releases/tag/%40simple-git%2Fargv-parser%403.0.0"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-134815"
+        }
+      ],
+      "score": 9.2,
+      "metric": "CVSS 4.0"
+    },
+    {
+      "id": "CVE-2026-134401",
+      "date": "2026-11-23",
+      "kev": null,
+      "category": "system",
+      "kind": "vulnerability",
+      "products": [
+        "Chrome"
+      ],
+      "level": "critical",
+      "badge": "Chrome",
+      "aliases": [],
+      "title": "Chrome 发布严重漏洞修复",
+      "summary": "Google 将该浏览器漏洞评为严重，桌面和 Android 浏览器均已开始分批推送修复。",
+      "impact": "涉及 Windows、macOS、Linux 桌面版 Chrome，以及 Android 上的 Chrome 浏览器。旧版浏览器存在执行不受信任代码的风险。",
+      "fix": "在桌面版的「关于 Google Chrome」检查更新并重启。Windows 和 macOS 稳定版修复于 158.0.8127.88/.89，Linux 为 158.0.8127.88。Windows 和 macOS 扩展稳定版修复于 156.0.8078.114。Android 请通过应用商店更新至 158.0.8127.92 或更新版本。",
+      "sources": [
+        {
+          "name": "Chrome 桌面稳定版公告",
+          "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01734282054.html"
+        },
+        {
+          "name": "Chrome 扩展稳定版公告",
+          "url": "https://chromereleases.googleblog.com/2026/11/extended-stable-update-for-desktop_01590513949.html"
+        },
+        {
+          "name": "Chrome Android 公告",
+          "url": "https://chromereleases.googleblog.com/2026/11/chrome-for-android-update_0411169060.html"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-134401"
+        }
+      ],
+      "score": null,
+      "metric": null
+    },
+    {
+      "id": "OPENROUTER-NOVITA-20261122",
+      "date": "2026-11-22",
+      "kev": null,
+      "category": "incident",
+      "kind": "incident",
+      "products": [
+        "OpenRouter",
+        "Novita"
+      ],
+      "level": "high",
+      "badge": "云服务",
+      "aliases": [],
+      "title": "OpenRouter 与 Novita 通报部分请求的数据处理风险",
+      "summary": "OpenRouter 和 Novita 于 11 月 22 日发布通报。部分经 Novita 处理的模型请求被转给上游服务。",
+      "impact": "通报涉及 2026 年 5 月 28 日至 11 月 11 日期间部分由 Novita 处理的模型请求，其中包括经 OpenRouter 路由的请求。具体影响以厂商通知和调用记录为准。",
+      "fix": "查看厂商的受影响通知并按调用时间、模型和供应商核对日志。若相关请求包含仍有效的 API 密钥、令牌或密码，应尽快轮换这些凭据。",
+      "sources": [
+        {
+          "name": "OpenRouter 官方公告",
+          "url": "https://openrouter.ai/blog/announcements/data-processing-incidents-on-inference-providers/"
+        },
+        {
+          "name": "Novita 官方公告",
+          "url": "https://novita.ai/blog/minimax-requests-privacy-notice/"
         }
       ],
       "score": null,

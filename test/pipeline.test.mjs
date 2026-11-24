@@ -6,6 +6,7 @@ import { openStore, snapshot } from '../server/store.mjs';
 import { syncSources } from '../server/sources.mjs';
 import { deliver } from '../server/wechat.mjs';
 import { digestSignals, telegramPosts } from '../server/digest.mjs';
+import { readCoverage } from '../server/coverage.mjs';
 
 const testedId = 'CVE-2026-999999';
 const tryDate = '2026-11-24';
@@ -19,6 +20,7 @@ const entry = {
 };
 const now = new Date(tryDate + 'T06:12:00Z');
 const emptyDigest = { status:{}, cursors:{}, signals:[] };
+const emptyCoverage = { status:{}, signals:[] };
 
 function catalog() {
   return {
@@ -115,7 +117,7 @@ test('severity distribution and pagination use the same grades and keep every al
 test('verified CVEs publish once, unverified leads wait, and withdrawals remain hidden', async t => {
   const store = openStore(':memory:');
   t.after(() => store.db.close());
-  const sources = { kev:catalog(),nvd:[entry],cisa:[],vendor:[],digest:emptyDigest,now };
+  const sources = { kev:catalog(),nvd:[entry],cisa:[],vendor:[],digest:emptyDigest,coverage:emptyCoverage,now };
   await syncSources(store,{ ...sources, draft:async () => null });
   assert.equal(store.lookup(testedId), undefined);
   assert.ok(store.candidates().some(item => item.id === testedId));
@@ -148,7 +150,7 @@ test('public channel posts generate deduplicated private leads without republish
   assert.equal(posts.length,4);
   assert.equal(signals.length,3);
   const digest = { status:{ telegram:{state:'ok',posts:4} },cursors:{digestTelegramCursor:'4'},signals };
-  const base = { kev:catalog(),nvd:[entry],cisa:[],vendor:[],now,draft:async () => null };
+  const base = { kev:catalog(),nvd:[entry],cisa:[],vendor:[],coverage:emptyCoverage,now,draft:async () => null };
   const first = await syncSources(store,{ ...base,digest });
   assert.equal(first.digest.candidates,2);
   const cve = store.candidates().find(item => item.id === testedId);
@@ -181,7 +183,7 @@ test('grouped CVEs remain searchable and new KEV evidence reopens individual rev
   assert.equal(status.get(testedId).state,'published');
   const kev = catalog();
   kev.vulnerabilities.push({ cveID:testedId,dateAdded:tryDate,notes:'' });
-  const sources = { kev,nvd:[],cisa:[],vendor:[],digest:emptyDigest,now };
+  const sources = { kev,nvd:[],cisa:[],vendor:[],digest:emptyDigest,coverage:emptyCoverage,now };
   await syncSources(store,sources);
   assert.equal(status.get(testedId).state,'pending');
   assert.equal(store.candidates().find(item => item.id === testedId).kev,tryDate);
@@ -189,6 +191,29 @@ test('grouped CVEs remain searchable and new KEV evidence reopens individual rev
   assert.equal(store.lookup(testedId),undefined);
   assert.equal(status.get(testedId).state,'withdrawn');
   assert.equal(store.lookup(bundle.id).aliases.length,33);
+});
+
+test('vendor and package coverage records verified source links for review without auto-publishing', async t => {
+  const store = openStore(':memory:');
+  t.after(() => store.db.close());
+  const chrome = 'https://chromereleases.googleblog.com/2026/11/test.html';
+  const novita = 'https://novita.ai/blog/test-incident/';
+  const release = (url, severity) => `<entry><title>Stable Channel Update for Desktop</title>
+    <published>${tryDate}T00:00:00Z</published><link rel="alternate" href="${url}"/>
+    <content>[$10] &lt;b&gt;${severity}&lt;/b&gt; ${testedId}</content></entry>`;
+  const fixtures = {
+    'chromereleases.googleblog.com': '<feed>' + release(chrome, 'Critical') + release('https://example.org/2026/11/test.html', 'High') + '</feed>',
+    'novita.ai': `<a class="post-card__link" href="${novita}" aria-label="Privacy Notice"><span>November 23, 2026</span></a>`,
+    'api.github.com': '[]'
+  };
+  const coverage = await readCoverage(async raw => new Response(fixtures[new URL(raw).hostname] ?? '<rss/>'), now);
+  assert.deepEqual(coverage.signals.map(signal => signal.links[0].url), [chrome, novita]);
+  const sources = { kev:catalog(),nvd:[entry],cisa:[],vendor:[],digest:emptyDigest,coverage,now,draft:async () => patch };
+  await syncSources(store,sources);
+  await syncSources(store,{ ...sources, coverage:emptyCoverage });
+  assert.equal(store.lookup(testedId),undefined);
+  assert.ok(store.candidates().find(item => item.id === testedId).reviewOnly);
+  assert.ok(store.candidates().some(item => item.origin === 'Novita 官方公告'));
 });
 
 test('a single opted-in matching recipient receives the new alert only once', async t => {

@@ -1,5 +1,6 @@
 import { CVE_ID, KEV_SOURCE, validSource } from './store.mjs';
 import { readDigest } from './digest.mjs';
+import { queueCoverage, readCoverage } from './coverage.mjs';
 
 const KEV_FEED = [
   'https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json',
@@ -20,7 +21,11 @@ const APPEARANCE = [
   { key: 'iOS', category: 'mobile', designation: /^Apple(?: Inc\.?)?$/i, names: /^iOS(?:$| |\/)/i, path: /^https:\/\/support\.apple\.com\/(?:[\w-]+\/)?\d+(?:\?|$)/i },
   { key: 'Android', category: 'mobile', designation: /^Google(?: LLC)?$/i, names: /^Android(?:$| (?:[\d]+|OS)(?:$| ))/i, path: /^https:\/\/source\.android\.com\/docs\/security\/bulletin\//i },
   { key: 'VMware', category: 'server', designation: /^(?:Broadcom(?: Inc\.?)?|VMware(?:, Inc\.)?)$/i, names: /^(?:VMware )?vCenter(?: Server)?$/i, path: /^https:\/\/support\.broadcom\.com\/web\/ecx\/support-content-notification\//i },
-  { key: 'MONAI Label', category: 'server', designation: /^Project MONAI$/i, names: /^MONAI ?Label$/i, path: /^https:\/\/github\.com\/Project-MONAI\/MONAILabel\/releases\//i }
+  { key: 'MONAI Label', category: 'server', designation: /^Project MONAI$/i, names: /^MONAI ?Label$/i, path: /^https:\/\/github\.com\/Project-MONAI\/MONAILabel\/releases\//i },
+  { key: 'Chrome', path: /^https:\/\/chromereleases\.googleblog\.com\/\d{4}\/\d{2}\//i, reviewOnly: true },
+  { key: 'GitLab', path: /^https:\/\/(?:docs\.gitlab\.com\/releases\/patches\/|about\.gitlab\.com\/releases\/)/i, reviewOnly: true },
+  { key: 'Ruby', path: /^https:\/\/(?:(?:www\.)?ruby-lang\.org\/en\/news\/|github\.com\/ruby\/ruby\/security\/advisories\/GHSA-)/i, reviewOnly: true },
+  { key: 'simple-git', path: /^https:\/\/github\.com\/steveukx\/git-js\/(?:releases\/tag\/|security\/advisories\/GHSA-)/i, reviewOnly: true }
 ];
 const DAY = 86400000;
 
@@ -172,7 +177,7 @@ async function directDraft(hint,getPage,now) {
   const cna = item.containers?.cna;
   if (!cna) return null;
   const affected = cna.affected || [];
-  const confirmed = APPEARANCE.filter(profile =>
+  const confirmed = APPEARANCE.filter(profile => !profile.reviewOnly &&
     affected.some(product => profile.names.test(product.product || '') &&
       (profile.designation.test(product.vendor || '') || profile.designation.test(cna.providerMetadata?.shortName || ''))) &&
     (cna.references || []).some(ref => profile.path.test(ref.url || '') && !ref.tags?.includes('exploit') &&
@@ -325,9 +330,10 @@ export async function syncSources(store, overrides = {}) {
     overrides.nvd ? Promise.resolve({ end: now, rows: overrides.nvd }) : getNVD(store,now),
     overrides.cisa ? Promise.resolve(overrides.cisa) : getCISAFeed(),
     overrides.vendor ? Promise.resolve(overrides.vendor) : getNginxHead(getPage),
-    overrides.digest ? Promise.resolve(overrides.digest) : readDigest(store,fetchSource,now)
+    overrides.digest ? Promise.resolve(overrides.digest) : readDigest(store,fetchSource,now),
+    overrides.coverage ? Promise.resolve(overrides.coverage) : readCoverage(fetchSource,now)
   ]);
-  const [kevResult,nvdResult,cisaResult,vendorResult,digestResult] = feeds;
+  const [kevResult,nvdResult,cisaResult,vendorResult,digestResult,coverageResult] = feeds;
   const hints = new Map();
   const outcomes = {};
   const checked = now.toISOString();
@@ -390,10 +396,13 @@ export async function syncSources(store, overrides = {}) {
   const nonPublic = store.q('SELECT active,origin FROM alerts WHERE id=?');
   const reviewState = store.q('SELECT state FROM candidates WHERE id=?');
   const backlog = new Map(store.candidates().filter(hint => now - Date.parse(hint.date) <= 14 * DAY).map(hint => [hint.id,hint]));
+  const coverage = coverageResult.status === 'fulfilled' ? coverageResult.value : null;
+  const coveredIds = new Set(coverage?.signals.map(signal => signal.id));
+  const previousReview = store.q("SELECT json_extract(content,'$.reviewOnly') AS required FROM candidates WHERE id=?");
   for (const hint of hints.values()) backlog.set(hint.id,hint);
   const eligible = [...backlog.values()].filter(hint => {
-    if (!CVE_ID.test(hint.id) ||
-        (!hint.leads?.length && !hint.links?.some(link => vendorMatch(link).length))) return false;
+    if (hint.reviewOnly || coveredIds.has(hint.id) || !CVE_ID.test(hint.id) || previousReview.get(hint.id)?.required ||
+        (!hint.leads?.length && !hint.links?.some(link => vendorMatch(link).some(profile => !profile.reviewOnly)))) return false;
     const current = nonPublic.get(hint.id);
     const state = reviewState.get(hint.id)?.state;
     return !['dismissed','withdrawn'].includes(state) &&
@@ -429,6 +438,10 @@ export async function syncSources(store, overrides = {}) {
       const reopen = current?.state === 'published' && Boolean(hint.kev);
       if (current && current.state !== 'pending' && !reopen) continue;
       const previous = current ? JSON.parse(current.content) : null;
+      if (previous?.reviewOnly) {
+        hint.reviewOnly = true;
+        hint.links = mergeLinks([...(hint.links || []), ...(previous.links || [])],'url',8);
+      }
       if (previous?.leads?.length) {
         hint.leads = mergeLinks([...(hint.leads || []),...previous.leads],'url',8);
       }
@@ -449,6 +462,9 @@ export async function syncSources(store, overrides = {}) {
         if (status.state === 'ok') store.setMeta('digest-' + provider + '-checked',checked);
       }
     }
+    if (coverage) {
+      outcomes.coverage = { ...coverage.status, ...queueCoverage(store,coverage.signals) };
+    } else outcomes.coverage = { error:coverageResult.reason.message };
     store.setMeta('syncOutcome',JSON.stringify(outcomes));
   });
   return { ...outcomes, pending: store.candidates().length, published };

@@ -12,6 +12,8 @@
 
 ## 信源与发布方式
 
+公开列表收录面向公众的产品漏洞公告和安全事件通报。金十自有产品的相关线索由公司内部安全流程处理。
+
 | 信源 | 用途 |
 | --- | --- |
 | [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)及[CISA 官方镜像](https://github.com/cisagov/kev-data) | 按 CVE ID 更新已知遭利用状态和收录日期 |
@@ -22,6 +24,10 @@
 | [微软 MSRC](https://msrc.microsoft.com/update-guide)、[微软 11 月 CVRF](https://api.msrc.microsoft.com/cvrf/v3.0/cvrf/2026-Nov)及微软支持 KB、[Apple 安全发布](https://support.apple.com/en-us/100100)、[Android 安全公告](https://source.android.com/docs/security/bulletin/asb-overview) | 核对操作系统安全更新和适用分支。Windows 11 本次逐 CVE 读取微软的 CVRF 数据做补录 |
 | [国家互联网应急中心](https://www.cert.org.cn/)、[国家信息安全漏洞共享平台](https://www.cnvd.org.cn/) | 可用于补充人工核验 |
 | [International Cyber Digest](https://x.com/IntCyberDigest) | 定时读取该账号的[公开 Telegram 频道](https://t.me/s/IntCyberDigest)。配置 X API 后也读取 X 原帖。用于发现线索，发布前回查官方通报或厂商公告 |
+| [Chrome Releases](https://chromereleases.googleblog.com/) | 读取桌面稳定版、扩展稳定版和 Android 上的 Chrome 发布公告，提取严重和高危 CVE |
+| [GitLab 补丁公告](https://docs.gitlab.com/releases/patches/)及 [Ruby 官方公告](https://www.ruby-lang.org/en/news/) | 检查自建 GitLab 补丁和 Ruby 上游安全公告，按 CVE 合并 |
+| [GitHub Advisory Database](https://github.com/advisories?query=ecosystem%3Anpm+is%3Areviewed)及 [simple-git 项目发布](https://github.com/steveukx/git-js/releases) | 轮询已审核的 npm 高危或严重公告，并从指定项目直接发现安全补丁，包括尚未取得 CVE 编号的发布 |
+| [OpenRouter 公告订阅](https://openrouter.ai/blog/feed.xml)及 [Novita 官方公告](https://novita.ai/blog/) | 读取厂商数据安全事件，包括没有 CVE 的事件 |
 
 已发布预警还使用了 [Cisco](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-vcs-static-cred-hr7EWZ8t)、[Apache Roller](https://lists.apache.org/thread/lnz4s26tv6hdo03wngtdbpfj4hg4gtds)、[Apache Axis](https://lists.apache.org/thread/8slf0j9gz35z56t0glt5h0ncwlbn4bdz)、[SAP](https://support.sap.com/en/my-support/knowledge-base/security-notes-news/bulletin-2025.html)、[REDCap](https://projectredcap.org/resources/community/)、[LiteLLM](https://github.com/BerriAI/litellm/security/advisories/GHSA-wxxx-gvqv-xp7p)、[Synology](https://www.synology.com/en-global/security/advisory/Synology_SA_24_20)、[Puppet／Perforce](https://www.puppet.com/products/puppet-enterprise/whats-new)、[Check Point](https://support.checkpoint.com/results/sk/sk1000362)、[UnrealIRCd](https://forums.unrealircd.org/viewtopic.php?t=9487)、[Broadcom／VMware](https://support.broadcom.com/web/ecx/support-content-notification/-/external/content/SecurityAdvisories/0/39495)、[Project MONAI](https://github.com/Project-MONAI/MONAILabel/releases/tag/0.8.6)、[N-able](https://me.n-able.com/s/security-advisory/aArVy0000002mrlKAA)及 [Optimizely](https://support.optimizely.com/hc/en-us/articles/50521849710605-Security-Advisory-Web-Experimentation-Security-Incident-Updated-November-19-2026) 的原始公告或补丁说明。每张预警有对应的官方来源链接。
 
@@ -31,9 +37,13 @@
 
 International Cyber Digest 只保存 CVE 编号、发现时间、原帖地址及匹配到的厂商公告链接，账号原文不进入公开列表。CVE 按编号合并，未带 CVE 的重要安全事件作为待复核线索。Telegram 采集首次最多读取五页、最多回看七天。公开频道与 X 时间线的帖子覆盖可能有差异。需要同时读取 X 时，在服务端设置 `X_DIGEST_BEARER_TOKEN` 并重启服务。X 接口权限和计费以开发者控制台为准。可用 `npm run review -- status` 查看 `sync.digest` 中两路的读取状态。
 
+浏览器、GitLab、Ruby、npm 与云服务的新增信源随服务端任务轮询。公告默认回看 7 天，simple-git 项目发布回看 14 天。命中的线索进入人工复核队列，按 CVE 或官方原文地址去重。用 `npm run review -- status` 查看 `sync.coverage` 中各信源的状态与发现数量，用 `npm run review -- list coverage` 查看待复核线索。GitHub Pages 随下一次快照提交更新。
+
 ```sh
 npm run review -- list
 npm run review -- list digest
+npm run review -- list coverage
+npm run review -- lead /path/to/lead.json
 npm run review -- publish /path/to/reviewed-alert.json
 npm run review -- backfill /path/to/reviewed-alerts.json
 npm run review -- withdraw CVE-YYYY-NNNN
