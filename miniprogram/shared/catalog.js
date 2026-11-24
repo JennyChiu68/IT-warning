@@ -37,10 +37,6 @@
       (item.category === 'incident' && item.level === 'high');
   }
 
-  function day(item) {
-    return (item.kev || item.date).slice(0, 10);
-  }
-
   function findItem(items, id) {
     return items.find(item => item.id === id) || items.find(item => (item.aliases || []).includes(id));
   }
@@ -66,14 +62,18 @@
   function formatItems(items) {
     return items.map(item => {
       const severity = severityOf(item);
+      const precise = chinaTime(item.publishedAt);
+      const publicationDate = precise ? precise.slice(0, 10) : item.date;
+      const time = precise ? ' ' + precise.slice(11, 16) : '';
       return {
         ...item, severity,
         productIcon: productIcon(item.products, item.category),
         levelName: levels[severityRanks[severity]].name,
-        dateLabel: day(item).slice(5).replace('-', '/'),
-        dateTitle: item.kev ? 'KEV 收录于 ' + item.kev : '发布于 ' + item.date
+        dateKey: precise || publicationDate,
+        dateLabel: publicationDate.slice(5).replace('-', '/') + time,
+        dateTitle: '公布于 ' + publicationDate + time + (time ? '（北京时间）' : '')
       };
-    }).sort((a, b) => day(b).localeCompare(day(a)) ||
+    }).sort((a, b) => b.dateKey.localeCompare(a.dateKey) ||
       Number(priority(b)) - Number(priority(a)) || (b.score ?? 0) - (a.score ?? 0) ||
       a.title.localeCompare(b.title) || a.id.localeCompare(b.id));
   }
@@ -95,11 +95,14 @@
   }
 
   function homeFeature(items, following, checkedDay) {
-    const end = checkedDay || (items.length ? day(items[0]) : '');
+    const end = checkedDay || items[0]?.dateKey.slice(0, 10);
     if (!end) return { feature: null, featureFollowed: false };
     const start = new Date(Date.parse(end) - 6 * dayMs).toISOString().slice(0, 10);
     const isFollowed = item => item.products.some(product => following.includes(product));
-    const candidates = items.filter(item => priority(item) && day(item) >= start && day(item) <= end);
+    const candidates = items.filter(item => {
+      const relevantDay = item.kev || item.dateKey.slice(0, 10);
+      return priority(item) && relevantDay >= start && relevantDay <= end;
+    });
     const feature = candidates.find(item => isFollowed(item) && item.kev)
       || candidates.find(isFollowed)
       || candidates.find(item => item.kev && item.level === 'critical')
@@ -163,5 +166,5 @@
     return list.includes(value) ? list.filter(item => item !== value) : list.concat(value);
   }
 
-  return { categories, tabs, sortOptions, severityGuide, display, priority, toggle, day };
+  return { categories, tabs, sortOptions, severityGuide, display, priority, toggle };
 });

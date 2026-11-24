@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { runInNewContext } from 'node:vm';
-import { openStore, snapshot } from '../server/store.mjs';
+import { openStore, snapshot, validateItem } from '../server/store.mjs';
 import { syncSources } from '../server/sources.mjs';
 import { deliver } from '../server/wechat.mjs';
 import { digestSignals, telegramPosts } from '../server/digest.mjs';
@@ -55,9 +55,9 @@ test('severity distribution and pagination use the same grades and keep every al
     assert.ok(view.pageItems.length <= 5);
     for (const item of view.pageItems) {
       displayedIds.add(item.id);
-      const date = alertCatalog.day(item);
-      assert.equal(item.dateLabel, date.slice(5).replace('-', '/'));
-      shownDates.push(date);
+      const date = item.dateKey.slice(0, 10);
+      assert.ok(item.dateLabel.startsWith(date.slice(5).replace('-', '/')));
+      shownDates.push(item.dateKey);
     }
     for (const item of risk.pageItems) shownRiskGrades.push(initial.severityCounts.findIndex(level => level.id === item.severity));
   }
@@ -118,6 +118,25 @@ test('severity distribution and pagination use the same grades and keep every al
   const more = alertCatalog.display(snapshot, { ...broadQuery, searchLimit: broad.nextSearchLimit });
   assert.equal(more.pageItems.length, broad.nextSearchLimit);
   assert.equal(more.pageItems.slice(0, broad.pageItems.length).map(item => item.id).join(), broad.pageItems.map(item => item.id).join());
+});
+
+test('publication timestamps use Beijing time and KEV collection does not change chronological order', t => {
+  const store = openStore(':memory:');
+  t.after(() => store.db.close());
+  const sandbox = { module: { exports: {} } };
+  runInNewContext(readFileSync(new URL('../miniprogram/shared/catalog.js', import.meta.url), 'utf8'), sandbox);
+  const { display } = sandbox.module.exports;
+  const evening = { ...patch, date:'2026-11-24', publishedAt:'2026-11-24T13:00:00-08:00' };
+  const morning = { ...patch, id:'CVE-2026-999998', date:'2026-11-24', publishedAt:'2026-11-25T01:00:00+08:00' };
+  const dateOnly = { ...patch, id:'CVE-2026-999997', date:'2026-11-25', publishedAt:undefined };
+  const collected = { ...patch, id:'CVE-2026-999996', date:'2026-11-23', publishedAt:undefined, kev:'2026-11-25' };
+  assert.throws(() => validateItem({ ...evening, publishedAt:'2026-11-24T13:00:00' }), /时区/);
+  store.transact(() => [evening, morning, dateOnly, collected].forEach(item => store.save(item,'review',false)));
+  const ids = [evening.id,morning.id,dateOnly.id,collected.id];
+  const items = store.feed().items.filter(item => ids.includes(item.id));
+  assert.deepEqual(items.map(item => item.id), ids);
+  const view = display({ items }, { tab:'home' });
+  assert.equal(view.pageItems.map(item => item.dateLabel).join(', '), '11/25 05:00, 11/25 01:00, 11/25, 11/23');
 });
 
 test('verified CVEs publish once, unverified leads wait, and withdrawals remain hidden', async t => {

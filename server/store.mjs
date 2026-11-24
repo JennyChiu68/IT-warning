@@ -8,10 +8,16 @@ const defaultPath = fileURLToPath(new URL('../var/alerts.sqlite', import.meta.ur
 export const priority = item => item.level === 'critical' || !!item.kev ||
   (item.category === 'incident' && item.level === 'high');
 export const KEV_SOURCE = { name: 'CISA KEV', url: 'https://www.cisa.gov/known-exploited-vulnerabilities-catalog' };
-const sortsOn = item => item.kev || item.date;
 const read = row => JSON.parse(row.content);
 const isIsoDate = date => /^\d{4}-\d{2}-\d{2}$/.test(date) && Number.isFinite(Date.parse(date));
 export const CVE_ID = /^CVE-\d{4}-\d{4,}$/;
+
+export function publicationTime(value) {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/i.test(value)) return null;
+  const instant = Date.parse(value);
+  if (!Number.isFinite(instant)) return null;
+  return { publishedAt: new Date(instant).toISOString(), date: new Date(instant + 8 * 3600000).toISOString().slice(0, 10) };
+}
 
 export function validSource(source) {
   if (!source || typeof source.name !== 'string' || !source.name.trim() || source.name.length > 40) return false;
@@ -33,6 +39,8 @@ export function validateItem(item) {
       !item.products.every(p => typeof p === 'string' && p.trim() && p.length <= 40) ||
       !Array.isArray(item.sources) || !item.sources.length || item.sources.length > 8 ||
       !item.sources.every(validSource)) throw new Error('请核对编号、日期、类别、风险、产品和 HTTPS 来源。');
+  const publication = publicationTime(item.publishedAt);
+  if (item.publishedAt != null && !publication) throw new Error('公布时间须包含明确时区。');
   for (const field of ['title','summary','impact','fix','badge']) {
     if (typeof item[field] !== 'string' || !item[field].trim() ||
         item[field].length > (field === 'badge' ? 14 : field === 'title' ? 80 : 650) ||
@@ -43,7 +51,8 @@ export function validateItem(item) {
   const aliases = item.aliases || [];
   if (!Array.isArray(aliases) || aliases.length > 100 || !aliases.every(id => CVE_ID.test(id) && id !== item.id)) throw new Error('请核对关联 CVE。');
   return {
-    id: item.id, date: item.date, kev: item.kev || null, category: item.category,
+    id: item.id, date: publication?.date || item.date, ...(publication && { publishedAt: publication.publishedAt }),
+    kev: item.kev || null, category: item.category,
     kind: item.category === 'incident' ? 'incident' : 'vulnerability', products: [...new Set(item.products)],
     level: item.level, badge: item.badge, aliases: [...new Set(aliases)],
     title: item.title, summary: item.summary, impact: item.impact, fix: item.fix,
@@ -103,7 +112,7 @@ export function openStore(path = process.env.DB_PATH || defaultPath) {
     const now = time();
     q(`INSERT INTO alerts VALUES(?,?,?,1,?,?) ON CONFLICT(id) DO UPDATE SET
       content=excluded.content,origin=excluded.origin,active=1,updated=excluded.updated,display_date=excluded.display_date`)
-      .run(item.id,serialized,origin,now,sortsOn(item));
+      .run(item.id,serialized,origin,now,item.date);
     if (notify && priority(item) &&
         (!previous?.active || !priority(read(previous)) || (!read(previous).kev && item.kev))) {
       q('INSERT OR IGNORE INTO events VALUES(?,?)').run(item.id,now);
@@ -132,6 +141,10 @@ export function openStore(path = process.env.DB_PATH || defaultPath) {
   }
 
   transact(() => {
+    if (!meta('publicationOrder')) {
+      db.exec("UPDATE alerts SET display_date=json_extract(content,'$.date') WHERE display_date<>json_extract(content,'$.date')");
+      setMeta('publicationOrder','1');
+    }
     if ((meta('snapshotDate') || '') >= snapshot.checkedAt) return;
     for (const item of snapshot.items) {
       const previous = q('SELECT origin,active FROM alerts WHERE id=?').get(item.id);
@@ -155,7 +168,7 @@ export function openStore(path = process.env.DB_PATH || defaultPath) {
       const fresh = ['kevOK','nvdOK'].every(key => Date.now() - Date.parse(meta(key)) < 75 * 60000);
       return {
         checkedAt, status: fresh ? 'live' : 'snapshot', kevVersion: meta('kevVersion'),
-        items: q('SELECT * FROM alerts WHERE active=1 ORDER BY display_date DESC, id LIMIT 160').all().map(read)
+        items: q("SELECT * FROM alerts WHERE active=1 ORDER BY display_date DESC, json_extract(content,'$.publishedAt') DESC, id LIMIT 160").all().map(read)
       };
     },
     candidates: () => q("SELECT * FROM candidates WHERE state='pending' ORDER BY updated DESC,id LIMIT 150").all().map(read)

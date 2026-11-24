@@ -35,7 +35,7 @@
         <text>{{detail.productsLabel}}</text>
       </view>
       <view class="detail-title">{{detail ? detail.title : '预警详情'}}</view>
-      <view class="detail-meta" wx:if="{{detail}}"><template is="tags" data="{{item:detail}}"/><text>{{detail.dateTitle}}</text></view>
+      <view class="detail-meta" wx:if="{{detail}}"><template is="tags" data="{{item:detail}}"/><text>{{detail.dateTitle}}</text><text wx:if="{{detail.kev}}">KEV 收录于 {{detail.kev}}</text></view>
     </view>
     <view class="main detail-main" wx:if="{{detail}}">
       <view class="panel fix-panel"><view class="panel-title"><text class="check-icon">✓</text>修复建议</view><view class="panel-text">{{detail.fix}}</view></view>
@@ -84,7 +84,7 @@
       <view class="home-section">
         <view class="section-head"><text class="heading">优先处理</text><text class="relevance" wx:if="{{home.featureFollowed}}">与你关注的产品有关</text></view>
         <button class="lead-alert" wx:if="{{home.feature}}" data-value="{{home.feature.id}}" bindtap="openDetail">
-          <view class="lead-top"><view class="lead-product"><view class="product-symbol"><image class="product-icon" src="{{'/assets/' + home.feature.productIcon + '.png'}}" mode="aspectFit"/></view><text class="lead-flag">{{home.feature.kev ? '已知遭利用' : home.feature.levelName}}</text></view><text class="lead-date">{{home.feature.dateLabel}} {{home.feature.kev ? '收录' : '发布'}}</text></view>
+          <view class="lead-top"><view class="lead-product"><view class="product-symbol"><image class="product-icon" src="{{'/assets/' + home.feature.productIcon + '.png'}}" mode="aspectFit"/></view><text class="lead-flag">{{home.feature.kev ? '已知遭利用' : home.feature.levelName}}</text></view><text class="lead-date">{{home.feature.dateLabel}} 公布</text></view>
           <view class="lead-title">{{home.feature.title}}</view>
           <view class="lead-fix">{{home.feature.fix}}</view>
           <view class="lead-cta"><text>查看修复建议</text><image class="tiny-arrow" src="/assets/arrow-white.png" mode="aspectFit"/></view>

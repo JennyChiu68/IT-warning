@@ -1,4 +1,4 @@
-import { CVE_ID, KEV_SOURCE, validSource } from './store.mjs';
+import { CVE_ID, KEV_SOURCE, publicationTime, validSource } from './store.mjs';
 import { readDigest } from './digest.mjs';
 import { queueCoverage, readCoverage } from './coverage.mjs';
 
@@ -172,7 +172,9 @@ async function verifyPatch(profile, products, id, url, getPage) {
 async function directDraft(hint,getPage,now) {
   const item = await (await fetchSource(officialRecordUrl(hint.id))).json();
   if (item.cveMetadata?.state !== 'PUBLISHED' || item.cveMetadata?.cveId !== hint.id) return null;
-  const date = item.cveMetadata.datePublished?.slice(0,10);
+  const rawDate = item.cveMetadata.datePublished;
+  const publication = publicationTime(rawDate);
+  const date = publication?.date || rawDate?.slice(0,10);
   if (!date || (!hint.kev && now - Date.parse(date) > 14 * DAY)) return null;
   const cna = item.containers?.cna;
   if (!cna) return null;
@@ -204,7 +206,7 @@ async function directDraft(hint,getPage,now) {
   if (!fix && !publishedSolution(cna)) return null;
   if (hint.kev) sources.push(KEV_SOURCE);
   return {
-    id: hint.id, date, products, category: lead.category,
+    id: hint.id, date, publishedAt: publication?.publishedAt, products, category: lead.category,
     level: score >= 9 ? 'critical' : 'high', kev: hint.kev, score, metric, badge: lead.key,
     title: products.join(' / ') + ' 安全更新',
     summary: hint.kev ? 'CISA 已将该漏洞列入已知遭利用目录。厂商已提供修复信息。' : 'CVE 发布方已公布漏洞及修复信息，请核对设备和软件版本。',
@@ -220,10 +222,10 @@ async function getCISAFeed() {
   return [...body.matchAll(/<item\b[^>]*>([\s\S]*?)<\/item>/gi)].slice(0,45).flatMap(([,item]) => {
     const url = (item.match(/<link>\s*(?:<!\[CDATA\[)?(https:\/\/www\.cisa\.gov\/news-events\/[^\s<\]]+)/i) || [])[1];
     const tag = (item.match(/<pubDate>([^<]+)/i) || [])[1];
-    const date = Number.isFinite(Date.parse(tag)) ? new Date(tag).toISOString().slice(0,10) : '';
-    if (!url || !date) return [];
+    const publication = Number.isFinite(Date.parse(tag)) ? publicationTime(new Date(tag).toISOString()) : null;
+    if (!url || !publication) return [];
     const id = 'CISA-' + url.toLowerCase().split('/').slice(-2).join('-').slice(0,100);
-    return [{ id, date, products: [], links: [{ name: 'CISA 公告', url }], origin: 'CISA RSS' }];
+    return [{ id, ...publication, products: [], links: [{ name: 'CISA 公告', url }], origin: 'CISA RSS' }];
   });
 }
 

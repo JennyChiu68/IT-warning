@@ -1,5 +1,5 @@
 module.exports = {
-  "checkedAt": "2026-11-24T09:19:48.315Z",
+  "checkedAt": "2026-11-24T09:36:45.651Z",
   "kevVersion": "2026.11.23",
   "items": [
     {
@@ -24,16 +24,21 @@ module.exports = {
           "url": "https://github.com/Project-MONAI/MONAILabel/releases/tag/0.8.6"
         },
         {
+          "name": "MONAI 项目安全公告",
+          "url": "https://github.com/Project-MONAI/MONAILabel/security/advisories/GHSA-qc22-rmgc-vg94"
+        },
+        {
           "name": "CISA KEV",
           "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
         }
       ],
       "score": 9.8,
-      "metric": "CVSS 3.1"
+      "metric": "CVSS 3.1",
+      "publishedAt": "2026-11-18T15:45:41.000Z"
     },
     {
       "id": "CVE-2026-134624",
-      "date": "2026-11-22",
+      "date": "2026-11-23",
       "kev": "2026-11-23",
       "category": "server",
       "kind": "vulnerability",
@@ -62,7 +67,8 @@ module.exports = {
         }
       ],
       "score": 9.3,
-      "metric": "CVSS 4.0"
+      "metric": "CVSS 4.0",
+      "publishedAt": "2026-11-22T19:10:45.282Z"
     },
     {
       "id": "CVE-2025-42884",
@@ -92,10 +98,15 @@ module.exports = {
         {
           "name": "CISA KEV",
           "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2025-42884"
         }
       ],
       "score": 6.5,
-      "metric": "CVSS 3.1"
+      "metric": "CVSS 3.1",
+      "publishedAt": "2025-11-11T00:14:02.774Z"
     },
     {
       "id": "CVE-2026-123890",
@@ -121,10 +132,15 @@ module.exports = {
         {
           "name": "CISA KEV",
           "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-123890"
         }
       ],
       "score": 9.8,
-      "metric": "CVSS 3.x"
+      "metric": "CVSS 3.x",
+      "publishedAt": "2026-11-19T14:02:38.017Z"
     },
     {
       "id": "CVE-2026-129448",
@@ -150,14 +166,19 @@ module.exports = {
         {
           "name": "CISA KEV",
           "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-129448"
         }
       ],
       "score": 9.8,
-      "metric": "CVSS 3.1"
+      "metric": "CVSS 3.1",
+      "publishedAt": "2026-11-17T11:03:49.685Z"
     },
     {
       "id": "CVE-2026-76466",
-      "date": "2026-10-21",
+      "date": "2026-10-22",
       "kev": "2026-11-20",
       "category": "server",
       "kind": "vulnerability",
@@ -179,10 +200,15 @@ module.exports = {
         {
           "name": "CISA KEV",
           "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-76466"
         }
       ],
       "score": 9.8,
-      "metric": "CVSS 3.1"
+      "metric": "CVSS 3.1",
+      "publishedAt": "2026-10-21T16:14:19.225Z"
     },
     {
       "id": "CVE-2026-115560",
@@ -211,7 +237,8 @@ module.exports = {
         }
       ],
       "score": 9.2,
-      "metric": "CVSS 4.0"
+      "metric": "CVSS 4.0",
+      "publishedAt": "2026-11-19T14:08:31.000Z"
     },
     {
       "id": "CVE-2026-126714",
@@ -240,11 +267,12 @@ module.exports = {
         }
       ],
       "score": 9.2,
-      "metric": "CVSS 4.0"
+      "metric": "CVSS 4.0",
+      "publishedAt": "2026-11-19T14:06:39.000Z"
     },
     {
       "id": "OPTI-2026-11-16",
-      "date": "2026-11-19",
+      "date": "2026-11-20",
       "kev": null,
       "category": "incident",
       "kind": "incident",
@@ -265,7 +293,8 @@ module.exports = {
         }
       ],
       "score": null,
-      "metric": null
+      "metric": null,
+      "publishedAt": "2026-11-19T17:19:55.000Z"
     },
     {
       "id": "PHP-2026-11",
@@ -331,10 +360,15 @@ module.exports = {
         {
           "name": "CISA KEV",
           "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2024-10441"
         }
       ],
       "score": 9.8,
-      "metric": "CVSS 3.1"
+      "metric": "CVSS 3.1",
+      "publishedAt": "2025-03-19T02:09:56.387Z"
     },
     {
       "id": "CVE-2026-113425",
@@ -360,10 +394,15 @@ module.exports = {
         {
           "name": "Nginx 安全公告",
           "url": "https://my.f5.com/manage/s/article/K000163931"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-113425"
         }
       ],
       "score": 9.2,
-      "metric": "CVSS 4.0"
+      "metric": "CVSS 4.0",
+      "publishedAt": "2026-11-18T15:23:28.642Z"
     },
     {
       "id": "CVE-2026-118899",
@@ -389,10 +428,15 @@ module.exports = {
         {
           "name": "Nginx 安全公告",
           "url": "https://my.f5.com/manage/s/article/K000163930"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-118899"
         }
       ],
       "score": 8.7,
-      "metric": "CVSS 4.0"
+      "metric": "CVSS 4.0",
+      "publishedAt": "2026-11-18T15:23:27.916Z"
     },
     {
       "id": "CVE-2026-121810",
@@ -418,10 +462,15 @@ module.exports = {
         {
           "name": "Nginx 安全公告",
           "url": "https://my.f5.com/manage/s/article/K000163927"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-121810"
         }
       ],
       "score": 9.2,
-      "metric": "CVSS 4.0"
+      "metric": "CVSS 4.0",
+      "publishedAt": "2026-11-18T15:23:29.375Z"
     },
     {
       "id": "CVE-2026-123007",
@@ -447,10 +496,15 @@ module.exports = {
         {
           "name": "F5",
           "url": "https://my.f5.com/manage/s/article/K000163926"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-123007"
         }
       ],
       "score": 9.2,
-      "metric": "CVSS 4.0"
+      "metric": "CVSS 4.0",
+      "publishedAt": "2026-11-18T15:23:29.008Z"
     },
     {
       "id": "CVE-2026-123633",
@@ -476,10 +530,15 @@ module.exports = {
         {
           "name": "Nginx 安全公告",
           "url": "https://my.f5.com/manage/s/article/K000163928"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-123633"
         }
       ],
       "score": 9.2,
-      "metric": "CVSS 4.0"
+      "metric": "CVSS 4.0",
+      "publishedAt": "2026-11-18T15:23:27.197Z"
     },
     {
       "id": "CVE-2026-123634",
@@ -505,10 +564,15 @@ module.exports = {
         {
           "name": "Nginx 安全公告",
           "url": "https://my.f5.com/manage/s/article/K000163925"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-123634"
         }
       ],
       "score": 9.2,
-      "metric": "CVSS 4.0"
+      "metric": "CVSS 4.0",
+      "publishedAt": "2026-11-18T15:23:28.277Z"
     },
     {
       "id": "CVE-2026-40217",
@@ -534,10 +598,15 @@ module.exports = {
         {
           "name": "CISA KEV",
           "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-40217"
         }
       ],
       "score": 8.8,
-      "metric": "CVSS 3.1"
+      "metric": "CVSS 3.1",
+      "publishedAt": "2026-04-10T13:43:23.147Z"
     },
     {
       "id": "CVE-2026-90436",
@@ -570,7 +639,8 @@ module.exports = {
         }
       ],
       "score": 9.8,
-      "metric": "CVSS 3.1"
+      "metric": "CVSS 3.1",
+      "publishedAt": "2026-11-06T15:37:55.374Z"
     },
     {
       "id": "CVE-2026-90817",
@@ -603,11 +673,12 @@ module.exports = {
         }
       ],
       "score": 9.8,
-      "metric": "CVSS 3.1"
+      "metric": "CVSS 3.1",
+      "publishedAt": "2026-09-20T12:05:32.698Z"
     },
     {
       "id": "CVE-2026-114938",
-      "date": "2026-11-17",
+      "date": "2026-11-18",
       "kev": null,
       "category": "runtime",
       "kind": "vulnerability",
@@ -633,14 +704,19 @@ module.exports = {
         {
           "name": "CISA 公告",
           "url": "https://content.govdelivery.com/accounts/USDHSCISA/bulletins/4332a87"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-114938"
         }
       ],
       "score": 8.1,
-      "metric": "CVSS 3.1"
+      "metric": "CVSS 3.1",
+      "publishedAt": "2026-11-17T21:32:03.183Z"
     },
     {
       "id": "CVE-2026-115731",
-      "date": "2026-11-03",
+      "date": "2026-11-04",
       "kev": "2026-11-17",
       "category": "server",
       "kind": "vulnerability",
@@ -666,10 +742,15 @@ module.exports = {
         {
           "name": "CISA KEV",
           "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-115731"
         }
       ],
       "score": 9.4,
-      "metric": "CVSS 4.0"
+      "metric": "CVSS 4.0",
+      "publishedAt": "2026-11-03T20:40:10.100Z"
     },
     {
       "id": "JAVA-2026-11",
@@ -730,10 +811,15 @@ module.exports = {
         {
           "name": "CISA KEV",
           "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-114713"
         }
       ],
       "score": 8.6,
-      "metric": "CVSS 3.1"
+      "metric": "CVSS 3.1",
+      "publishedAt": "2026-11-08T02:31:48.387Z"
     },
     {
       "id": "CVE-2026-123039",
@@ -766,11 +852,12 @@ module.exports = {
         }
       ],
       "score": 7.8,
-      "metric": "CVSS 3.1"
+      "metric": "CVSS 3.1",
+      "publishedAt": "2026-11-12T14:02:13.665Z"
     },
     {
       "id": "CVE-2026-123866",
-      "date": "2026-11-11",
+      "date": "2026-11-12",
       "kev": null,
       "category": "runtime",
       "kind": "vulnerability",
@@ -788,10 +875,15 @@ module.exports = {
         {
           "name": "Node.js",
           "url": "https://nodejs.org/en/blog/vulnerability/november-2026-security-releases"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-123866"
         }
       ],
       "score": 7.5,
-      "metric": "CVSS 3.1"
+      "metric": "CVSS 3.1",
+      "publishedAt": "2026-11-11T18:21:18.538Z"
     },
     {
       "id": "NODEJS-2026-11",
@@ -932,7 +1024,7 @@ module.exports = {
     },
     {
       "id": "CVE-2026-113964",
-      "date": "2026-11-09",
+      "date": "2026-11-10",
       "kev": null,
       "category": "mobile",
       "kind": "vulnerability",
@@ -955,10 +1047,15 @@ module.exports = {
         {
           "name": "Apple macOS",
           "url": "https://support.apple.com/en-us/149718"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-113964"
         }
       ],
       "score": null,
-      "metric": null
+      "metric": null,
+      "publishedAt": "2026-11-09T20:28:00.168Z"
     },
     {
       "id": "CVE-2026-58876",
@@ -1018,10 +1115,15 @@ module.exports = {
         {
           "name": "CISA KEV",
           "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-109618"
         }
       ],
       "score": null,
-      "metric": null
+      "metric": null,
+      "publishedAt": "2026-10-21T13:48:34.845Z"
     },
     {
       "id": "CVE-2026-132825",
@@ -1097,11 +1199,12 @@ module.exports = {
         }
       ],
       "score": 9.2,
-      "metric": "CVSS 4.0"
+      "metric": "CVSS 4.0",
+      "publishedAt": "2026-11-22T21:22:14.052Z"
     },
     {
       "id": "CVE-2026-134401",
-      "date": "2026-11-23",
+      "date": "2026-11-24",
       "kev": null,
       "category": "system",
       "kind": "vulnerability",
@@ -1134,7 +1237,8 @@ module.exports = {
         }
       ],
       "score": null,
-      "metric": null
+      "metric": null,
+      "publishedAt": "2026-11-23T20:52:51.321Z"
     },
     {
       "id": "OPENROUTER-NOVITA-20261122",
@@ -1164,7 +1268,8 @@ module.exports = {
         }
       ],
       "score": null,
-      "metric": null
+      "metric": null,
+      "publishedAt": "2026-11-22T10:00:00.000Z"
     }
   ]
 };

@@ -1,6 +1,6 @@
 # IT漏洞预警
 
-原生微信小程序与同款浏览器预览。首页上方展示优先处理的漏洞，下方默认按列表日期从新到旧排列。日期为公告发布日或 CISA KEV 收录日。可切换为风险优先，也可点击分布图或产品类别筛选。「搜索」支持按产品和 CVE 查询，初始显示常用产品入口。详情先展示修复建议和影响范围，底部的「关注与提醒」可展开产品管理和微信订阅设置。
+原生微信小程序与同款浏览器预览。首页上方展示优先处理的漏洞，下方默认按公开公告的公布时间从新到旧排列。明确的时间统一换算为北京时间，只有公布日期时显示到日，同一天的日期级记录列在有时分的记录之后。CISA KEV 收录日期在详情里单独展示。可切换为风险优先，也可点击分布图或产品类别筛选。「搜索」支持按产品和 CVE 查询，初始显示常用产品入口。详情先展示修复建议和影响范围，底部的「关注与提醒」可展开产品管理和微信订阅设置。
 
 ## 预览
 
@@ -50,7 +50,7 @@ npm run review -- withdraw CVE-YYYY-NNNN
 npm run review -- dismiss CANDIDATE-ID
 ```
 
-待发稿件采用 `miniprogram/shared/snapshot.json` 中单条 `items` 的字段结构。使用 `category: "incident"` 标记安全事件。可用 `aliases` 合并同一份通告的其他 CVE，搜索和详情均可按关联编号查找。核验并更新随包快照后，运行 `node scripts/preview.mjs` 重建两个预览文件。修改共享样式后运行 `node scripts/native-styles.mjs` 更新 WXSS。
+待发稿件采用 `miniprogram/shared/snapshot.json` 中单条 `items` 的字段结构。`date` 填原公告公布日期。原文有明确时间时，同时填写含时区的 `publishedAt`，服务端将 `date` 换算为北京时间日期。使用 `category: "incident"` 标记安全事件。可用 `aliases` 合并同一份通告的其他 CVE，搜索和详情均可按关联编号查找。核验并更新随包快照后，运行 `node scripts/preview.mjs` 重建两个预览文件。修改共享样式后运行 `node scripts/native-styles.mjs` 更新 WXSS。
 
 ## 接入正式微信提醒
 

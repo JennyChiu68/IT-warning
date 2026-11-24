@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { CVE_ID, validSource } from './store.mjs';
+import { CVE_ID, publicationTime, validSource } from './store.mjs';
 
 const dayMs = 86400000;
 const incidentTitle = /incident|breach|data (?:exposure|leak)|privacy notice|security (?:notice|advisory|alert)/i;
@@ -60,7 +60,8 @@ export function feedSignals(xml, source, now) {
   const signals = [];
   for (const [, , entry] of xml.matchAll(/<(entry|item)\b[^>]*>([\s\S]*?)<\/\1>/gi)) {
     const title = field(entry, 'title').replace(/<[^>]+>/g, '').trim();
-    const published = field(entry, 'published') || field(entry, 'pubDate') || field(entry, 'updated');
+    const original = field(entry, 'published');
+    const published = original || field(entry, 'pubDate') || field(entry, 'updated');
     if (!source.title.test(title) || !inWindow(published, now, source.securityRelease ? 14 : 7)) continue;
     const url = officialFeedLink(entry, source);
     if (!url) continue;
@@ -70,10 +71,11 @@ export function feedSignals(xml, source, now) {
       ? [...content.matchAll(/\b(?:Critical|High)\s+(CVE-\d{4}-\d{4,})\b/gi)].map(match => match[1].toUpperCase())
       : (content.match(/\bCVE-\d{4}-\d{4,}\b/gi) || []).map(id => id.toUpperCase());
     const date = /^\d{4}-\d{2}-\d{2}/.test(published) ? published.slice(0, 10) : new Date(published).toISOString().slice(0, 10);
+    const publication = (source.ranked && publicationTime(original)) || { date };
     const pickByUrl = source.byUrl || (!ids.length && (source.securityRelease || source.fallbackByUrl));
     const selected = pickByUrl ? [signalId(source, url)] : [...new Set(ids)].slice(0, 20);
     for (const id of selected) {
-      signals.push({ id, date, title: title.slice(0, 180), products: source.products, links: [{ name: source.name, url }], origin: source.name });
+      signals.push({ id, ...publication, title: title.slice(0, 180), products: source.products, links: [{ name: source.name, url }], origin: source.name });
     }
   }
   return signals;
@@ -100,7 +102,8 @@ function npmSignals(rows, now) {
     const products = [...new Set((row.vulnerabilities || []).filter(v => v.package?.ecosystem === 'npm')
       .map(v => v.package.name).filter(name => typeof name === 'string' && name.length <= 40))].slice(0, 8);
     if (!products.length) return [];
-    return [{ id: row.cve_id, date: row.published_at.slice(0, 10), title: String(row.summary || 'npm 安全公告').slice(0, 180),
+    const publication = publicationTime(row.published_at) || { date: row.published_at.slice(0, 10) };
+    return [{ id: row.cve_id, ...publication, title: String(row.summary || 'npm 安全公告').slice(0, 180),
       products, links: [{ name: 'GitHub Advisory Database', url: row.html_url }], origin: 'GitHub npm 公告' }];
   });
 }
@@ -144,7 +147,9 @@ export function queueCoverage(store, signals) {
     if (row && row.state !== 'pending') continue;
     const prior = row ? JSON.parse(row.content) : {};
     const links = [...new Map([...(prior.links || []), ...signal.links].map(link => [sourceKey(link.url), link])).values()].slice(0, 8);
-    store.candidate({ ...prior, ...signal, date: prior.date || signal.date,
+    const dates = [prior.publishedAt, signal.publishedAt].filter(Boolean).sort();
+    const publication = publicationTime(dates[0]) || { date: prior.date || signal.date };
+    store.candidate({ ...prior, ...signal, ...publication,
       products: [...new Set([...(prior.products || []), ...signal.products])].slice(0, 8), links, reviewOnly: true });
     candidates.add(signal.id);
   }

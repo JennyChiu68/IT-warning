@@ -50,7 +50,7 @@ function homePage(view) {
   return `<section class="home-section">
       <div class="section-head"><h2 class="heading">优先处理</h2>${featureFollowed ? '<span class="relevance">与你关注的产品有关</span>' : ''}</div>
       ${feature ? `<button class="lead-alert" data-action="detail" data-value="${esc(feature.id)}">
-        <span class="lead-top"><span class="lead-product"><span class="product-symbol">${icon(feature.productIcon,'product-icon')}</span><span class="lead-flag">${feature.kev ? '已知遭利用' : esc(feature.levelName)}</span></span><span class="lead-date">${esc(feature.dateLabel)} ${feature.kev ? '收录' : '发布'}</span></span>
+        <span class="lead-top"><span class="lead-product"><span class="product-symbol">${icon(feature.productIcon,'product-icon')}</span><span class="lead-flag">${feature.kev ? '已知遭利用' : esc(feature.levelName)}</span></span><span class="lead-date">${esc(feature.dateLabel)} 公布</span></span>
         <span class="lead-title">${esc(feature.title)}</span>
         <span class="lead-fix">${esc(feature.fix)}</span>
         <span class="lead-cta"><span>查看修复建议</span>${icon('arrow-white','tiny-arrow')}</span>
@@ -86,7 +86,7 @@ function rows(items, empty) {
   return `<div class="stack">${items.map(item => `<button class="row" data-action="detail" data-value="${esc(item.matchedId || item.id)}">
     <span class="product-symbol">${icon(item.productIcon,'product-icon')}</span>
     <span class="row-main"><span class="row-label">${esc(item.title)}</span>
-      <span class="meta">${tags(item)} <time class="row-date" datetime="${esc(AlertCatalog.day(item))}" title="${esc(item.dateTitle)}">${esc(item.dateLabel)}</time>${item.matchedId ? `<span class="matched-id">${esc(item.matchedId)}</span>` : ''}</span>
+      <span class="meta">${tags(item)} <time class="row-date" datetime="${esc(item.publishedAt || item.date)}" title="${esc(item.dateTitle)}">${esc(item.dateLabel)}</time>${item.matchedId ? `<span class="matched-id">${esc(item.matchedId)}</span>` : ''}</span>
     </span>${icon('arrow','row-arrow')}
   </button>`).join('')}</div>`;
 }
@@ -157,7 +157,7 @@ function detail(view) {
   return `<header class="detail-head">${back}
     <div class="detail-product"><span class="product-symbol">${icon(item.productIcon,'product-icon')}</span><span>${esc(item.products.join(' · '))}</span></div>
     <h1 class="detail-title">${esc(item.title)}</h1>
-    <div class="detail-meta">${tags(item)}<span>${esc(item.dateTitle)}</span></div>
+    <div class="detail-meta">${tags(item)}<span>${esc(item.dateTitle)}</span>${item.kev ? `<span>KEV 收录于 ${esc(item.kev)}</span>` : ''}</div>
   </header>
   <main class="main detail-main">
     <section class="panel fix-panel"><h2 class="panel-title"><i aria-hidden="true">✓</i>修复建议</h2><p class="panel-text">${esc(item.fix)}</p></section>
