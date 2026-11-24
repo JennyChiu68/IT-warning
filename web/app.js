@@ -51,11 +51,7 @@ function header(view) {
 
 function homePage(view) {
   const { feature, featureFollowed } = view.home;
-  return `<button class="subscription-banner" data-action="tab" data-value="subscribe">
-      <span class="subscription-icon">${icon('bell-active')}</span><span class="subscription-banner-title">订阅重点预警</span>
-      <span class="subscription-banner-action">${channels.push ? '管理订阅' : '查看订阅方式'} ${icon('arrow','tiny-arrow')}</span>
-    </button>
-    <section class="home-section">
+  return `<section class="home-section">
       <div class="section-head"><h2 class="heading">优先处理</h2>${featureFollowed ? '<span class="relevance">与你关注的产品有关</span>' : ''}</div>
       ${feature ? `<button class="lead-alert" data-action="detail" data-value="${esc(feature.id)}">
         <span class="lead-top"><span class="lead-product"><span class="product-symbol">${icon(feature.productIcon,'product-icon')}</span><span class="lead-flag">${feature.kev ? '已知遭利用' : esc(feature.levelName)}</span></span><span class="lead-date">${esc(feature.dateLabel)} 公布</span></span>

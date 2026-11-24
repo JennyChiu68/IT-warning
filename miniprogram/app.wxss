@@ -16,10 +16,7 @@ button.page-step[disabled]:not([type]) { background:#fff; color:#53607e; }
 .status-dot.live { background:#178f65; }
 .main { padding:0 32rpx 20rpx; }
 .home-section { margin-top:6rpx; }
-.subscription-banner { display:flex; align-items:center; width:100%; gap:18rpx; padding:16rpx 20rpx; margin:0 0 20rpx; border:1px solid #dee4f7; border-radius:24rpx; background:#eef2ff; color:#303e91; }
 .subscription-icon { display:flex; flex:none; align-items:center; justify-content:center; width:60rpx; height:60rpx; background:#fff; border-radius:18rpx; }
-.subscription-banner-title { flex:1; font-size:26rpx; line-height:1.35; font-weight:720; }
-.subscription-banner-action { display:flex; align-items:center; flex:none; gap:6rpx; font-size:22rpx; font-weight:650; }
 .subscription-panel .subscription-icon { margin-bottom:16rpx; background:#edf0ff; }
 .subscription-button { margin-top:22rpx; }
 .rss-panel { margin-top:18rpx; }

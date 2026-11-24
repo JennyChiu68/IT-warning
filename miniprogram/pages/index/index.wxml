@@ -87,7 +87,6 @@
       <view class="status" wx:if="{{tab === 'home' && updateLabel}}"><view class="status-dot {{live ? 'live' : ''}}"/><text>{{live ? '同步于' : '快照'}} {{updateLabel}}</text></view>
     </view>
     <view class="main" wx:if="{{tab === 'home'}}">
-      <button class="subscription-banner" data-value="subscribe" bindtap="selectTab"><view class="subscription-icon"><image class="nav-icon" src="/assets/bell-active.png" mode="aspectFit"/></view><text class="subscription-banner-title">订阅重点预警</text><text class="subscription-banner-action">查看订阅方式 ›</text></button>
       <view class="home-section">
         <view class="section-head"><text class="heading">优先处理</text><text class="relevance" wx:if="{{home.featureFollowed}}">与你关注的产品有关</text></view>
         <button class="lead-alert" wx:if="{{home.feature}}" data-value="{{home.feature.id}}" bindtap="openDetail">

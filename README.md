@@ -54,7 +54,7 @@ npm run review -- dismiss CANDIDATE-ID
 
 ## H5 订阅和评论
 
-- 首页和底部「订阅」提供重点预警 RSS。GitHub Pages 的 `feed.xml` 随审核快照发布。运行 Node 服务时，`/feed.xml` 从当前数据库生成。用 `PUBLIC_URL` 设置预警的 HTTPS 页面地址。
+- 底部「订阅」提供重点预警 RSS。GitHub Pages 的 `feed.xml` 随审核快照发布。运行 Node 服务时，`/feed.xml` 从当前数据库生成。用 `PUBLIC_URL` 设置预警的 HTTPS 页面地址。
 - 浏览器后台通知使用 Web Push。用 `npx web-push generate-vapid-keys` 生成密钥，按 `.env.example` 设置环境变量，在支持 Push API 的 HTTPS 浏览器中点击「启用浏览器通知」。严重漏洞、新确认已遭利用和高危安全事件自发布后进入推送队列，每 30 秒检查一次。浏览器会提示用户授权，也可在订阅页随时取消。金十 App 内的系统通知需要宿主支持及真机验证。
 - 「评论」按预警收集内容。服务端将 `COMMENTS_ENABLED` 设为 `1` 后可提交；用 `npm run review -- comments` 查看待审评论，`npm run review -- approve-comment 编号` 发布，`npm run review -- remove-comment 编号` 移除。仅审核通过且对应预警仍公开的评论会显示，角标取设备上未读的公开评论数。
 

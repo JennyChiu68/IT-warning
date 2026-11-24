@@ -40,10 +40,7 @@ a { color:inherit; text-decoration:none; }
 .status-dot.live { background:#178f65; }
 .main { padding:0 16px 10px; }
 .home-section { margin-top:3px; }
-.subscription-banner { display:flex; align-items:center; width:100%; gap:9px; padding:8px 10px; margin:0 0 10px; border:1px solid #dee4f7; border-radius:12px; background:#eef2ff; color:#303e91; }
 .subscription-icon { display:flex; flex:none; align-items:center; justify-content:center; width:30px; height:30px; background:#fff; border-radius:9px; }
-.subscription-banner-title { flex:1; font-size:13px; line-height:1.35; font-weight:720; }
-.subscription-banner-action { display:flex; align-items:center; flex:none; gap:3px; font-size:11px; font-weight:650; }
 .subscription-panel .subscription-icon { margin-bottom:8px; background:#edf0ff; }
 .subscription-button { margin-top:11px; }
 .rss-panel { margin-top:9px; }
@@ -1702,11 +1699,7 @@ function header(view) {
 
 function homePage(view) {
   const { feature, featureFollowed } = view.home;
-  return `<button class="subscription-banner" data-action="tab" data-value="subscribe">
-      <span class="subscription-icon">${icon('bell-active')}</span><span class="subscription-banner-title">订阅重点预警</span>
-      <span class="subscription-banner-action">${channels.push ? '管理订阅' : '查看订阅方式'} ${icon('arrow','tiny-arrow')}</span>
-    </button>
-    <section class="home-section">
+  return `<section class="home-section">
       <div class="section-head"><h2 class="heading">优先处理</h2>${featureFollowed ? '<span class="relevance">与你关注的产品有关</span>' : ''}</div>
       ${feature ? `<button class="lead-alert" data-action="detail" data-value="${esc(feature.id)}">
         <span class="lead-top"><span class="lead-product"><span class="product-symbol">${icon(feature.productIcon,'product-icon')}</span><span class="lead-flag">${feature.kev ? '已知遭利用' : esc(feature.levelName)}</span></span><span class="lead-date">${esc(feature.dateLabel)} 公布</span></span>
