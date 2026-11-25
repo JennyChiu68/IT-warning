@@ -4,7 +4,7 @@
 
 ## 预览
 
-- 打开项目根目录的 `preview.html`，离线浏览 2026 年 11 月 24 日核验的快照。
+- 打开项目根目录的 `preview.html`，离线浏览 2026 年 11 月 25 日核验的快照。
 - GitHub Pages 从 `main` 分支的 `/docs` 目录发布静态预览。更新代码或已核验快照后，用 `node scripts/preview.mjs` 重新生成预览并提交。在线预览使用随包快照。
 - 在微信开发者工具中导入本项目目录即可加载随包快照。项目预设体验 AppID。预览正式 API 和微信提醒时，使用对应小程序的 AppID。
 - 使用 Node.js 22.13 或更新版本，运行 `npm ci` 后运行 `npm start`。浏览 `http://127.0.0.1:4173/` 查看实时 API 和页面。服务默认每 15 分钟同步，可用 `SYNC_MINUTES` 调整。设置 `AUTO_SYNC=0` 可固定现有数据库，运行 `npm run sync` 可手动刷新，运行 `npm run review -- status` 查看信源结果。SQLite 默认存储在 `var/alerts.sqlite`。

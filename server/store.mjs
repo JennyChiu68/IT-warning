@@ -12,6 +12,12 @@ const read = row => JSON.parse(row.content);
 const isIsoDate = date => /^\d{4}-\d{2}-\d{2}$/.test(date) && Number.isFinite(Date.parse(date));
 export const CVE_ID = /^CVE-\d{4}-\d{4,}$/;
 
+export function kevCve(item) {
+  if (CVE_ID.test(item.id || '')) return item.id;
+  return item.category === 'incident' && Array.isArray(item.aliases) && item.aliases.length === 1 && CVE_ID.test(item.aliases[0])
+    ? item.aliases[0] : null;
+}
+
 export function publicationTime(value) {
   if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/i.test(value)) return null;
   const instant = Date.parse(value);
@@ -32,7 +38,7 @@ export function validSource(source) {
 
 export function validateItem(item) {
   if (!item || !/^[A-Z\d-]{4,45}$/.test(item.id || '') || !isIsoDate(item.date) ||
-      (item.kev && (!CVE_ID.test(item.id) || !isIsoDate(item.kev))) ||
+      (item.kev && (!kevCve(item) || !isIsoDate(item.kev))) ||
       !['server','runtime','system','mobile','incident'].includes(item.category) ||
       !['critical','high','notice'].includes(item.level) ||
       !Array.isArray(item.products) || !item.products.length || item.products.length > 8 ||
@@ -131,8 +137,8 @@ export function openStore(path = process.env.DB_PATH || defaultPath) {
       q('INSERT OR IGNORE INTO events VALUES(?,?)').run(item.id,now);
     }
     q("UPDATE candidates SET state='published' WHERE id=?").run(item.id);
-    const covered = q("UPDATE candidates SET state='published' WHERE id=? AND state='pending' AND json_extract(content,'$.kev') IS NULL");
-    for (const id of item.aliases) covered.run(id);
+    const covered = q("UPDATE candidates SET state='published' WHERE id=? AND state='pending' AND (json_extract(content,'$.kev') IS NULL OR json_extract(content,'$.kev')=?)");
+    for (const id of item.aliases) covered.run(id,id === kevCve(item) ? item.kev : null);
     return true;
   }
   function candidate(item, reopen = false) {

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { runInNewContext } from 'node:vm';
-import { openStore, snapshot, validateItem } from '../server/store.mjs';
+import { kevCve, openStore, snapshot, validateItem } from '../server/store.mjs';
 import { syncSources } from '../server/sources.mjs';
 import { deliver } from '../server/wechat.mjs';
 import { digestSignals, telegramPosts } from '../server/digest.mjs';
@@ -28,7 +28,7 @@ function catalog() {
   return {
     dateReleased:'2026-11-24T05:00:00Z', catalogVersion:'2026.11.24',
     vulnerabilities: snapshot.items.filter(item => item.kev).map(item => ({
-      cveID:item.id, dateAdded:item.kev, notes:''
+      cveID:kevCve(item), dateAdded:item.kev, notes:''
     }))
   };
 }
@@ -218,6 +218,19 @@ test('grouped CVEs remain searchable and new KEV evidence reopens individual rev
   assert.equal(store.lookup(testedId),undefined);
   assert.equal(status.get(testedId).state,'withdrawn');
   assert.equal(store.lookup(bundle.id).aliases.length,33);
+});
+
+test('a released incident keeps its permalink when its associated CVE enters KEV', async t => {
+  const store = openStore(':memory:');
+  t.after(() => store.db.close());
+  const incident = { ...patch,id:'INCIDENT-TEST',category:'incident',aliases:[testedId] };
+  store.transact(() => store.save(incident,'review',false));
+  const kev = catalog();
+  kev.vulnerabilities.push({ cveID:testedId,dateAdded:tryDate,notes:'' });
+  await syncSources(store,{ kev,nvd:[],cisa:[],vendor:[],digest:emptyDigest,coverage:emptyCoverage,now });
+  assert.equal(store.lookup(testedId).id,incident.id);
+  assert.equal(store.lookup(incident.id).kev,tryDate);
+  assert.equal(store.q('SELECT 1 FROM alerts WHERE id=?').get(testedId),undefined);
 });
 
 test('vendor and package coverage records verified source links for review without auto-publishing', async t => {

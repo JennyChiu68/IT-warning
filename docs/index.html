@@ -197,46 +197,293 @@ a { color:inherit; text-decoration:none; }
   <div id="app" class="app"></div>
   <div id="toast" class="toast" role="status" hidden></div>
 <script>const IT_WARNING_SNAPSHOT={
-  "checkedAt": "2026-11-24T09:36:45.651Z",
-  "kevVersion": "2026.11.23",
+  "checkedAt": "2026-11-25T05:57:28.642Z",
+  "kevVersion": "2026.11.24",
   "items": [
     {
-      "id": "CVE-2026-133968",
-      "date": "2026-11-18",
-      "kev": "2026-11-23",
-      "category": "server",
+      "id": "CVE-2026-112732",
+      "date": "2026-11-25",
+      "publishedAt": "2026-11-24T20:11:58.472Z",
+      "kev": null,
+      "category": "system",
       "kind": "vulnerability",
       "products": [
-        "MONAI Label"
+        "Microsoft Visio",
+        "Microsoft Office"
       ],
       "level": "critical",
-      "badge": "MONAI",
+      "badge": "Visio",
       "aliases": [],
-      "title": "MONAI Label 文件写入漏洞",
-      "summary": "官方已发布修复。CISA 于 11 月 23 日确认漏洞已遭利用。",
-      "impact": "MONAI Label 0.8.6 以前版本存在未经授权写入文件的风险。",
-      "fix": "升级至 0.8.6 或更高版本。升级前严格限制服务访问，仅允许受信任用户访问。",
+      "title": "微软补充披露 Visio 严重漏洞",
+      "summary": "微软披露 Visio 远程代码执行风险，CVSS 3.1 评分 9.8。CVE 记录已列出相应安全修复。",
+      "impact": "涉及 Microsoft 365 企业应用版，以及 Microsoft Office LTSC 2021、2024 中的受影响 Visio 安装。",
+      "fix": "检查并安装所属通道的最新 Office 安全更新。LTSC 2021 核对 16.0.14334.21048 或更高版本，LTSC 2024 核对 16.0.17932.21140 或更高版本。Microsoft 365 企业应用版按所在更新通道核对官方说明。",
       "sources": [
         {
-          "name": "MONAI 项目",
-          "url": "https://github.com/Project-MONAI/MONAILabel/releases/tag/0.8.6"
+          "name": "微软安全更新指南",
+          "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-112732"
         },
         {
-          "name": "MONAI 项目安全公告",
-          "url": "https://github.com/Project-MONAI/MONAILabel/security/advisories/GHSA-qc22-rmgc-vg94"
-        },
-        {
-          "name": "CISA KEV",
-          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-112732"
         }
       ],
       "score": 9.8,
-      "metric": "CVSS 3.1",
-      "publishedAt": "2026-11-18T15:45:41.000Z"
+      "metric": "CVSS 3.1"
+    },
+    {
+      "id": "CVE-2026-109484",
+      "date": "2026-11-25",
+      "publishedAt": "2026-11-24T17:46:10.766Z",
+      "kev": null,
+      "category": "server",
+      "kind": "vulnerability",
+      "products": [
+        "Azure App Service for Linux"
+      ],
+      "level": "critical",
+      "badge": "Azure",
+      "aliases": [],
+      "title": "微软通报 Azure Linux 应用服务严重漏洞",
+      "summary": "微软公开披露一项 CVSS 3.1 为 10.0 的权限提升漏洞，并确认已在托管服务中完成缓解。",
+      "impact": "涉及 Microsoft Azure App Service for Linux 托管平台。",
+      "fix": "微软表示该服务的用户无需采取补丁操作。管理员可查阅 Azure 服务运行状况中与自身资源相关的通知。",
+      "sources": [
+        {
+          "name": "微软安全更新指南",
+          "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-109484"
+        },
+        {
+          "name": "微软 11 月 CVRF",
+          "url": "https://api.msrc.microsoft.com/cvrf/v3.0/cvrf/2026-Nov"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-109484"
+        }
+      ],
+      "score": 10,
+      "metric": "CVSS 3.1"
+    },
+    {
+      "id": "CVE-2026-114203",
+      "date": "2026-11-24",
+      "publishedAt": "2026-11-24T02:00:15.633Z",
+      "kev": null,
+      "category": "system",
+      "kind": "vulnerability",
+      "products": [
+        "ASUS GPU Tweak III"
+      ],
+      "level": "critical",
+      "badge": "ASUS",
+      "aliases": [],
+      "title": "ASUS GPU Tweak III 发布严重漏洞修复",
+      "summary": "ASUS 已发布安全更新，CVE 发布方给出的 CVSS 4.0 评分为 9.3。",
+      "impact": "影响 ASUS GPU Tweak III 1.6.9.4 至 2.2.1.1，存在远程执行代码的风险。",
+      "fix": "使用该工具的用户应从 ASUS 支持渠道安装最新安全版本，并确认已退出受影响的版本范围。",
+      "sources": [
+        {
+          "name": "ASUS 安全公告",
+          "url": "https://www.asus.com/security-advisory/"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-114203"
+        }
+      ],
+      "score": 9.3,
+      "metric": "CVSS 4.0"
+    },
+    {
+      "id": "CVE-2026-134401",
+      "date": "2026-11-24",
+      "publishedAt": "2026-11-23T20:52:51.321Z",
+      "kev": null,
+      "category": "system",
+      "kind": "vulnerability",
+      "products": [
+        "Chrome"
+      ],
+      "level": "critical",
+      "badge": "Chrome",
+      "aliases": [],
+      "title": "Chrome 发布严重漏洞修复",
+      "summary": "Google 将该浏览器漏洞评为严重，桌面和 Android 浏览器均已开始分批推送修复。",
+      "impact": "涉及 Windows、macOS、Linux 桌面版 Chrome，以及 Android 上的 Chrome 浏览器。旧版浏览器存在执行不受信任代码的风险。",
+      "fix": "在桌面版的「关于 Google Chrome」检查更新并重启。Windows 和 macOS 稳定版修复于 158.0.8127.88/.89，Linux 为 158.0.8127.88。Windows 和 macOS 扩展稳定版修复于 156.0.8078.114。Android 请通过应用商店更新至 158.0.8127.92 或更新版本。",
+      "sources": [
+        {
+          "name": "Chrome 桌面稳定版公告",
+          "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01734282054.html"
+        },
+        {
+          "name": "Chrome 扩展稳定版公告",
+          "url": "https://chromereleases.googleblog.com/2026/11/extended-stable-update-for-desktop_01590513949.html"
+        },
+        {
+          "name": "Chrome Android 公告",
+          "url": "https://chromereleases.googleblog.com/2026/11/chrome-for-android-update_0411169060.html"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-134401"
+        }
+      ],
+      "score": null,
+      "metric": null
+    },
+    {
+      "id": "MOZILLA-2026-11-24",
+      "date": "2026-11-24",
+      "kev": null,
+      "category": "system",
+      "kind": "vulnerability",
+      "products": [
+        "Firefox",
+        "Thunderbird"
+      ],
+      "level": "high",
+      "badge": "Mozilla",
+      "aliases": [
+        "CVE-2026-135500",
+        "CVE-2026-135501",
+        "CVE-2026-135502",
+        "CVE-2026-135503",
+        "CVE-2026-135504",
+        "CVE-2026-135505",
+        "CVE-2026-135506",
+        "CVE-2026-135507",
+        "CVE-2026-135508",
+        "CVE-2026-135509",
+        "CVE-2026-135510",
+        "CVE-2026-135511",
+        "CVE-2026-135512",
+        "CVE-2026-135513",
+        "CVE-2026-135514",
+        "CVE-2026-135515",
+        "CVE-2026-135516",
+        "CVE-2026-135517",
+        "CVE-2026-135518",
+        "CVE-2026-135519",
+        "CVE-2026-135520",
+        "CVE-2026-135521",
+        "CVE-2026-135522",
+        "CVE-2026-135523",
+        "CVE-2026-135524",
+        "CVE-2026-135525",
+        "CVE-2026-135526",
+        "CVE-2026-135527",
+        "CVE-2026-135528",
+        "CVE-2026-135529",
+        "CVE-2026-135530",
+        "CVE-2026-135531",
+        "CVE-2026-135532",
+        "CVE-2026-135533",
+        "CVE-2026-135534",
+        "CVE-2026-135535",
+        "CVE-2026-135536",
+        "CVE-2026-135537",
+        "CVE-2026-135538",
+        "CVE-2026-135539",
+        "CVE-2026-135540",
+        "CVE-2026-135541",
+        "CVE-2026-135542",
+        "CVE-2026-135543",
+        "CVE-2026-135544",
+        "CVE-2026-135545",
+        "CVE-2026-135546",
+        "CVE-2026-135547",
+        "CVE-2026-135548",
+        "CVE-2026-135549",
+        "CVE-2026-135550",
+        "CVE-2026-135551",
+        "CVE-2026-135552",
+        "CVE-2026-135553",
+        "CVE-2026-135554",
+        "CVE-2026-135555",
+        "CVE-2026-135556",
+        "CVE-2026-135557",
+        "CVE-2026-135558",
+        "CVE-2026-117902",
+        "CVE-2026-135610",
+        "CVE-2026-136226",
+        "CVE-2026-136227",
+        "CVE-2026-130020",
+        "CVE-2026-130021"
+      ],
+      "title": "Firefox 与 Thunderbird 修复多项高危漏洞",
+      "summary": "Mozilla 11 月 24 日发布多个版本的安全更新，修复浏览器和邮件客户端中的高危问题。",
+      "impact": "涉及旧版 Firefox、Firefox ESR 及 Thunderbird。适用平台和具体漏洞因产品和版本分支而异。",
+      "fix": "Firefox 更新至 161，ESR 分支更新至 153.8 或 115.46。Thunderbird 更新至 161，ESR 更新至 153.8。也可安装系统或应用商店提供的同一分支后续安全版本。",
+      "sources": [
+        {
+          "name": "Mozilla MFSA 2026-131",
+          "url": "https://www.mozilla.org/en-US/security/advisories/mfsa2026-131/"
+        },
+        {
+          "name": "Mozilla MFSA 2026-132",
+          "url": "https://www.mozilla.org/en-US/security/advisories/mfsa2026-132/"
+        },
+        {
+          "name": "Mozilla MFSA 2026-133",
+          "url": "https://www.mozilla.org/en-US/security/advisories/mfsa2026-133/"
+        },
+        {
+          "name": "Mozilla MFSA 2026-134",
+          "url": "https://www.mozilla.org/en-US/security/advisories/mfsa2026-134/"
+        },
+        {
+          "name": "Mozilla MFSA 2026-135",
+          "url": "https://www.mozilla.org/en-US/security/advisories/mfsa2026-135/"
+        }
+      ],
+      "score": null,
+      "metric": null
+    },
+    {
+      "id": "CVE-2026-134815",
+      "date": "2026-11-23",
+      "publishedAt": "2026-11-22T21:22:14.052Z",
+      "kev": null,
+      "category": "runtime",
+      "kind": "vulnerability",
+      "products": [
+        "simple-git",
+        "@simple-git/argv-parser"
+      ],
+      "level": "critical",
+      "badge": "simple-git",
+      "aliases": [],
+      "title": "npm 依赖 simple-git 命令注入漏洞",
+      "summary": "CVE 记录给出 CVSS 4.0 评分 9.2，维护者已发布修复。",
+      "impact": "涉及 Node.js 生态的 npm 包。simple-git 低于 4.1.0 或 @simple-git/argv-parser 低于 3.0.0 的应用应核对依赖。会将不受信任的输入传给 Git 的服务和 CI 工具应优先排查。",
+      "fix": "检查应用及 CI 工具的直接和传递依赖，更新锁文件。将 simple-git 升级至 4.1.0 或更高版本，将独立使用的 @simple-git/argv-parser 升级至 3.0.0 或更高版本，然后重建并部署。",
+      "sources": [
+        {
+          "name": "维护者发布说明",
+          "url": "https://github.com/steveukx/git-js/releases/tag/simple-git%404.1.0"
+        },
+        {
+          "name": "GitHub 安全公告",
+          "url": "https://github.com/advisories/GHSA-24pq-g7mp-w876"
+        },
+        {
+          "name": "argv-parser 维护者发布",
+          "url": "https://github.com/steveukx/git-js/releases/tag/%40simple-git%2Fargv-parser%403.0.0"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-134815"
+        }
+      ],
+      "score": 9.2,
+      "metric": "CVSS 4.0"
     },
     {
       "id": "CVE-2026-134624",
       "date": "2026-11-23",
+      "publishedAt": "2026-11-22T19:10:45.282Z",
       "kev": "2026-11-23",
       "category": "server",
       "kind": "vulnerability",
@@ -265,50 +512,141 @@ a { color:inherit; text-decoration:none; }
         }
       ],
       "score": 9.3,
-      "metric": "CVSS 4.0",
-      "publishedAt": "2026-11-22T19:10:45.282Z"
+      "metric": "CVSS 4.0"
     },
     {
-      "id": "CVE-2025-42884",
-      "date": "2025-11-11",
-      "kev": "2026-11-20",
+      "id": "OPENROUTER-NOVITA-20261122",
+      "date": "2026-11-22",
+      "publishedAt": "2026-11-22T10:00:00.000Z",
+      "kev": null,
+      "category": "incident",
+      "kind": "incident",
+      "products": [
+        "OpenRouter",
+        "Novita"
+      ],
+      "level": "high",
+      "badge": "云服务",
+      "aliases": [],
+      "title": "OpenRouter 与 Novita 通报部分请求的数据处理风险",
+      "summary": "OpenRouter 和 Novita 于 11 月 22 日发布通报。部分经 Novita 处理的模型请求被转给上游服务。",
+      "impact": "通报涉及 2026 年 5 月 28 日至 11 月 11 日期间部分由 Novita 处理的模型请求，其中包括经 OpenRouter 路由的请求。具体影响以厂商通知和调用记录为准。",
+      "fix": "查看厂商的受影响通知并按调用时间、模型和供应商核对日志。若相关请求包含仍有效的 API 密钥、令牌或密码，应尽快轮换这些凭据。",
+      "sources": [
+        {
+          "name": "OpenRouter 官方公告",
+          "url": "https://openrouter.ai/blog/announcements/data-processing-incidents-on-inference-providers/"
+        },
+        {
+          "name": "Novita 官方公告",
+          "url": "https://novita.ai/blog/minimax-requests-privacy-notice/"
+        }
+      ],
+      "score": null,
+      "metric": null
+    },
+    {
+      "id": "CVE-2026-132825",
+      "date": "2026-11-20",
+      "kev": null,
       "category": "server",
       "kind": "vulnerability",
       "products": [
-        "SAP NetWeaver"
+        "GitLab",
+        "Ruby"
       ],
-      "level": "notice",
-      "badge": "SAP",
+      "level": "critical",
+      "badge": "GitLab",
       "aliases": [],
-      "title": "SAP NetWeaver 企业门户漏洞",
-      "summary": "CISA 已将该漏洞列入已知遭利用目录。建议优先核对受影响资产。",
-      "impact": "SAP NetWeaver Enterprise Portal，涉及 EP-BASIS 7.50 和 EP-RUNTIME 7.50。",
-      "fix": "按 SAP 安全说明 3660969 安装适用修复，核对已部署组件和补丁级别。",
+      "title": "自建 GitLab 发布 Ruby 安全补丁",
+      "summary": "GitLab 沿用 Ruby 项目的严重评级，CVE 记录另列 MITRE 的 CVSS 3.1 评分 7.4（高危）。",
+      "impact": "影响使用受影响 Ruby 版本的自建 GitLab CE/EE。满足漏洞触发条件时，存在远程执行代码的风险。",
+      "fix": "按所在分支升级至 GitLab 19.6.1、19.5.8、19.4.10 或更新版本。官方安装包和镜像已含修复。自行编译部署时，按实际运行的 Ruby 分支升级至 3.3.14、3.4.13 或更新补丁版本。独立使用 Ruby 4.0 的环境应升级至 4.0.10 或更高版本。",
       "sources": [
         {
-          "name": "SAP 安全公告",
-          "url": "https://support.sap.com/en/my-support/knowledge-base/security-notes-news/bulletin-2025.html"
+          "name": "GitLab 补丁公告",
+          "url": "https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-6-1-released/"
         },
         {
-          "name": "SAP 安全说明 3660969",
-          "url": "https://me.sap.com/notes/3660969"
+          "name": "Ruby 项目安全公告",
+          "url": "https://github.com/ruby/ruby/security/advisories/GHSA-34m4-m9fh-gqp5"
         },
         {
-          "name": "CISA KEV",
-          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+          "name": "Ruby 官方发布",
+          "url": "https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/"
         },
         {
           "name": "CVE 官方记录",
-          "url": "https://www.cve.org/CVERecord?id=CVE-2025-42884"
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-132825"
         }
       ],
-      "score": 6.5,
-      "metric": "CVSS 3.1",
-      "publishedAt": "2025-11-11T00:14:02.774Z"
+      "score": null,
+      "metric": null
+    },
+    {
+      "id": "CVE-2026-115560",
+      "date": "2026-11-19",
+      "publishedAt": "2026-11-19T14:08:31.000Z",
+      "kev": null,
+      "category": "runtime",
+      "kind": "vulnerability",
+      "products": [
+        "PHP"
+      ],
+      "level": "critical",
+      "badge": "PHP",
+      "aliases": [],
+      "title": "PHP 会话序列化严重漏洞",
+      "summary": "PHP 已发布安全更新。受影响配置在特定条件下存在远程代码执行风险。",
+      "impact": "涉及 PHP 会话处理组件和部分会话配置。PHP 8.2、8.3、8.4 和 8.5 分支请按公告核对修复版本。",
+      "fix": "按分支安装 PHP 8.2.36、8.3.37、8.4.28、8.5.13 或后续安全版本。发行版维护构建请核对发行版的补丁说明。",
+      "sources": [
+        {
+          "name": "PHP 安全公告",
+          "url": "https://github.com/php/php-src/security/advisories/GHSA-658j-r8rw-q6mx"
+        },
+        {
+          "name": "PHP 更新日志",
+          "url": "https://www.php.net/ChangeLog-8.php#8.5.13"
+        }
+      ],
+      "score": 9.2,
+      "metric": "CVSS 4.0"
+    },
+    {
+      "id": "CVE-2026-126714",
+      "date": "2026-11-19",
+      "publishedAt": "2026-11-19T14:06:39.000Z",
+      "kev": null,
+      "category": "runtime",
+      "kind": "vulnerability",
+      "products": [
+        "PHP"
+      ],
+      "level": "critical",
+      "badge": "PHP",
+      "aliases": [],
+      "title": "PHP 会话文件处理严重漏洞",
+      "summary": "PHP 安全团队已为内置文件会话处理组件发布修复。受影响的应用在特定条件下可能发生远程代码执行。",
+      "impact": "使用 PHP 内置文件会话处理器的应用。受支持的 8.2、8.3、8.4 和 8.5 分支，请按对应修复版本核对。",
+      "fix": "按分支至少升级至 PHP 8.2.36、8.3.37、8.4.28 或 8.5.13。由发行版维护的构建，请安装发行版提供的对应安全补丁。",
+      "sources": [
+        {
+          "name": "PHP 安全公告",
+          "url": "https://github.com/php/php-src/security/advisories/GHSA-fm2m-fjf5-v3cp"
+        },
+        {
+          "name": "PHP 更新日志",
+          "url": "https://www.php.net/ChangeLog-8.php"
+        }
+      ],
+      "score": 9.2,
+      "metric": "CVSS 4.0"
     },
     {
       "id": "CVE-2026-123890",
       "date": "2026-11-19",
+      "publishedAt": "2026-11-19T14:02:38.017Z",
       "kev": "2026-11-20",
       "category": "server",
       "kind": "vulnerability",
@@ -337,162 +675,68 @@ a { color:inherit; text-decoration:none; }
         }
       ],
       "score": 9.8,
-      "metric": "CVSS 3.x",
-      "publishedAt": "2026-11-19T14:02:38.017Z"
+      "metric": "CVSS 3.x"
     },
     {
-      "id": "CVE-2026-129448",
-      "date": "2026-11-17",
-      "kev": "2026-11-20",
-      "category": "server",
-      "kind": "vulnerability",
-      "products": [
-        "Apache Roller"
-      ],
-      "level": "critical",
-      "badge": "Roller",
-      "aliases": [],
-      "title": "Apache Roller 反序列化严重漏洞",
-      "summary": "CISA 已将该漏洞列入已知遭利用目录。建议优先核对受影响资产。",
-      "impact": "Apache Roller 4.0.0 至 6.1.5 之前的受影响版本，存在远程代码执行风险。",
-      "fix": "升级至 Apache Roller 6.1.5 或更新的受支持版本。",
-      "sources": [
-        {
-          "name": "Apache 官方公告",
-          "url": "https://lists.apache.org/thread/lnz4s26tv6hdo03wngtdbpfj4hg4gtds"
-        },
-        {
-          "name": "CISA KEV",
-          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
-        },
-        {
-          "name": "CVE 官方记录",
-          "url": "https://www.cve.org/CVERecord?id=CVE-2026-129448"
-        }
-      ],
-      "score": 9.8,
-      "metric": "CVSS 3.1",
-      "publishedAt": "2026-11-17T11:03:49.685Z"
-    },
-    {
-      "id": "CVE-2026-76466",
-      "date": "2026-10-22",
-      "kev": "2026-11-20",
-      "category": "server",
-      "kind": "vulnerability",
-      "products": [
-        "Cisco Expressway"
-      ],
-      "level": "critical",
-      "badge": "Cisco",
-      "aliases": [],
-      "title": "Cisco Expressway 系列严重漏洞",
-      "summary": "CISA 已将该漏洞列入已知遭利用目录。建议优先核对受影响资产。",
-      "impact": "Cisco Expressway Series 的受影响版本。可能导致未经授权的代码执行。",
-      "fix": "X15 系列按 Cisco 公告升级至 X15.5.20 或更高修复版本。X14 及更早分支迁移至受支持的修复版本。",
-      "sources": [
-        {
-          "name": "Cisco 安全公告",
-          "url": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-vcs-static-cred-hr7EWZ8t"
-        },
-        {
-          "name": "CISA KEV",
-          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
-        },
-        {
-          "name": "CVE 官方记录",
-          "url": "https://www.cve.org/CVERecord?id=CVE-2026-76466"
-        }
-      ],
-      "score": 9.8,
-      "metric": "CVSS 3.1",
-      "publishedAt": "2026-10-21T16:14:19.225Z"
-    },
-    {
-      "id": "CVE-2026-115560",
+      "id": "CVE-2026-131914",
       "date": "2026-11-19",
-      "kev": null,
+      "publishedAt": "2026-11-19T01:29:12.970Z",
+      "kev": "2026-11-24",
       "category": "runtime",
       "kind": "vulnerability",
       "products": [
-        "PHP"
+        "Idunno.AntiCsrf",
+        "ASP.NET"
       ],
       "level": "critical",
-      "badge": "PHP",
+      "badge": "ASP.NET",
       "aliases": [],
-      "title": "PHP 会话序列化严重漏洞",
-      "summary": "PHP 已发布安全更新。受影响配置在特定条件下存在远程代码执行风险。",
-      "impact": "涉及 PHP 会话处理组件和部分会话配置。PHP 8.2、8.3、8.4 和 8.5 分支请按公告核对修复版本。",
-      "fix": "按分支安装 PHP 8.2.36、8.3.37、8.4.28、8.5.13 或后续安全版本。发行版维护构建请核对发行版的补丁说明。",
+      "title": "ASP.NET 旧版 AntiCsrf 组件漏洞已遭利用",
+      "summary": "CISA 于 11 月 24 日收录该漏洞。CVE 发布方评为严重，旧组件已停止维护。",
+      "impact": "涉及使用 Idunno.AntiCsrf 旧版组件的 ASP.NET WebForms 应用，包含已发布的 0.9.1 Beta 等旧版本。",
+      "fix": "检查应用及依赖是否仍引用 Idunno.AntiCsrf。已确认使用该组件的团队应停用并替换为仍受维护的防跨站请求伪造方案，替换前优先限制受影响应用的暴露。",
       "sources": [
         {
-          "name": "PHP 安全公告",
-          "url": "https://github.com/php/php-src/security/advisories/GHSA-658j-r8rw-q6mx"
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-131914"
         },
         {
-          "name": "PHP 更新日志",
-          "url": "https://www.php.net/ChangeLog-8.php#8.5.13"
+          "name": "CISA 已知遭利用目录",
+          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
         }
       ],
-      "score": 9.2,
-      "metric": "CVSS 4.0",
-      "publishedAt": "2026-11-19T14:08:31.000Z"
+      "score": 9.3,
+      "metric": "CVSS 4.0"
     },
     {
-      "id": "CVE-2026-126714",
+      "id": "CVE-2026-132165",
       "date": "2026-11-19",
-      "kev": null,
-      "category": "runtime",
+      "publishedAt": "2026-11-18T17:43:11.000Z",
+      "kev": "2026-11-24",
+      "category": "server",
       "kind": "vulnerability",
       "products": [
-        "PHP"
+        "Drupal"
       ],
       "level": "critical",
-      "badge": "PHP",
+      "badge": "Drupal",
       "aliases": [],
-      "title": "PHP 会话文件处理严重漏洞",
-      "summary": "PHP 安全团队已为内置文件会话处理组件发布修复。受影响的应用在特定条件下可能发生远程代码执行。",
-      "impact": "使用 PHP 内置文件会话处理器的应用。受支持的 8.2、8.3、8.4 和 8.5 分支，请按对应修复版本核对。",
-      "fix": "按分支至少升级至 PHP 8.2.36、8.3.37、8.4.28 或 8.5.13。由发行版维护的构建，请安装发行版提供的对应安全补丁。",
+      "title": "Drupal 核心严重漏洞已遭利用",
+      "summary": "Drupal 安全团队确认有实际利用报告，CISA 于 11 月 24 日将该漏洞列入已知遭利用目录。",
+      "impact": "涉及仍在运行受影响版本的 Drupal 10 和 11 站点。漏洞可能导致未授权人员接管站点或运行代码。",
+      "fix": "Drupal 10.6.x 升级至 10.6.22，11.3.x 升级至 11.3.22，11.4.x 升级至 11.4.13，或应用对应分支的更新安全版本。旧分支应迁移至受支持版本。暂不能升级时，按 Drupal 官方指引限制安装程序的访问。",
       "sources": [
         {
-          "name": "PHP 安全公告",
-          "url": "https://github.com/php/php-src/security/advisories/GHSA-fm2m-fjf5-v3cp"
+          "name": "Drupal 安全公告",
+          "url": "https://www.drupal.org/sa-core-2026-017"
         },
         {
-          "name": "PHP 更新日志",
-          "url": "https://www.php.net/ChangeLog-8.php"
-        }
-      ],
-      "score": 9.2,
-      "metric": "CVSS 4.0",
-      "publishedAt": "2026-11-19T14:06:39.000Z"
-    },
-    {
-      "id": "OPTI-2026-11-16",
-      "date": "2026-11-20",
-      "kev": null,
-      "category": "incident",
-      "kind": "incident",
-      "products": [
-        "Optimizely"
-      ],
-      "level": "high",
-      "badge": "Opti",
-      "aliases": [],
-      "title": "Optimizely 通报网站实验服务安全事件",
-      "summary": "Optimizely 表示已修复漏洞，并移除受影响项目中的恶意代码。",
-      "impact": "事件涉及部分 Web Experimentation 项目。厂商已直接通知相关客户。",
-      "fix": "Web Experimentation 客户请查阅厂商通知，并按通知核对受影响项目及网站访问期间的潜在影响。",
-      "sources": [
-        {
-          "name": "Optimizely",
-          "url": "https://support.optimizely.com/hc/en-us/articles/50521849710605-Security-Advisory-Web-Experimentation-Security-Incident-Updated-November-19-2026"
+          "name": "CISA 已知遭利用目录",
+          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
         }
       ],
       "score": null,
-      "metric": null,
-      "publishedAt": "2026-11-19T17:19:55.000Z"
+      "metric": null
     },
     {
       "id": "PHP-2026-11",
@@ -530,115 +774,43 @@ a { color:inherit; text-decoration:none; }
       "metric": null
     },
     {
-      "id": "CVE-2024-10441",
-      "date": "2025-03-19",
-      "kev": "2026-11-18",
+      "id": "CVE-2026-133968",
+      "date": "2026-11-18",
+      "publishedAt": "2026-11-18T15:45:41.000Z",
+      "kev": "2026-11-23",
       "category": "server",
       "kind": "vulnerability",
       "products": [
-        "Synology DSM",
-        "BeeStation OS"
+        "MONAI Label"
       ],
       "level": "critical",
-      "badge": "Synology",
+      "badge": "MONAI",
       "aliases": [],
-      "title": "群晖 DSM 和 BeeStation OS 严重漏洞",
-      "summary": "CISA 已将该漏洞列入已知遭利用目录。建议优先核对受影响资产。",
-      "impact": "群晖 DSM 和 BeeStation OS 的部分旧构建。不同分支的修复版本不同。",
-      "fix": "DSM 7.2.2、7.2.1、7.2 分别升级至 7.2.2-72806-1、7.2.1-69057-6、7.2-64570-4 或更新版本。其他分支按群晖公告核对。BeeStation OS 升级至 1.1-65374 或更新版本。",
+      "title": "MONAI Label 文件写入漏洞",
+      "summary": "官方已发布修复。CISA 于 11 月 23 日确认漏洞已遭利用。",
+      "impact": "MONAI Label 0.8.6 以前版本存在未经授权写入文件的风险。",
+      "fix": "升级至 0.8.6 或更高版本。升级前严格限制服务访问，仅允许受信任用户访问。",
       "sources": [
         {
-          "name": "群晖 DSM 公告",
-          "url": "https://www.synology.com/en-global/security/advisory/Synology_SA_24_20"
+          "name": "MONAI 项目",
+          "url": "https://github.com/Project-MONAI/MONAILabel/releases/tag/0.8.6"
         },
         {
-          "name": "群晖 BeeStation 公告",
-          "url": "https://www.synology.com/en-global/security/advisory/Synology_SA_24_23"
+          "name": "MONAI 项目安全公告",
+          "url": "https://github.com/Project-MONAI/MONAILabel/security/advisories/GHSA-qc22-rmgc-vg94"
         },
         {
           "name": "CISA KEV",
           "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
-        },
-        {
-          "name": "CVE 官方记录",
-          "url": "https://www.cve.org/CVERecord?id=CVE-2024-10441"
         }
       ],
       "score": 9.8,
-      "metric": "CVSS 3.1",
-      "publishedAt": "2025-03-19T02:09:56.387Z"
-    },
-    {
-      "id": "CVE-2026-113425",
-      "date": "2026-11-18",
-      "kev": null,
-      "category": "server",
-      "kind": "vulnerability",
-      "products": [
-        "Nginx"
-      ],
-      "level": "critical",
-      "badge": "Nginx",
-      "aliases": [],
-      "title": "Nginx 安全更新",
-      "summary": "CVE 发布方已公布漏洞及修复信息，请核对设备和软件版本。",
-      "impact": "涉及 Nginx 的部分构建。请按所用版本、平台与厂商的受影响范围核对。",
-      "fix": "按所用分支升级至 1.31.9、1.30.7 或更新的修复版本。商业版本与发行版维护构建请参照对应厂商公告。",
-      "sources": [
-        {
-          "name": "Nginx 安全公告",
-          "url": "https://nginx.org/en/security_advisories.html"
-        },
-        {
-          "name": "Nginx 安全公告",
-          "url": "https://my.f5.com/manage/s/article/K000163931"
-        },
-        {
-          "name": "CVE 官方记录",
-          "url": "https://www.cve.org/CVERecord?id=CVE-2026-113425"
-        }
-      ],
-      "score": 9.2,
-      "metric": "CVSS 4.0",
-      "publishedAt": "2026-11-18T15:23:28.642Z"
-    },
-    {
-      "id": "CVE-2026-118899",
-      "date": "2026-11-18",
-      "kev": null,
-      "category": "server",
-      "kind": "vulnerability",
-      "products": [
-        "Nginx"
-      ],
-      "level": "high",
-      "badge": "Nginx",
-      "aliases": [],
-      "title": "Nginx 安全更新",
-      "summary": "CVE 发布方已公布漏洞及修复信息，请核对设备和软件版本。",
-      "impact": "涉及 Nginx 的部分构建。请按所用版本、平台与厂商的受影响范围核对。",
-      "fix": "按所用分支升级至 1.31.9、1.30.7 或更新的修复版本。商业版本与发行版维护构建请参照对应厂商公告。",
-      "sources": [
-        {
-          "name": "Nginx 安全公告",
-          "url": "https://nginx.org/en/security_advisories.html"
-        },
-        {
-          "name": "Nginx 安全公告",
-          "url": "https://my.f5.com/manage/s/article/K000163930"
-        },
-        {
-          "name": "CVE 官方记录",
-          "url": "https://www.cve.org/CVERecord?id=CVE-2026-118899"
-        }
-      ],
-      "score": 8.7,
-      "metric": "CVSS 4.0",
-      "publishedAt": "2026-11-18T15:23:27.916Z"
+      "metric": "CVSS 3.1"
     },
     {
       "id": "CVE-2026-121810",
       "date": "2026-11-18",
+      "publishedAt": "2026-11-18T15:23:29.375Z",
       "kev": null,
       "category": "server",
       "kind": "vulnerability",
@@ -660,19 +832,15 @@ a { color:inherit; text-decoration:none; }
         {
           "name": "Nginx 安全公告",
           "url": "https://my.f5.com/manage/s/article/K000163927"
-        },
-        {
-          "name": "CVE 官方记录",
-          "url": "https://www.cve.org/CVERecord?id=CVE-2026-121810"
         }
       ],
       "score": 9.2,
-      "metric": "CVSS 4.0",
-      "publishedAt": "2026-11-18T15:23:29.375Z"
+      "metric": "CVSS 4.0"
     },
     {
       "id": "CVE-2026-123007",
       "date": "2026-11-18",
+      "publishedAt": "2026-11-18T15:23:29.008Z",
       "kev": null,
       "category": "server",
       "kind": "vulnerability",
@@ -701,12 +869,12 @@ a { color:inherit; text-decoration:none; }
         }
       ],
       "score": 9.2,
-      "metric": "CVSS 4.0",
-      "publishedAt": "2026-11-18T15:23:29.008Z"
+      "metric": "CVSS 4.0"
     },
     {
-      "id": "CVE-2026-123633",
+      "id": "CVE-2026-113425",
       "date": "2026-11-18",
+      "publishedAt": "2026-11-18T15:23:28.642Z",
       "kev": null,
       "category": "server",
       "kind": "vulnerability",
@@ -727,20 +895,16 @@ a { color:inherit; text-decoration:none; }
         },
         {
           "name": "Nginx 安全公告",
-          "url": "https://my.f5.com/manage/s/article/K000163928"
-        },
-        {
-          "name": "CVE 官方记录",
-          "url": "https://www.cve.org/CVERecord?id=CVE-2026-123633"
+          "url": "https://my.f5.com/manage/s/article/K000163931"
         }
       ],
       "score": 9.2,
-      "metric": "CVSS 4.0",
-      "publishedAt": "2026-11-18T15:23:27.197Z"
+      "metric": "CVSS 4.0"
     },
     {
       "id": "CVE-2026-123634",
       "date": "2026-11-18",
+      "publishedAt": "2026-11-18T15:23:28.277Z",
       "kev": null,
       "category": "server",
       "kind": "vulnerability",
@@ -762,121 +926,75 @@ a { color:inherit; text-decoration:none; }
         {
           "name": "Nginx 安全公告",
           "url": "https://my.f5.com/manage/s/article/K000163925"
-        },
-        {
-          "name": "CVE 官方记录",
-          "url": "https://www.cve.org/CVERecord?id=CVE-2026-123634"
         }
       ],
       "score": 9.2,
-      "metric": "CVSS 4.0",
-      "publishedAt": "2026-11-18T15:23:28.277Z"
+      "metric": "CVSS 4.0"
     },
     {
-      "id": "CVE-2026-40217",
-      "date": "2026-04-10",
-      "kev": "2026-11-18",
+      "id": "CVE-2026-118899",
+      "date": "2026-11-18",
+      "publishedAt": "2026-11-18T15:23:27.916Z",
+      "kev": null,
       "category": "server",
       "kind": "vulnerability",
       "products": [
-        "LiteLLM"
+        "Nginx"
       ],
       "level": "high",
-      "badge": "LiteLLM",
+      "badge": "Nginx",
       "aliases": [],
-      "title": "LiteLLM Proxy 隔离绕过漏洞",
-      "summary": "CISA 已将该漏洞列入已知遭利用目录。建议优先核对受影响资产。",
-      "impact": "LiteLLM Proxy 的受影响构建，涉及自定义防护规则功能。",
-      "fix": "优先升级到当前维护的安全版本。项目公告建议至少升级至 1.83.11。",
+      "title": "Nginx 安全更新",
+      "summary": "CVE 发布方已公布漏洞及修复信息，请核对设备和软件版本。",
+      "impact": "涉及 Nginx 的部分构建。请按所用版本、平台与厂商的受影响范围核对。",
+      "fix": "按所用分支升级至 1.31.9、1.30.7 或更新的修复版本。商业版本与发行版维护构建请参照对应厂商公告。",
       "sources": [
         {
-          "name": "LiteLLM 项目公告",
-          "url": "https://github.com/BerriAI/litellm/security/advisories/GHSA-wxxx-gvqv-xp7p"
+          "name": "Nginx 安全公告",
+          "url": "https://nginx.org/en/security_advisories.html"
         },
         {
-          "name": "CISA KEV",
-          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
-        },
-        {
-          "name": "CVE 官方记录",
-          "url": "https://www.cve.org/CVERecord?id=CVE-2026-40217"
+          "name": "Nginx 安全公告",
+          "url": "https://my.f5.com/manage/s/article/K000163930"
         }
       ],
-      "score": 8.8,
-      "metric": "CVSS 3.1",
-      "publishedAt": "2026-04-10T13:43:23.147Z"
+      "score": 8.7,
+      "metric": "CVSS 4.0"
     },
     {
-      "id": "CVE-2026-90436",
-      "date": "2026-11-06",
-      "kev": "2026-11-18",
+      "id": "CVE-2026-123633",
+      "date": "2026-11-18",
+      "publishedAt": "2026-11-18T15:23:27.197Z",
+      "kev": null,
       "category": "server",
       "kind": "vulnerability",
       "products": [
-        "Apache Axis"
+        "Nginx"
       ],
       "level": "critical",
-      "badge": "Axis",
+      "badge": "Nginx",
       "aliases": [],
-      "title": "Apache Axis 1.x 严重漏洞",
-      "summary": "CISA 已将该漏洞列入已知遭利用目录。建议优先核对受影响资产。",
-      "impact": "停止维护的 Apache Axis 1.x 发布版，包括 1.4。还需检查嵌入该旧库的第三方应用。",
-      "fix": "使用第三方应用时，安装该应用厂商提供的安全更新。自行维护的 Axis 1.x 部署应优先迁移到受支持的替代方案，迁移前限制暴露。",
+      "title": "Nginx 安全更新",
+      "summary": "CVE 发布方已公布漏洞及修复信息，请核对设备和软件版本。",
+      "impact": "涉及 Nginx 的部分构建。请按所用版本、平台与厂商的受影响范围核对。",
+      "fix": "按所用分支升级至 1.31.9、1.30.7 或更新的修复版本。商业版本与发行版维护构建请参照对应厂商公告。",
       "sources": [
         {
-          "name": "Apache 安全通报",
-          "url": "https://lists.apache.org/thread/8slf0j9gz35z56t0glt5h0ncwlbn4bdz"
+          "name": "Nginx 安全公告",
+          "url": "https://nginx.org/en/security_advisories.html"
         },
         {
-          "name": "CVE 官方记录",
-          "url": "https://www.cve.org/CVERecord?id=CVE-2026-90436"
-        },
-        {
-          "name": "CISA KEV",
-          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+          "name": "Nginx 安全公告",
+          "url": "https://my.f5.com/manage/s/article/K000163928"
         }
       ],
-      "score": 9.8,
-      "metric": "CVSS 3.1",
-      "publishedAt": "2026-11-06T15:37:55.374Z"
-    },
-    {
-      "id": "CVE-2026-90817",
-      "date": "2026-09-20",
-      "kev": "2026-11-18",
-      "category": "server",
-      "kind": "vulnerability",
-      "products": [
-        "REDCap"
-      ],
-      "level": "critical",
-      "badge": "REDCap",
-      "aliases": [],
-      "title": "REDCap 代码注入严重漏洞",
-      "summary": "CISA 已将该漏洞列入已知遭利用目录。建议优先核对受影响资产。",
-      "impact": "使用受影响 REDCap 版本的组织。请由 REDCap 管理员核对所用发布分支。",
-      "fix": "依据官方 CVE 记录和 REDCap 社区补丁说明，升级至对应分支的 16.0.49、17.3.10、17.4.4 或后续修复版本。",
-      "sources": [
-        {
-          "name": "REDCap 支持社区",
-          "url": "https://projectredcap.org/resources/community/"
-        },
-        {
-          "name": "CVE 官方记录",
-          "url": "https://www.cve.org/CVERecord?id=CVE-2026-90817"
-        },
-        {
-          "name": "CISA KEV",
-          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
-        }
-      ],
-      "score": 9.8,
-      "metric": "CVSS 3.1",
-      "publishedAt": "2026-09-20T12:05:32.698Z"
+      "score": 9.2,
+      "metric": "CVSS 4.0"
     },
     {
       "id": "CVE-2026-114938",
       "date": "2026-11-18",
+      "publishedAt": "2026-11-17T21:32:03.183Z",
       "kev": null,
       "category": "runtime",
       "kind": "vulnerability",
@@ -909,33 +1027,29 @@ a { color:inherit; text-decoration:none; }
         }
       ],
       "score": 8.1,
-      "metric": "CVSS 3.1",
-      "publishedAt": "2026-11-17T21:32:03.183Z"
+      "metric": "CVSS 3.1"
     },
     {
-      "id": "CVE-2026-115731",
-      "date": "2026-11-04",
-      "kev": "2026-11-17",
+      "id": "CVE-2026-129448",
+      "date": "2026-11-17",
+      "publishedAt": "2026-11-17T11:03:49.685Z",
+      "kev": "2026-11-20",
       "category": "server",
       "kind": "vulnerability",
       "products": [
-        "Puppet Enterprise"
+        "Apache Roller"
       ],
       "level": "critical",
-      "badge": "Puppet",
+      "badge": "Roller",
       "aliases": [],
-      "title": "Puppet Enterprise 反序列化严重漏洞",
+      "title": "Apache Roller 反序列化严重漏洞",
       "summary": "CISA 已将该漏洞列入已知遭利用目录。建议优先核对受影响资产。",
-      "impact": "Puppet Enterprise 2023.8、2025 和 2026 的受影响版本。可能导致服务端代码执行。",
-      "fix": "按分支升级至 PE 2023.8.13、2025.12.1、2026.0.1 或更新的修复版本。",
+      "impact": "Apache Roller 4.0.0 至 6.1.5 之前的受影响版本，存在远程代码执行风险。",
+      "fix": "升级至 Apache Roller 6.1.5 或更新的受支持版本。",
       "sources": [
         {
-          "name": "Puppet 官方版本公告",
-          "url": "https://www.puppet.com/products/puppet-enterprise/whats-new"
-        },
-        {
-          "name": "Perforce 安全公告",
-          "url": "https://portal.perforce.com/s/cve/a91Qi000003IaHpIAK/report-deserialization-code-execution"
+          "name": "Apache 官方公告",
+          "url": "https://lists.apache.org/thread/lnz4s26tv6hdo03wngtdbpfj4hg4gtds"
         },
         {
           "name": "CISA KEV",
@@ -943,12 +1057,51 @@ a { color:inherit; text-decoration:none; }
         },
         {
           "name": "CVE 官方记录",
-          "url": "https://www.cve.org/CVERecord?id=CVE-2026-115731"
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-129448"
         }
       ],
-      "score": 9.4,
-      "metric": "CVSS 4.0",
-      "publishedAt": "2026-11-03T20:40:10.100Z"
+      "score": 9.8,
+      "metric": "CVSS 3.1"
+    },
+    {
+      "id": "OPTI-2026-11-16",
+      "date": "2026-11-17",
+      "publishedAt": "2026-11-17T01:02:57.699Z",
+      "kev": "2026-11-24",
+      "category": "incident",
+      "kind": "incident",
+      "products": [
+        "Optimizely"
+      ],
+      "level": "high",
+      "badge": "Opti",
+      "aliases": [
+        "CVE-2026-132224"
+      ],
+      "title": "Optimizely 通报网站实验服务安全事件",
+      "summary": "Optimizely 已修复问题并通知相关客户。CISA 于 11 月 24 日将这起事件对应的 CVE-2026-132224 纳入已知遭利用目录。",
+      "impact": "事件涉及部分 Web Experimentation 项目。厂商已直接通知相关客户。",
+      "fix": "Web Experimentation 客户请查阅厂商通知，并按通知核对受影响项目及网站访问期间的潜在影响。",
+      "sources": [
+        {
+          "name": "Optimizely",
+          "url": "https://support.optimizely.com/hc/en-us/articles/50521849710605-Security-Advisory-Web-Experimentation-Security-Incident-Updated-November-19-2026"
+        },
+        {
+          "name": "Optimizely 首次通报",
+          "url": "https://status.optimizely.com/incidents/ftw0fh9wx43z"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-132224"
+        },
+        {
+          "name": "CISA 已知遭利用目录",
+          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        }
+      ],
+      "score": 7.1,
+      "metric": "CVSS 4.0"
     },
     {
       "id": "JAVA-2026-11",
@@ -986,42 +1139,9 @@ a { color:inherit; text-decoration:none; }
       "metric": null
     },
     {
-      "id": "CVE-2026-114713",
-      "date": "2026-11-08",
-      "kev": "2026-11-13",
-      "category": "server",
-      "kind": "vulnerability",
-      "products": [
-        "UnrealIRCd"
-      ],
-      "level": "high",
-      "badge": "UnrealIRCd",
-      "aliases": [],
-      "title": "UnrealIRCd 命令权限漏洞",
-      "summary": "CISA 已将该漏洞列入已知遭利用目录。建议优先核对受影响资产。",
-      "impact": "UnrealIRCd 6.0.0 至 6.2.7 的受影响部署。旧版分支请核对项目的维护状态。",
-      "fix": "升级至 UnrealIRCd 6.2.7.1 或更新版本。适用的 UnrealIRCd 6 部署也可按项目公告安装官方热补丁。",
-      "sources": [
-        {
-          "name": "UnrealIRCd 官方公告",
-          "url": "https://forums.unrealircd.org/viewtopic.php?t=9487"
-        },
-        {
-          "name": "CISA KEV",
-          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
-        },
-        {
-          "name": "CVE 官方记录",
-          "url": "https://www.cve.org/CVERecord?id=CVE-2026-114713"
-        }
-      ],
-      "score": 8.6,
-      "metric": "CVSS 3.1",
-      "publishedAt": "2026-11-08T02:31:48.387Z"
-    },
-    {
       "id": "CVE-2026-123039",
       "date": "2026-11-12",
+      "publishedAt": "2026-11-12T14:02:13.665Z",
       "kev": "2026-11-13",
       "category": "server",
       "kind": "vulnerability",
@@ -1050,12 +1170,12 @@ a { color:inherit; text-decoration:none; }
         }
       ],
       "score": 7.8,
-      "metric": "CVSS 3.1",
-      "publishedAt": "2026-11-12T14:02:13.665Z"
+      "metric": "CVSS 3.1"
     },
     {
       "id": "CVE-2026-123866",
       "date": "2026-11-12",
+      "publishedAt": "2026-11-11T18:21:18.538Z",
       "kev": null,
       "category": "runtime",
       "kind": "vulnerability",
@@ -1080,8 +1200,7 @@ a { color:inherit; text-decoration:none; }
         }
       ],
       "score": 7.5,
-      "metric": "CVSS 3.1",
-      "publishedAt": "2026-11-11T18:21:18.538Z"
+      "metric": "CVSS 3.1"
     },
     {
       "id": "NODEJS-2026-11",
@@ -1110,6 +1229,41 @@ a { color:inherit; text-decoration:none; }
         {
           "name": "Node.js 11 月公告",
           "url": "https://nodejs.org/en/blog/vulnerability/november-2026-security-releases"
+        }
+      ],
+      "score": null,
+      "metric": null
+    },
+    {
+      "id": "CVE-2026-113964",
+      "date": "2026-11-10",
+      "publishedAt": "2026-11-09T20:28:00.168Z",
+      "kev": null,
+      "category": "mobile",
+      "kind": "vulnerability",
+      "products": [
+        "iOS",
+        "macOS"
+      ],
+      "level": "notice",
+      "badge": "Apple",
+      "aliases": [],
+      "title": "Apple 修复蓝牙配对安全问题",
+      "summary": "Apple 修复了可能造成未经授权配对的逻辑缺陷。",
+      "impact": "受影响的 iPhone、iPad 和 Mac，具体机型与分支以各自的 Apple 安全更新说明为准。",
+      "fix": "受支持设备请在系统设置中安装对应分支的最新安全更新。iOS 和 iPadOS 27 分支至少升至 27.2.1，macOS Golden Gate 至少升至 27.2.1。",
+      "sources": [
+        {
+          "name": "Apple iOS",
+          "url": "https://support.apple.com/en-us/149715"
+        },
+        {
+          "name": "Apple macOS",
+          "url": "https://support.apple.com/en-us/149718"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-113964"
         }
       ],
       "score": null,
@@ -1221,39 +1375,110 @@ a { color:inherit; text-decoration:none; }
       "metric": null
     },
     {
-      "id": "CVE-2026-113964",
-      "date": "2026-11-10",
-      "kev": null,
-      "category": "mobile",
+      "id": "CVE-2026-114713",
+      "date": "2026-11-08",
+      "publishedAt": "2026-11-08T02:31:48.387Z",
+      "kev": "2026-11-13",
+      "category": "server",
       "kind": "vulnerability",
       "products": [
-        "iOS",
-        "macOS"
+        "UnrealIRCd"
       ],
-      "level": "notice",
-      "badge": "Apple",
+      "level": "high",
+      "badge": "UnrealIRCd",
       "aliases": [],
-      "title": "Apple 修复蓝牙配对安全问题",
-      "summary": "Apple 修复了可能造成未经授权配对的逻辑缺陷。",
-      "impact": "受影响的 iPhone、iPad 和 Mac，具体机型与分支以各自的 Apple 安全更新说明为准。",
-      "fix": "受支持设备请在系统设置中安装对应分支的最新安全更新。iOS 和 iPadOS 27 分支至少升至 27.2.1，macOS Golden Gate 至少升至 27.2.1。",
+      "title": "UnrealIRCd 命令权限漏洞",
+      "summary": "CISA 已将该漏洞列入已知遭利用目录。建议优先核对受影响资产。",
+      "impact": "UnrealIRCd 6.0.0 至 6.2.7 的受影响部署。旧版分支请核对项目的维护状态。",
+      "fix": "升级至 UnrealIRCd 6.2.7.1 或更新版本。适用的 UnrealIRCd 6 部署也可按项目公告安装官方热补丁。",
       "sources": [
         {
-          "name": "Apple iOS",
-          "url": "https://support.apple.com/en-us/149715"
+          "name": "UnrealIRCd 官方公告",
+          "url": "https://forums.unrealircd.org/viewtopic.php?t=9487"
         },
         {
-          "name": "Apple macOS",
-          "url": "https://support.apple.com/en-us/149718"
+          "name": "CISA KEV",
+          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
         },
         {
           "name": "CVE 官方记录",
-          "url": "https://www.cve.org/CVERecord?id=CVE-2026-113964"
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-114713"
         }
       ],
-      "score": null,
-      "metric": null,
-      "publishedAt": "2026-11-09T20:28:00.168Z"
+      "score": 8.6,
+      "metric": "CVSS 3.1"
+    },
+    {
+      "id": "CVE-2026-90436",
+      "date": "2026-11-06",
+      "publishedAt": "2026-11-06T15:37:55.374Z",
+      "kev": "2026-11-18",
+      "category": "server",
+      "kind": "vulnerability",
+      "products": [
+        "Apache Axis"
+      ],
+      "level": "critical",
+      "badge": "Axis",
+      "aliases": [],
+      "title": "Apache Axis 1.x 严重漏洞",
+      "summary": "CISA 已将该漏洞列入已知遭利用目录。建议优先核对受影响资产。",
+      "impact": "停止维护的 Apache Axis 1.x 发布版，包括 1.4。还需检查嵌入该旧库的第三方应用。",
+      "fix": "使用第三方应用时，安装该应用厂商提供的安全更新。自行维护的 Axis 1.x 部署应优先迁移到受支持的替代方案，迁移前限制暴露。",
+      "sources": [
+        {
+          "name": "Apache 安全通报",
+          "url": "https://lists.apache.org/thread/8slf0j9gz35z56t0glt5h0ncwlbn4bdz"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-90436"
+        },
+        {
+          "name": "CISA KEV",
+          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        }
+      ],
+      "score": 9.8,
+      "metric": "CVSS 3.1"
+    },
+    {
+      "id": "CVE-2026-115731",
+      "date": "2026-11-04",
+      "publishedAt": "2026-11-03T20:40:10.100Z",
+      "kev": "2026-11-17",
+      "category": "server",
+      "kind": "vulnerability",
+      "products": [
+        "Puppet Enterprise"
+      ],
+      "level": "critical",
+      "badge": "Puppet",
+      "aliases": [],
+      "title": "Puppet Enterprise 反序列化严重漏洞",
+      "summary": "CISA 已将该漏洞列入已知遭利用目录。建议优先核对受影响资产。",
+      "impact": "Puppet Enterprise 2023.8、2025 和 2026 的受影响版本。可能导致服务端代码执行。",
+      "fix": "按分支升级至 PE 2023.8.13、2025.12.1、2026.0.1 或更新的修复版本。",
+      "sources": [
+        {
+          "name": "Puppet 官方版本公告",
+          "url": "https://www.puppet.com/products/puppet-enterprise/whats-new"
+        },
+        {
+          "name": "Perforce 安全公告",
+          "url": "https://portal.perforce.com/s/cve/a91Qi000003IaHpIAK/report-deserialization-code-execution"
+        },
+        {
+          "name": "CISA KEV",
+          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-115731"
+        }
+      ],
+      "score": 9.4,
+      "metric": "CVSS 4.0"
     },
     {
       "id": "CVE-2026-58876",
@@ -1288,8 +1513,43 @@ a { color:inherit; text-decoration:none; }
       "metric": null
     },
     {
+      "id": "CVE-2026-76466",
+      "date": "2026-10-22",
+      "publishedAt": "2026-10-21T16:14:19.225Z",
+      "kev": "2026-11-20",
+      "category": "server",
+      "kind": "vulnerability",
+      "products": [
+        "Cisco Expressway"
+      ],
+      "level": "critical",
+      "badge": "Cisco",
+      "aliases": [],
+      "title": "Cisco Expressway 系列严重漏洞",
+      "summary": "CISA 已将该漏洞列入已知遭利用目录。建议优先核对受影响资产。",
+      "impact": "Cisco Expressway Series 的受影响版本。可能导致未经授权的代码执行。",
+      "fix": "X15 系列按 Cisco 公告升级至 X15.5.20 或更高修复版本。X14 及更早分支迁移至受支持的修复版本。",
+      "sources": [
+        {
+          "name": "Cisco 安全公告",
+          "url": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-vcs-static-cred-hr7EWZ8t"
+        },
+        {
+          "name": "CISA KEV",
+          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-76466"
+        }
+      ],
+      "score": 9.8,
+      "metric": "CVSS 3.1"
+    },
+    {
       "id": "CVE-2026-109618",
       "date": "2026-10-21",
+      "publishedAt": "2026-10-21T13:48:34.845Z",
       "kev": "2026-10-26",
       "category": "runtime",
       "kind": "vulnerability",
@@ -1320,154 +1580,152 @@ a { color:inherit; text-decoration:none; }
         }
       ],
       "score": null,
-      "metric": null,
-      "publishedAt": "2026-10-21T13:48:34.845Z"
-    },
-    {
-      "id": "CVE-2026-132825",
-      "date": "2026-11-20",
-      "kev": null,
-      "category": "server",
-      "kind": "vulnerability",
-      "products": [
-        "GitLab",
-        "Ruby"
-      ],
-      "level": "critical",
-      "badge": "GitLab",
-      "aliases": [],
-      "title": "自建 GitLab 发布 Ruby 安全补丁",
-      "summary": "GitLab 沿用 Ruby 项目的严重评级，CVE 记录另列 MITRE 的 CVSS 3.1 评分 7.4（高危）。",
-      "impact": "影响使用受影响 Ruby 版本的自建 GitLab CE/EE。满足漏洞触发条件时，存在远程执行代码的风险。",
-      "fix": "按所在分支升级至 GitLab 19.6.1、19.5.8、19.4.10 或更新版本。官方安装包和镜像已含修复。自行编译部署时，按实际运行的 Ruby 分支升级至 3.3.14、3.4.13 或更新补丁版本。独立使用 Ruby 4.0 的环境应升级至 4.0.10 或更高版本。",
-      "sources": [
-        {
-          "name": "GitLab 补丁公告",
-          "url": "https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-6-1-released/"
-        },
-        {
-          "name": "Ruby 项目安全公告",
-          "url": "https://github.com/ruby/ruby/security/advisories/GHSA-34m4-m9fh-gqp5"
-        },
-        {
-          "name": "Ruby 官方发布",
-          "url": "https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/"
-        },
-        {
-          "name": "CVE 官方记录",
-          "url": "https://www.cve.org/CVERecord?id=CVE-2026-132825"
-        }
-      ],
-      "score": null,
       "metric": null
     },
     {
-      "id": "CVE-2026-134815",
-      "date": "2026-11-23",
-      "kev": null,
-      "category": "runtime",
+      "id": "CVE-2026-90817",
+      "date": "2026-09-20",
+      "publishedAt": "2026-09-20T12:05:32.698Z",
+      "kev": "2026-11-18",
+      "category": "server",
       "kind": "vulnerability",
       "products": [
-        "simple-git",
-        "@simple-git/argv-parser"
+        "REDCap"
       ],
       "level": "critical",
-      "badge": "simple-git",
+      "badge": "REDCap",
       "aliases": [],
-      "title": "npm 依赖 simple-git 命令注入漏洞",
-      "summary": "CVE 记录给出 CVSS 4.0 评分 9.2，维护者已发布修复。",
-      "impact": "涉及 Node.js 生态的 npm 包。simple-git 低于 4.1.0 或 @simple-git/argv-parser 低于 3.0.0 的应用应核对依赖。会将不受信任的输入传给 Git 的服务和 CI 工具应优先排查。",
-      "fix": "检查应用及 CI 工具的直接和传递依赖，更新锁文件。将 simple-git 升级至 4.1.0 或更高版本，将独立使用的 @simple-git/argv-parser 升级至 3.0.0 或更高版本，然后重建并部署。",
+      "title": "REDCap 代码注入严重漏洞",
+      "summary": "CISA 已将该漏洞列入已知遭利用目录。建议优先核对受影响资产。",
+      "impact": "使用受影响 REDCap 版本的组织。请由 REDCap 管理员核对所用发布分支。",
+      "fix": "依据官方 CVE 记录和 REDCap 社区补丁说明，升级至对应分支的 16.0.49、17.3.10、17.4.4 或后续修复版本。",
       "sources": [
         {
-          "name": "维护者发布说明",
-          "url": "https://github.com/steveukx/git-js/releases/tag/simple-git%404.1.0"
-        },
-        {
-          "name": "GitHub 安全公告",
-          "url": "https://github.com/advisories/GHSA-24pq-g7mp-w876"
-        },
-        {
-          "name": "argv-parser 维护者发布",
-          "url": "https://github.com/steveukx/git-js/releases/tag/%40simple-git%2Fargv-parser%403.0.0"
+          "name": "REDCap 支持社区",
+          "url": "https://projectredcap.org/resources/community/"
         },
         {
           "name": "CVE 官方记录",
-          "url": "https://www.cve.org/CVERecord?id=CVE-2026-134815"
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-90817"
+        },
+        {
+          "name": "CISA KEV",
+          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
         }
       ],
-      "score": 9.2,
-      "metric": "CVSS 4.0",
-      "publishedAt": "2026-11-22T21:22:14.052Z"
+      "score": 9.8,
+      "metric": "CVSS 3.1"
     },
     {
-      "id": "CVE-2026-134401",
-      "date": "2026-11-24",
-      "kev": null,
-      "category": "system",
+      "id": "CVE-2026-40217",
+      "date": "2026-04-10",
+      "publishedAt": "2026-04-10T13:43:23.147Z",
+      "kev": "2026-11-18",
+      "category": "server",
       "kind": "vulnerability",
       "products": [
-        "Chrome"
-      ],
-      "level": "critical",
-      "badge": "Chrome",
-      "aliases": [],
-      "title": "Chrome 发布严重漏洞修复",
-      "summary": "Google 将该浏览器漏洞评为严重，桌面和 Android 浏览器均已开始分批推送修复。",
-      "impact": "涉及 Windows、macOS、Linux 桌面版 Chrome，以及 Android 上的 Chrome 浏览器。旧版浏览器存在执行不受信任代码的风险。",
-      "fix": "在桌面版的「关于 Google Chrome」检查更新并重启。Windows 和 macOS 稳定版修复于 158.0.8127.88/.89，Linux 为 158.0.8127.88。Windows 和 macOS 扩展稳定版修复于 156.0.8078.114。Android 请通过应用商店更新至 158.0.8127.92 或更新版本。",
-      "sources": [
-        {
-          "name": "Chrome 桌面稳定版公告",
-          "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01734282054.html"
-        },
-        {
-          "name": "Chrome 扩展稳定版公告",
-          "url": "https://chromereleases.googleblog.com/2026/11/extended-stable-update-for-desktop_01590513949.html"
-        },
-        {
-          "name": "Chrome Android 公告",
-          "url": "https://chromereleases.googleblog.com/2026/11/chrome-for-android-update_0411169060.html"
-        },
-        {
-          "name": "CVE 官方记录",
-          "url": "https://www.cve.org/CVERecord?id=CVE-2026-134401"
-        }
-      ],
-      "score": null,
-      "metric": null,
-      "publishedAt": "2026-11-23T20:52:51.321Z"
-    },
-    {
-      "id": "OPENROUTER-NOVITA-20261122",
-      "date": "2026-11-22",
-      "kev": null,
-      "category": "incident",
-      "kind": "incident",
-      "products": [
-        "OpenRouter",
-        "Novita"
+        "LiteLLM"
       ],
       "level": "high",
-      "badge": "云服务",
+      "badge": "LiteLLM",
       "aliases": [],
-      "title": "OpenRouter 与 Novita 通报部分请求的数据处理风险",
-      "summary": "OpenRouter 和 Novita 于 11 月 22 日发布通报。部分经 Novita 处理的模型请求被转给上游服务。",
-      "impact": "通报涉及 2026 年 5 月 28 日至 11 月 11 日期间部分由 Novita 处理的模型请求，其中包括经 OpenRouter 路由的请求。具体影响以厂商通知和调用记录为准。",
-      "fix": "查看厂商的受影响通知并按调用时间、模型和供应商核对日志。若相关请求包含仍有效的 API 密钥、令牌或密码，应尽快轮换这些凭据。",
+      "title": "LiteLLM Proxy 隔离绕过漏洞",
+      "summary": "CISA 已将该漏洞列入已知遭利用目录。建议优先核对受影响资产。",
+      "impact": "LiteLLM Proxy 的受影响构建，涉及自定义防护规则功能。",
+      "fix": "优先升级到当前维护的安全版本。项目公告建议至少升级至 1.83.11。",
       "sources": [
         {
-          "name": "OpenRouter 官方公告",
-          "url": "https://openrouter.ai/blog/announcements/data-processing-incidents-on-inference-providers/"
+          "name": "LiteLLM 项目公告",
+          "url": "https://github.com/BerriAI/litellm/security/advisories/GHSA-wxxx-gvqv-xp7p"
         },
         {
-          "name": "Novita 官方公告",
-          "url": "https://novita.ai/blog/minimax-requests-privacy-notice/"
+          "name": "CISA KEV",
+          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2026-40217"
         }
       ],
-      "score": null,
-      "metric": null,
-      "publishedAt": "2026-11-22T10:00:00.000Z"
+      "score": 8.8,
+      "metric": "CVSS 3.1"
+    },
+    {
+      "id": "CVE-2025-42884",
+      "date": "2025-11-11",
+      "publishedAt": "2025-11-11T00:14:02.774Z",
+      "kev": "2026-11-20",
+      "category": "server",
+      "kind": "vulnerability",
+      "products": [
+        "SAP NetWeaver"
+      ],
+      "level": "notice",
+      "badge": "SAP",
+      "aliases": [],
+      "title": "SAP NetWeaver 企业门户漏洞",
+      "summary": "CISA 已将该漏洞列入已知遭利用目录。建议优先核对受影响资产。",
+      "impact": "SAP NetWeaver Enterprise Portal，涉及 EP-BASIS 7.50 和 EP-RUNTIME 7.50。",
+      "fix": "按 SAP 安全说明 3660969 安装适用修复，核对已部署组件和补丁级别。",
+      "sources": [
+        {
+          "name": "SAP 安全公告",
+          "url": "https://support.sap.com/en/my-support/knowledge-base/security-notes-news/bulletin-2025.html"
+        },
+        {
+          "name": "SAP 安全说明 3660969",
+          "url": "https://me.sap.com/notes/3660969"
+        },
+        {
+          "name": "CISA KEV",
+          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2025-42884"
+        }
+      ],
+      "score": 6.5,
+      "metric": "CVSS 3.1"
+    },
+    {
+      "id": "CVE-2024-10441",
+      "date": "2025-03-19",
+      "publishedAt": "2025-03-19T02:09:56.387Z",
+      "kev": "2026-11-18",
+      "category": "server",
+      "kind": "vulnerability",
+      "products": [
+        "Synology DSM",
+        "BeeStation OS"
+      ],
+      "level": "critical",
+      "badge": "Synology",
+      "aliases": [],
+      "title": "群晖 DSM 和 BeeStation OS 严重漏洞",
+      "summary": "CISA 已将该漏洞列入已知遭利用目录。建议优先核对受影响资产。",
+      "impact": "群晖 DSM 和 BeeStation OS 的部分旧构建。不同分支的修复版本不同。",
+      "fix": "DSM 7.2.2、7.2.1、7.2 分别升级至 7.2.2-72806-1、7.2.1-69057-6、7.2-64570-4 或更新版本。其他分支按群晖公告核对。BeeStation OS 升级至 1.1-65374 或更新版本。",
+      "sources": [
+        {
+          "name": "群晖 DSM 公告",
+          "url": "https://www.synology.com/en-global/security/advisory/Synology_SA_24_20"
+        },
+        {
+          "name": "群晖 BeeStation 公告",
+          "url": "https://www.synology.com/en-global/security/advisory/Synology_SA_24_23"
+        },
+        {
+          "name": "CISA KEV",
+          "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+        },
+        {
+          "name": "CVE 官方记录",
+          "url": "https://www.cve.org/CVERecord?id=CVE-2024-10441"
+        }
+      ],
+      "score": 9.8,
+      "metric": "CVSS 3.1"
     }
   ]
 };

@@ -1,4 +1,4 @@
-import { CVE_ID, KEV_SOURCE, publicationTime, validSource } from './store.mjs';
+import { CVE_ID, KEV_SOURCE, kevCve, publicationTime, validSource } from './store.mjs';
 import { readDigest } from './digest.mjs';
 import { queueCoverage, readCoverage } from './coverage.mjs';
 
@@ -242,7 +242,7 @@ async function getNginxHead(getPage) {
 function addKEV(store, index, kev, now) {
   const known = new Set();
   for (const active of store.all()) {
-    const entry = index.get(active.id);
+    const entry = index.get(kevCve(active));
     if (!entry) {
       if (active.kev) {
         const sources = active.sources.filter(s => s.name !== KEV_SOURCE.name);
@@ -252,7 +252,7 @@ function addKEV(store, index, kev, now) {
       continue;
     }
     const date = entry.dateAdded;
-    known.add(active.id);
+    known.add(entry.cveID);
     for (const alias of active.aliases) {
       if (index.get(alias)?.dateAdded === date) known.add(alias);
     }
